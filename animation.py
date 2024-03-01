@@ -35,29 +35,11 @@ def drawRotRect(screen, color, pc, w, h, ang): #точка центра, шир�
     pts = rotArr(pts, ang)
     pts = np.add(pts, pc)
     pygame.draw.polygon(screen, color, pts, 2)
-    # for i in range(len(pts)):
-    #    pygame.draw.line(screen, (0,0,255),pts[i-1], pts[i], 2)
 
 def main():
     screen = pygame.display.set_mode(sz)
     timer = pygame.time.Clock()
-    fps = 30
-    b, team1, team2 = None, None, None
-
-    a = Area((25, 25), sz[1]-50, sz[0]-50)
-    def initScene():
-        nonlocal b, team1, team2
-        p1 = a.getGlobalPt((200,0))
-        p2 = a.getGlobalPt((-200, 0))
-        team1 = Team(a, 3, 100, True)
-        team2 = Team(a, 3, 100, False)
-        ptRndx = np.random.randint(-10, 11)
-        ptRndy = np.random.randint(-10, 11)
-        b = Ball(*a.getGlobalPt((ptRndx, ptRndy)),70)
-        b.vx = 0
-        b.vy = 0
-    initScene()
-    score1, score2 = 0, 0
+    fps = 20
 
     while True:
         for ev in pygame.event.get():
@@ -65,27 +47,13 @@ def main():
                 sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_r:
-                    initScene()
+                    print("Hi")
 
-        dt=1/fps
-        b.sim(dt)
-        team1.sim(dt, b)
-        team2.sim(dt, b)
+        dt=1/fps        
 
-        screen.fill((255, 255, 255))
-        team1.draw(screen)
-        team2.draw(screen)
-        b.draw(screen)
-        a.draw(screen)
+        screen.fill((255, 255, 255))     
 
-        outside = a.isPtOutside(b.getPos())
-        if outside:
-            ptLocal=a.getLocalPt(b.getPos())
-            initScene()
-            if ptLocal[0] < 0: score1 += 1
-            else: score2 += 1
-
-        drawText(screen, f"Score = {score1} : {score2}", 5, 5)
+        drawText(screen, f"Test = {1}", 5, 5)
 
         pygame.display.flip()
         timer.tick(fps)
