@@ -24,16 +24,14 @@ def drawAxes():
         glEnd()
 
 def rotate(pts, r, p, y):
-    cr,cp,cy=cos(r),cos(p),cos(y)
-    sr,sp,sy=sin(r),sin(p),sin(y)
-    myaw=[[cy,-sy,0,0],[sy,cy,0,0],[0,0,1,0],[0,0,0,1]] #z
-    mpit=[[cp,0,sp,0],[0,1,0,0],[-sp,0,cp,0],[0,0,0,1]] #y
-    mrol=[[1,0,0,0],[0,cr,-sr,0],[0,sr,cr,0],[0,0,0,1]] #x
-    mat=np.array(myaw) @ mpit @ mrol
-    #TODO: упростить матрицу до размера 3*3, т.к. смещения нет
-    pts2 = np.pad(pts, pad_width=((0,0),(0,1)), mode='constant', constant_values=1)
-    res=mat.dot(np.transpose(pts2))
-    res=np.transpose(res[:3, :] )
+    cr, cp, cy = cos(r), cos(p), cos(y)
+    sr, sp, sy = sin(r), sin(p), sin(y)
+    myaw = [[cy, -sy, 0], [sy, cy, 0], [0, 0, 1]]  # z
+    mpit = [[cp, 0, sp], [0, 1, 0], [-sp, 0, cp]]  # y
+    mrol = [[1, 0, 0], [0, cr, -sr], [0, sr, cr]]  # x
+    mat = np.array(myaw) @ mpit @ mrol
+    res = mat.dot(np.transpose(pts))
+    res = np.transpose(res)
     return res
 
 pts=[
