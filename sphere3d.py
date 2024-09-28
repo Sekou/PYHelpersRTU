@@ -8,7 +8,7 @@ from math import sin, cos
 
 kpi = np.pi / 180
 
-# from text3d import *
+# from tex3d import *
 
 def drawPoints(pts, sz=3):
     glPointSize(sz)
