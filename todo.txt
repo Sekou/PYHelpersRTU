@@ -3,5 +3,9 @@ image example
 car2d example
 drone2d example
 manip2d example
-mrs2d example
+mrs2d mobile example
+mrs2d manip example
 perceptron example
+balncing robot
+bicicle example
+mrtc - platform+manipulator
