@@ -13,3 +13,4 @@ walking dog 2d
 walking human 2d
 graph 2d
 grid 2d
+3d labyrinth
