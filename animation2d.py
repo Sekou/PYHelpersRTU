@@ -4,12 +4,10 @@ import numpy as np
 import math
 
 pygame.font.init()
-font = pygame.font.SysFont('Comic Sans MS', 20)
-def drawText(screen, s, x, y):
+def drawText(screen, s, x, y, sz=20, color=(0,0,0)):
+    font = pygame.font.SysFont('Comic Sans MS', sz)
     surf=font.render(s, True, (0,0,0))
     screen.blit(surf, (x,y))
-
-sz = (800, 600)
 
 def rot(v, ang): #функция для поворота на угол
     s, c = math.sin(ang), math.cos(ang)
@@ -36,6 +34,8 @@ def drawRotRect(screen, color, pc, w, h, ang): #точка центра, шир�
     pts = rotArr(pts, ang)
     pts = np.add(pts, pc)
     pygame.draw.polygon(screen, color, pts, 2)
+
+sz = (800, 600)
 
 def main():
     screen = pygame.display.set_mode(sz)
