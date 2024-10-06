@@ -4,16 +4,16 @@ import numpy as np
 import math
 
 pygame.font.init()
-def drawText(screen, s, x, y, sz=20, color=(0,0,0)):
+def drawText(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
     font = pygame.font.SysFont('Comic Sans MS', sz)
     surf=font.render(s, True, (0,0,0))
     screen.blit(surf, (x,y))
 
-def rot(v, ang): #функция для поворота на угол
+def rot(v, ang): #поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
-def limAng(ang):
+def limAng(ang): #ограничение угла в пределах +/-pi
     while ang > math.pi: ang -= 2 * math.pi
     while ang <= -math.pi: ang += 2 * math.pi
     return ang
@@ -21,7 +21,7 @@ def limAng(ang):
 def rotArr(vv, ang): # функция для поворота массива на угол
     return [rot(v, ang) for v in vv]
 
-def dist(p1, p2):
+def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p1, p2))
 
 def drawRotRect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
