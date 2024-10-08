@@ -4,18 +4,18 @@ import pygame
 import numpy as np
 import math
 
-pygame.font.init()
-def drawText(screen, s, x, y, sz=20, color=(0,0,0)):
-    font = pygame.font.SysFont('Comic Sans MS', sz)
-    surf=font.render(s, True, (0,0,0))
-    screen.blit(surf, (x,y))
-
 def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p1, p2))
 
 def rot(v, ang): #поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
+    
+pygame.font.init()
+def drawText(screen, s, x, y, sz=20, color=(0,0,0)):
+    font = pygame.font.SysFont('Comic Sans MS', sz)
+    surf=font.render(s, True, (0,0,0))
+    screen.blit(surf, (x,y))
 
 def drawArrow(screen, color, p1, p2, w, sz):
     v=sz*np.subtract(p1, p2)/dist(p2, p1)
