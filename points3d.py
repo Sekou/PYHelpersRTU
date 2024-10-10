@@ -46,8 +46,6 @@ pts2 = rotate(pts, 45*kpi, 0, 0)
 pts2 = pts2 + [0.5,0.3,0.1]
 
 def main():
-    global pts, pts2
-
     pygame.init()
     display=(800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
