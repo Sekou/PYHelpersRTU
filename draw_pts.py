@@ -1,3 +1,5 @@
+#Drawing and saving points/ngons, S. Diane, 2024
+
 import sys, pygame
 from pygame.locals import*
 import numpy as np
