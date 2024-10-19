@@ -1,3 +1,5 @@
+#2024, S. Diane, tensorflow/keras neural network example
+
 import tensorflow as tf
 
 def createModel():
