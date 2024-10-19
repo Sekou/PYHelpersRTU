@@ -1,6 +1,6 @@
+#2024, S. Diane, tensorflow/keras neural network example with dataset loading from file
 import numpy as np
 import tensorflow as tf
-
 
 def createModel():
     model = tf.keras.Sequential([
