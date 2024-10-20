@@ -42,10 +42,10 @@ def trainNet():
                        epochs=100)
 
     for x, y in zip(X_val[:5], Y_val[:5]):
-        result = model.predict([x.tolist()])
+        result = model.predict(np.array([x.tolist()]))
         print(f"X={x}, Y={result[0]} //{y}")
 
     model.save_weights("net.h5")
 
-def main():
+if __name__=="__main__":
     trainNet()
