@@ -29,8 +29,8 @@ def trainNet():
                        batch_size=1,
                        epochs=15)
 
-    result=model.predict([[0.4, 0.4, 0.4]])
+    result=model.predict(np.array([[0.4, 0.4, 0.4]]))
     print(result)
 
-def main():
+if __name__=="__main__":
     trainNet()
