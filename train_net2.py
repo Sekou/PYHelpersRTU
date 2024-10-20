@@ -45,7 +45,7 @@ def trainNet():
         result = model.predict(np.array([x.tolist()]))
         print(f"X={x}, Y={result[0]} //{y}")
 
-    model.save_weights("net.h5")
+    model.save_weights("net.weights.h5")
 
 if __name__=="__main__":
     trainNet()
