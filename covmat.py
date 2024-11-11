@@ -5,12 +5,10 @@ import sys, pygame
 
 #оценка матрицы ковариации
 def estimateCovMat(pts, weights):
-    sx, sy, sxy, M = 0, 0, 0, 0
-    pavg=np.zeros(2)
-    for i in range(len(pts)):
-        pavg+=pts[i].pos*weights[i]
-        M+=weights[i]
-    pavg/=M
+    sx, sy, sxy = 0, 0, 0
+    ii=range(len(pts))
+    M=np.sum([weights[i] for i in ii])
+    pavg=np.sum([pts[i].pos*weights[i] for i in ii], axis=0)/M
     for i in range(len(pts)):
         d=(pts[i].pos-pavg)
         sx+=d[0]*d[0]*weights[i]
