@@ -8,7 +8,7 @@ def createModel():
         tf.keras.layers.Dense(units=64, activation='relu',
                               input_shape=[3]),
         tf.keras.layers.Dense(units=64, activation='relu'),
-        tf.keras.layers.Dense(units=1)
+        tf.keras.layers.Dense(units=1) #, activation=tf.nn.softmax
     ])
     return model
 
