@@ -1,6 +1,7 @@
 #2024, S. Diane, tensorflow/keras neural network example
 
 import tensorflow as tf
+import numpy as np
 
 def createModel():
     model = tf.keras.Sequential([
