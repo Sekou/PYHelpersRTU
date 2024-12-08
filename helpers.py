@@ -9,3 +9,9 @@ def probSel(probs): #вероятностный выбор индекса эле
 def readPts(filename): #чтение массива целочисленных точек
     with open(filename, "r") as f:
         return [[int(v) for v in l.split()] for l in f.readlines()]
+
+def rotSegm(segm, ang): #центральный поворот отрезка на угол
+    c=np.mean(segm, axis=0)
+    v1=np.subtract(segm[0], c)
+    v2=np.subtract(segm[1], c)
+    return list(np.add([rot(v1, ang), rot(v2, ang)], c))
