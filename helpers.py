@@ -15,3 +15,9 @@ def rotSegm(segm, ang): #центральный поворот отрезка н
     v1=np.subtract(segm[0], c)
     v2=np.subtract(segm[1], c)
     return list(np.add([rot(v1, ang), rot(v2, ang)], c))
+
+def ptSegmDist(p, p1, p2):
+    dx, dy = np.subtract(p2, p1)
+    k = dy / (0.0000001 if dx==0 else dx)
+    b = p1[1] - k * p1[0]
+    return np.abs(-k * p[0] + p[1] - b) / math.sqrt(k * k + 1)
