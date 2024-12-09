@@ -42,7 +42,7 @@ def check_intersection(A,B,C,D): #проверка пересечения дву
 def get_segm_intersection(A, B, C, D): #поиск точки пересечения двух отрезков
     (x1, y1), (x2, y2), (x3, y3), (x4, y4) = A, B, C, D
     denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-    if denom == 0: return None  # Отрезки параллельны или совпадают
+    if denom == 0: return None  # отрезки параллельны или совпадают
     t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
     u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
     if 0 <= t <= 1 and 0 <= u <= 1:
@@ -51,7 +51,8 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
         return (intersection_x, intersection_y)
     return None
 
-def point_inside_polygon(p, poly, include_edges=True):
+def point_inside_polygon(p, poly, include_edges=True): #проверка нахождения точки внутри полигона
+    #uses intersection count parity check for horizontal line
     (x,y),n,inside,(p1x, p1y) = p,len(poly), False, poly[0]
     for i in range(1, n + 1):
         p2x, p2y = poly[i % n]
