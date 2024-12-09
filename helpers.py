@@ -36,7 +36,7 @@ def check_proj(segm, pt): #проверка попадания проецирц�
     return 0<=np.dot(v1/L1, v2)<=L1
 
 def check_intersection(A,B,C,D): #проверка пересечения двух отрезков
-    ccw = lambda A, B, C: (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x)
+    ccw = lambda A, B, C: (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
     return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
 
 def get_segm_intersection(A, B, C, D): #поиск точки пересечения двух отрезков
