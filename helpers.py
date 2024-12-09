@@ -34,3 +34,7 @@ def projCheck(segm, pt): #проверка попадания проецирце
     v1=np.subtract(segm[1], segm[0], dtype=float)
     L1=np.linalg.norm(v1)
     return 0<=np.dot(v1/L1, v2)<=L1
+
+def intersect(A,B,C,D): #проверка пересечения двух отрезков
+    ccw = lambda A, B, C: (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x)
+    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
