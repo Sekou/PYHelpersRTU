@@ -39,7 +39,7 @@ def check_intersection(A,B,C,D): #проверка пересечения дву
     ccw = lambda A, B, C: (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x)
     return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
 
-def get_segm_intersection(A, B, C, D):
+def get_segm_intersection(A, B, C, D): #поиск точки пересечения двух отрезков
     (x1, y1), (x2, y2), (x3, y3), (x4, y4) = A, B, C, D
     denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
     if denom == 0: return None  # Отрезки параллельны или совпадают
