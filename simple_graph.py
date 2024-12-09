@@ -28,13 +28,20 @@ class Graph:
     def draw(self, screen):
         for n in self.nodes:
             n.draw(screen)
-    def connect(self):
+    def connect(self): #полное соединение
         for n1 in self.nodes:
             for n2 in self.nodes:
                 if n1==n2: continue
                 w=np.linalg.norm(np.subtract(n1.getPos(), n2.getPos()))
                 n1.nextEdges.append(Edge(n1, n2, w))
-    def findNode(self, p):
+    def connect2(self, connFile): #соединение по индексам вершин из файла
+        with open(connFile,"r") as f:
+            ii=eval(f.read())
+        for i1,i2 in ii:
+            n1, n2 = self.nodes[i1], self.nodes[i2]
+            w=dist(n1.getPos(), n2.getPos())
+            n1.nextEdges.append(Edge(n1, n2, w))
+    def findNode(self, p): #поиск узла по координатам
         dd=[np.linalg.norm(np.subtract(n.getPos(),p)) for n in self.nodes]
         return self.nodes[np.argmin(dd)]
         
