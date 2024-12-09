@@ -50,3 +50,23 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
         intersection_y = y1 + t * (y2 - y1)
         return (intersection_x, intersection_y)
     return None
+
+def point_inside_polygon(p, poly, include_edges=True):
+    (x,y),n,inside,(p1x, p1y) = p,len(poly), False, poly[0]
+    for i in range(1, n + 1):
+        p2x, p2y = poly[i % n]
+        if p1y == p2y:
+            if y == p1y:
+                if min(p1x, p2x) <= x <= max(p1x, p2x): # horisontal edge
+                    inside = include_edges
+                    break
+                if x < min(p1x, p2x): inside = not inside # point is to the left from current edge
+        else:  # p1y!= p2y
+            if min(p1y, p2y) <= y <= max(p1y, p2y):
+                xinters = (y - p1y) * (p2x - p1x) / float(p2y - p1y) + p1x
+                if x == xinters:  # point on the edge
+                    inside = include_edges
+                    break
+                if x < xinters: inside = not inside # point is to the left from current edge
+        p1x, p1y = p2x, p2y
+    return inside
