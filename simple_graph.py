@@ -34,7 +34,10 @@ class Graph:
                 if n1==n2: continue
                 w=np.linalg.norm(np.subtract(n1.getPos(), n2.getPos()))
                 n1.nextEdges.append(Edge(n1, n2, w))
-
+    def findNode(self, p):
+        dd=[np.linalg.norm(np.subtract(n.getPos(),p)) for n in self.nodes]
+        return self.nodes[np.argmin(dd)]
+        
 # import simple_graph
 # graph=simple_graph.Graph(pts)
 # graph.connect()
