@@ -104,7 +104,7 @@ def main():
     robot=Robot(100, 100, 1)
 
     time=0
-    goal = [300,400]
+    goal = [600,400]
 
     while True:
         for ev in pygame.event.get():
