@@ -46,7 +46,6 @@ class Cart:
         elif self.alpha>0.01:
             self.control=-100
             if dxCart<0 and abs(self.alpha)>0.3:  self.control+= 0.1*dxCart
-
         else:
             self.control=0
 
@@ -80,7 +79,7 @@ if __name__ == "__main__":
         pygame.display.flip()
         timer.tick(fps)
 
-        #
+        #alternative for expert control
         # k = abs(self.alpha)
         # if self.alpha < -0.01:
         #     self.control = 100 + 0.1 * dxCart * k
