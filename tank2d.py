@@ -84,3 +84,25 @@ class Tank:
         self.y+=vec[1]*dt
         self.ang+=self.va*dt
         self.angGun+=self.vaGun*dt
+
+
+if __name__=="__main__":
+    screen = pygame.display.set_mode([800,600])
+    timer = pygame.time.Clock()
+    fps = 20
+
+    tank=Tank(0, 200, 300, 1)
+    
+    while True:
+        for ev in pygame.event.get():
+            if ev.type==pygame.QUIT:
+                sys.exit(0)
+        dt=1/fps
+        screen.fill((255, 255, 255))
+
+        tank.sim(dt)
+
+        tank.draw(screen)        
+
+        pygame.display.flip()
+        timer.tick(fps)
