@@ -1,5 +1,4 @@
-# To do 
-#class platform, class energy_calc_lagrangian, work_zone_grid
+#2025, by S. Diane
 
 import pygame
 from pygame.locals import*
