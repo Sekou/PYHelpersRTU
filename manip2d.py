@@ -20,12 +20,12 @@ class Link:
         pygame.draw.line(screen, (0,0,0), self.P1, self.P2, 3)
         pygame.draw.circle(screen, (0,0,255), self.P1, 3)
         pygame.draw.circle(screen, (0,0,255), self.P2, 3)
-
-#манипуляционный робот
+        
+# манипуляционный робот с ангулярной кинематикой
 class RobotManipulator:
     def __init__(self, lengths):
-        self.lenghts = lengths
-        self.links = [Link(lengths[i], -0.3) for i in range (len(lengths)) ]
+        self.lengths = lengths
+        self.links = [Link(lengths[i], -0.3) for i in range(len(lengths))]
         self.endPos = np.zeros(2)
     def draw(self, screen): #отрисовка
         for l in self.links:
