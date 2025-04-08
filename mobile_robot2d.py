@@ -95,8 +95,7 @@ class Robot:
         if self.steer < -maxSteer: self.steer = -maxSteer
         self.speed = 50
 
-
-def main():
+if __name__=="__main__":
     screen = pygame.display.set_mode(sz)
     timer = pygame.time.Clock()
     fps = 20
@@ -126,7 +125,5 @@ def main():
         pygame.display.flip()
         timer.tick(fps)
         time+=dt
-
-main()
 
 #template file by S. Diane, RTU MIREA, 2024
