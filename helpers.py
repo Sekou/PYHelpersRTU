@@ -69,3 +69,21 @@ def get_points_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
             check = point_inside_polygon([x, y], ngon_pts)
             if check: pts.append([x,y])
     return pts
+
+#отрисовка стрелки по точке и углу
+def arrow(screen, color, p0, angle, lenpx, w):
+    p1 = [p0[0] + lenpx * math.cos(angle), p0[1] + lenpx * math.sin(angle)]
+    p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
+    p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
+    pygame.draw.line(screen, color, p0, p1, w)
+    pygame.draw.line(screen, color, p1, p2, w)
+    pygame.draw.line(screen, color, p1, p3, w)
+    
+#отрисовка стрелки по 2 точкам
+def arrow2(screen, color, p0, p1, w):
+    angle=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
+    p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
+    p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
+    pygame.draw.line(screen, color, p0, p1, w)
+    pygame.draw.line(screen, color, p1, p2, w)
+    pygame.draw.line(screen, color, p1, p3, w)
