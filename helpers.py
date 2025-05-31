@@ -10,6 +10,18 @@ def read_pts(filename): #чтение массива целочисленных 
     with open(filename, "r") as f:
         return [[int(v) for v in l.split()] for l in f.readlines()]
 
+def rot(v, ang): #поворот вектора на угол
+    s, c = math.sin(ang), math.cos(ang)
+    return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
+
+def limAng(ang): #ограничение угла в пределах +/-pi
+    while ang > math.pi: ang -= 2 * math.pi
+    while ang <= -math.pi: ang += 2 * math.pi
+    return ang
+    
+def dist(p1, p2):
+    return np.linalg.norm(np.subtract(p2, p1))
+
 def rot_segm(segm, ang): #центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
     v1=np.subtract(segm[0], c)
