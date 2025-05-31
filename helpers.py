@@ -19,7 +19,7 @@ def limAng(ang): #ограничение угла в пределах +/-pi
     while ang <= -math.pi: ang += 2 * math.pi
     return ang
     
-def dist(p1, p2):
+def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
 
 def rot_segm(segm, ang): #центральный поворот отрезка на угол
