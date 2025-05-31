@@ -14,10 +14,13 @@ def rot(v, ang): #поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
-def limAng(ang): #ограничение угла в пределах +/-pi
+def lim_ang(ang): #ограничение угла в пределах +/-pi
     while ang > math.pi: ang -= 2 * math.pi
     while ang <= -math.pi: ang += 2 * math.pi
     return ang
+
+def ang_to(p1, p2): # Угол от 1 точки на 2 точку
+    return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
     
 def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
