@@ -51,6 +51,35 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
         return (intersection_x, intersection_y)
     return None
 
+#пересечения отрезка с прямоугольником
+def get_segm_intersection_rect(A, B, x, y, w, h):
+    res=[]
+    pp=[[x,y], [x+w,y], [x+w,y+h], [x,y+h]]
+    for i in range(4):
+        p1, p2 = pp[i-1], pp[i]
+        p=get_segm_intersection(A, B, p1, p2)
+        if p: res.append(p)
+    return res
+    
+#пересечения отрезка с окружностью
+def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9):
+    (p1x, p1y), (p2x, p2y), (cx, cy) = A, B, pos
+    (x1, y1), (x2, y2) = (p1x - cx, p1y - cy), (p2x - cx, p2y - cy)
+    dx, dy = (x2 - x1), (y2 - y1)
+    dr = (dx ** 2 + dy ** 2) ** .5
+    big_d = x1 * y2 - x2 * y1
+    discriminant = R ** 2 * dr ** 2 - big_d ** 2
+    if discriminant < 0: return [] # No intersection between circle and line
+    else:  # There may be 0, 1, or 2 pts with the segment
+        pts = [ (cx + (big_d * dy + sign * (-1 if dy < 0 else 1) * dx * discriminant ** .5) / dr ** 2,
+             cy + (-big_d * dx + sign * abs(dy) * discriminant ** .5) / dr ** 2)
+            for sign in ((1, -1) if dy < 0 else (-1, 1))]  # This makes sure the order along the segment is correct
+        if not full_line:  # If only considering the segment, filter out pts that do not fall within the segment
+            fraction = [(xi - p1x) / dx if abs(dx) > abs(dy) else (yi - p1y) / dy for xi, yi in pts]
+            pts = [pt for pt, frac in zip(pts, fraction) if 0 <= frac <= 1]
+        if len(pts) == 2 and abs(discriminant) <= tangent_tol: return [pts[0]] # If line is tangent to circle, return just one point
+        else: return pts
+
 #проверяем, находится ли точка внутри многоугольника
 def point_inside_polygon(point, vertices):
     (x, y), c = point, 0
