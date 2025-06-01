@@ -124,15 +124,10 @@ def polygon_perimeter(points):
     
 #определяем площадь многоугольника
 def polygon_area(coords):
-    # get x and y in vectors
-    x = [point[0] for point in coords]
-    y = [point[1] for point in coords]
-    # shift coordinates
-    x_ = x - np.mean(x)
-    y_ = y - np.mean(y)
-    # calculate area
+    x, y = [p[0] for p in coords], [p[1] for p in coords] # get x and y in vectors
+    x_, y_ = x - np.mean(x), y - np.mean(y) # shift coordinates
+    main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:]) # calculate area
     correction = x_[-1] * y_[0] - y_[-1] * x_[0]
-    main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:])
     return 0.5 * np.abs(main_area + correction)
 
 #отрисовка стрелки по точке и углу
