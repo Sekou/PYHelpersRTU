@@ -113,6 +113,27 @@ def get_points_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
             check = point_inside_polygon([x, y], ngon_pts)
             if check: pts.append([x,y])
     return pts
+    
+#определяем периметр многоугольника
+def polygon_perimeter(points):
+    res=0
+    for i in range(len(points)):
+        A, B=points[i], points[(i+1)%len(points)]
+        res+=dist(A, B)
+    return res
+    
+#определяем площадь многоугольника
+def polygon_area(coords):
+    # get x and y in vectors
+    x = [point[0] for point in coords]
+    y = [point[1] for point in coords]
+    # shift coordinates
+    x_ = x - np.mean(x)
+    y_ = y - np.mean(y)
+    # calculate area
+    correction = x_[-1] * y_[0] - y_[-1] * x_[0]
+    main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:])
+    return 0.5 * np.abs(main_area + correction)
 
 #отрисовка стрелки по точке и углу
 def arrow(screen, color, p0, angle, lenpx, w):
