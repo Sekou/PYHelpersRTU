@@ -7,7 +7,7 @@ import numpy as np
 import math
 
 shift=[0,0]
-scale=1
+scale=50
 eps=0.0000001
 
 def getT():
