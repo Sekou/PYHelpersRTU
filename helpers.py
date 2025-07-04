@@ -96,7 +96,7 @@ def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9
         else: return pts
 
 #проверяем, находится ли точка внутри многоугольника
-def point_inside_polygon(point, vertices):
+def pt_inside_ngon(point, vertices):
     (x, y), c = point, 0
     for i in range(len(vertices)):
         (x1, y1), (x2, y2) = vertices[i-1], vertices[i]
@@ -106,11 +106,11 @@ def point_inside_polygon(point, vertices):
     return c
 
 #определяем точки, лежащие внутри многоугольника
-def get_points_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
+def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
     pts=[]
     for x in range(xmin, xmax, step):
         for y in range(ymin, ymax, step):
-            check = point_inside_polygon([x, y], ngon_pts)
+            check = pt_inside_ngon([x, y], ngon_pts)
             if check: pts.append([x,y])
     return pts
     
