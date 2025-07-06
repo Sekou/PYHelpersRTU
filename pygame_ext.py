@@ -53,7 +53,8 @@ class Draw:
         pygame.draw.line(screen, color, p1, p2, w)
     def lines(self, screen, color, closed, pp, w=1):
         T=getT(); pp=[CUT(T@EXT(p)) for p in pp]
-        for i in range(len(pp)):
+        start=0 if closed else 1
+        for i in range(start, len(pp)):
             pygame.draw.line(screen, color, pp[i-1], pp[i], w)
     def grid(self, screen, color, step, x0, y0, xmax, ymax, w=1):
         x,y=x0,y0
