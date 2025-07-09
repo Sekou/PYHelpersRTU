@@ -19,7 +19,6 @@ def some_tests():
     print(replace_char(test, 7, "b"))
 some_tests()
 
-
 class Creature:
     def __init__(self, str_len):
         self.str_len=str_len
