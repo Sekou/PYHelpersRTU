@@ -18,10 +18,10 @@ class Creature: #существо/особь/траектория/решение
         self.fitness=0
         self.mutate(0.5)
 
-    def mutate(self, f):
+    def mutate(self, k_mut):
         n=len(self.inds)
         for i in range(n):
-            if np.random.rand()<f:
+            if np.random.rand()<k_mut:
                 j=i+rint(1, n)
                 self.inds[i], self.inds[j%n] = self.inds[j%n], self.inds[i]
 
@@ -80,10 +80,10 @@ class GA: # генетический алгоритм
         self.creatures[self.num_elite:]=childs
     #5 мутация особей
     def mutate(self):
-        N=max(1, int(self.num_creatures * self.k_mut))
+        N=max(1, int(self.num_creatures * self.f_mut))
         for i in range(N):
             i_ = rint(self.num_elite, self.num_creatures)
-            cr = self.creatures[i_].mutate(self.f_mut)
+            cr = self.creatures[i_].mutate(self.k_mut)
     #6 выдача решения
     def get_solution(self):
         return self.creatures[0]
