@@ -6,13 +6,11 @@ import sys, pygame
 import pygame_ext
 import numpy as np
 import math
-from numba import jit
 
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
     font = pygame.font.SysFont('Comic Sans MS', sz)
-    surf=font.render(s, True, (0,0,0))
-    screen.blit(surf, (x,y))
+    screen.blit(font.render(s, True, (0,0,0)), (x,y))
 
 def rot(v, ang): #поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
@@ -26,13 +24,11 @@ def lim_ang(ang): #ограничение угла в пределах +/-pi
 def rot_arr(vv, ang): # функция для поворота массива на угол
     return [rot(v, ang) for v in vv]
 
-@jit
 def dist(p1, p2): #расстояние между точками
     dx,dy=p1[0]-p2[0],p1[1]-p2[1]
     return math.sqrt(dx*dx+dy*dy)
 
 #проверяем, находится ли точка внутри многоугольника
-@jit
 def pt_inside_ngon(point, vertices):
     (x, y), c = point, 0
     for i in range(len(vertices)):
@@ -42,7 +38,6 @@ def pt_inside_ngon(point, vertices):
             c ^= (x - x1 < ratio*(x2 - x1))
     return c
 
-@jit
 def get_segm_intersection(A, B, C, D, lines=False): #поиск точки пересечения двух отрезков
     (x1, y1), (x2, y2), (x3, y3), (x4, y4) = A, B, C, D
     denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
@@ -55,14 +50,12 @@ def get_segm_intersection(A, B, C, D, lines=False): #поиск точки пе�
         return (intersection_x, intersection_y)
     return None
 
-@jit
 def pt_segm_dist(p, p1, p2): #расстояние от точки до отрезка
     dx, dy = np.subtract(p2, p1)
     k = dy / (0.0000001 if dx==0 else dx)
     b = p1[1] - k * p1[0]
     return np.abs(-k * p[0] + p[1] - b) / math.sqrt(k * k + 1)
 
-@jit
 def pt_on_edge(pt, pts_, eps=0.1): #лежит ли точка на границе многоугольника
     for i in range(len(pts_)):
         p1, p2 = pts_[i - 1], pts_[i]
@@ -188,6 +181,9 @@ class Map:
         for i in range(int(self.h_real)):
             p1, p2 = [self.x0_px, self.y0_px + i * sy], [self.x0_px + self.w_px, self.y0_px + i * sy]
             pygame.draw.line(screen, (200,200,200), p1, p2, 1)
+        #usage: # map = Map(12, 10, 300, 250, 450, 110)
+        #usage: # for o in oo: map.try_add_pt(o.get_pos()) #map.try_add_circle(o.get_pos(), o.get_avg_radius(), 0.2)
+        #usage: # map.draw(screen)
 
 def main():
     PIXEL_SZ=0.1
@@ -217,10 +213,6 @@ def main():
         dt=1/fps
         robot.sim(dt)
         oo=robot.get_visible_objs(objs)
-        #
-        # for o in oo:
-        #     # map.try_add_pt(o.get_pos())
-        #     map.try_add_circle(o.get_pos(), o.get_avg_radius(), 0.2)
 
         screen.fill((255, 255, 255))
         robot.draw(screen)
