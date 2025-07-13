@@ -158,7 +158,6 @@ def get_some_colors():
 #сохранение скриншота в pygame
 def save_screenshot(screen):
     import time, datetime as dt
-    epoch_now = time.time()
     frmt_date = dt.datetime.fromtimestamp(
-        epoch_now).strftime("%Y-%m-%d(%H-%M-%S)")
+        time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
