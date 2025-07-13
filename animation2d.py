@@ -38,6 +38,7 @@ sz = (800, 600)
 
 def main():
     screen = pygame.display.set_mode(sz)
+    pygame.display.set_caption('Animation 2D')
     timer = pygame.time.Clock()
     fps = 20
 
