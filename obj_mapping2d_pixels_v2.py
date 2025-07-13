@@ -173,6 +173,7 @@ class Pt:
         self.state = False
     def get_pos(self):
         return [self.x, self.y]
+
 class Map:
     def __init__(self, w_real, h_real, w_px, h_px, x0_px, y0_px):
         self.w_real, self.h_real = w_real, h_real
@@ -211,6 +212,9 @@ class Map:
         for i in range(int(self.h_real)):
             p1, p2 = [self.x0_px, self.y0_px + i * sy], [self.x0_px + self.w_px, self.y0_px + i * sy]
             pygame.draw.line(screen, (200,200,200), p1, p2, 1)
+            # usage: # map = Map(12, 10, 300, 250, 450, 110)
+            # usage: # for o in oo: map.try_add_pt(o.get_pos()) #map.try_add_circle(o.get_pos(), o.get_avg_radius(), 0.2)
+            # usage: # map.draw(screen)
 
 def main():
     PIXEL_SZ=0.1
@@ -241,10 +245,6 @@ def main():
         dt=1/fps
         robot.sim(dt)
         oo=robot.get_visible_objs(objs)
-        #
-        # for o in oo:
-        #     # map.try_add_pt(o.get_pos())
-        #     map.try_add_circle(o.get_pos(), o.get_avg_radius(), 0.2)
 
         screen.fill((255, 255, 255))
         robot.draw(screen)
