@@ -147,3 +147,18 @@ def arrow2(screen, color, p0, p1, w):
     pygame.draw.line(screen, color, p0, p1, w)
     pygame.draw.line(screen, color, p1, p2, w)
     pygame.draw.line(screen, color, p1, p3, w)
+
+#формирование нескольких различных цветов
+def get_some_colors():
+    return [(220, 0, 0), (0, 220, 0), (0, 0, 220),
+     (150, 150, 0), (0, 150, 150), (150, 0, 150),
+     (120, 50, 50), (50, 120, 50), (50, 50, 120),
+     (100, 100, 50), (50, 100, 100), (100, 50, 100)]
+
+#сохранение скриншота в pygame
+def save_screenshot(screen):
+    import time, datetime as dt
+    epoch_now = time.time()
+    frmt_date = dt.datetime.fromtimestamp(
+        epoch_now).strftime("%Y-%m-%d(%H-%M-%S)")
+    pygame.image.save(screen, frmt_date+".png")
