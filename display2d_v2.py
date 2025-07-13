@@ -6,6 +6,12 @@ import sys, pygame
 
 import numpy as np
 from pygame.locals import *
+import time, datetime as dt
+
+points=[]
+points_ext=[]
+curves=[]
+agents=[]
 
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=14, color=(0,0,0)): # drawing text
@@ -19,11 +25,20 @@ def get_some_colors():
      (100, 100, 50), (50, 100, 100), (100, 50, 100)]
 
 def save_screenshot(screen):
-    import time, datetime as dt
-    epoch_now = time.time()
     frmt_date = dt.datetime.fromtimestamp(
-        epoch_now).strftime("%Y-%m-%d(%H-%M-%S)")
+        time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
+
+def save_data():
+    res= {}
+    res["points"]=points
+    res["points_ext"]=[p.as_dict() for p in points_ext]
+    res["curves"]=curves
+    res["agents"]=agents
+    frmt_date = dt.datetime.fromtimestamp(
+        time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
+    with open(frmt_date+".txt", "w") as f:
+        f.write(str(res))
 
 WIDTH, HEIGHT = 800, 600
 SCALE=70
@@ -46,7 +61,7 @@ def arrow(screen, color, p0, angle, lenpx, w):
         pygame.draw.line(screen, color, a, b, w)
 
 class ExtPt: # extended point
-    def __init__(self, x, y, radius=0, angle=None, color=(0,0,0), name=None):
+    def __init__(self, x=0, y=0, radius=0, angle=None, color=(0,0,0), name=None):
         self.x, self.y = x, y
         self.radius = radius
         self.name = name
@@ -54,17 +69,18 @@ class ExtPt: # extended point
         self.color = color
     def get_pos(self):
         return (self.x, self.y)
+    def as_dict(self):
+        return {'x': self.x, 'y': self.y, 'radius': self.radius,
+                'name': self.name, 'angle': self.angle, 'color': self.color}
+    def from_dict(self, dictionary):
+        for k, v in dictionary.items():
+            setattr(self, k, v)
     def draw(self, screen):
         p, r = trP(self.get_pos()), self.radius * SCALE
         pygame.draw.circle(screen, self.color, p, 3, 0)
         if r>0.0001: pygame.draw.circle(screen, self.color, p, r, 1)
         if self.angle: arrow(screen, self.color, p, self.angle, max(10,r), 2)
         if self.name: draw_text(screen, self.name, *p)
-
-points=[]
-points_ext=[]
-curves=[]
-agents=[]
 
 def drawGrid(screen, dx, dy):
     nx=int(WIDTH / abs(dx * SCALE) / 2 + 1)
@@ -88,20 +104,19 @@ def rot(p, ang):
     return [x,y]
 
 def displayLoop():
-    global screen
+    global screen, KEY
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Points 2D')
     timer = pygame.time.Clock()
-    fps = 10
-    global KEY
-    R0 = 5
+    fps, R0 = 10, 5
 
     while True:
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 KEY=event.key
-                if KEY==K_s:
-                    save_screenshot(screen)
+                if KEY==K_s: save_screenshot(screen)
+                if KEY==K_d: save_data()
+                if KEY==K_a: save_data() or save_screenshot(screen)
             if event.type == QUIT:
                 sys.exit(0)
         screen.fill((255, 255, 255))
