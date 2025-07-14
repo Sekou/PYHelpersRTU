@@ -1,0 +1,22 @@
+class TaskMove:
+    def __init__(self, x, y, vlin=0.5, vrot=0.5):
+        self.x, self.y=x,y
+        self.vlin, self.vrot=vlin,vrot
+        self.finished=False
+    def sim(self):
+        if self.finished: return
+        pos=sim.getObjectPosition(hRobot)
+        ang=sim.getObjectOrientation(hRobot)
+        dx,dy=self.x-pos[0], self.y-pos[1]
+        arob=ang[2]+math.pi
+        agoal=math.atan2(dy,dx)
+        dang=lim_ang(agoal-arob)
+        print(f"arob={arob:.2f}, agoal={agoal:.2f}, dang={dang:.2f}")
+        if np.linalg.norm((dx,dy))<0.1:
+            self.finished=True
+            return
+        if self.vlin==0 and abs(dang)<0.1:
+            self.finished=True
+            return
+        sim.setJointTargetVelocity(leftJointHandle, self.vlin-self.vrot*dang)
+        sim.setJointTargetVelocity(rightJointHandle, self.vlin+self.vrot*dang)
