@@ -6,6 +6,9 @@ import sys, pygame
 import numpy as np
 import time, datetime as dt
 
+WIDTH, HEIGHT = 800, 600
+SCALE=80
+
 points=[]
 points_ext=[]
 curves=[]
@@ -42,8 +45,6 @@ def save_data():
     with open(frmt_date+".txt", "w") as f:
         f.write(str(res))
 
-WIDTH, HEIGHT = 800, 600
-SCALE=150
 COLORS=get_some_colors()
 
 Y_AXIS_UP=True
