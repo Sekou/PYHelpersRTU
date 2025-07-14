@@ -3,9 +3,7 @@
 
 import math
 import sys, pygame
-
 import numpy as np
-from pygame.locals import *
 import time, datetime as dt
 
 points=[]
@@ -45,7 +43,7 @@ def save_data():
         f.write(str(res))
 
 WIDTH, HEIGHT = 800, 600
-SCALE=70
+SCALE=150
 COLORS=get_some_colors()
 
 Y_AXIS_UP=True
@@ -104,9 +102,10 @@ def try_add_pt(pt, eps=0.01):
     dd = [dist(p, pt) for p in points]
     if len(dd) > 0:
         i = np.argmin(dd)
-        if dd[i] > eps: points.append(pt)
-        else: points[i] = 0.5 * np.add(points[i], pt)
-    else: points.append(pt)
+        if dd[i] < eps:
+            else: points[i] = 0.5 * np.add(points[i], pt)
+            return
+    points.append(pt)
 
 def add_ext_pt(pt, eps=0.01):
     points_ext.append(pt)
@@ -128,12 +127,12 @@ def displayLoop():
 
     while True:
         for event in pygame.event.get():
-            if event.type == KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 KEY=event.key
-                if KEY==K_s: save_screenshot(screen)
-                if KEY==K_d: save_data()
-                if KEY==K_a: save_data() or save_screenshot(screen)
-            if event.type == QUIT:
+                if KEY==pygame.K_s: save_screenshot(screen)
+                if KEY==pygame.K_d: save_data()
+                if KEY==pygame.K_a: save_data() or save_screenshot(screen)
+            if event.type == pygame.QUIT:
                 sys.exit(0)
         screen.fill((255, 255, 255))
         drawGrid(screen, 1, 1)
