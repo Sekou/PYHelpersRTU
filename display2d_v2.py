@@ -18,6 +18,10 @@ def draw_text(screen, s, x, y, sz=14, color=(0,0,0)): # drawing text
     font = pygame.font.SysFont('Comic Sans MS', sz)
     screen.blit(font.render(s, True, (0,0,0)), (x,y))
 
+def dist(p1, p2): #расстояние между точками
+    dx,dy=p1[0]-p2[0],p1[1]-p2[1]
+    return math.sqrt(dx*dx+dy*dy)
+
 def get_some_colors():
     return [(220, 0, 0), (0, 220, 0), (0, 0, 220),
      (150, 150, 0), (0, 150, 150), (150, 0, 150),
@@ -46,6 +50,7 @@ COLORS=get_some_colors()
 
 Y_AXIS_UP=True
 k=(-1 if Y_AXIS_UP else 1)
+R_POINT=15
 
 def trP(p):
     return (p[0] * SCALE + WIDTH // 2, p[1] * SCALE * k + HEIGHT // 2)
@@ -76,10 +81,10 @@ class ExtPt: # extended point
         for k, v in dictionary.items():
             setattr(self, k, v)
     def draw(self, screen):
-        p, r = trP(self.get_pos()), self.radius * SCALE
+        p, r = trP(self.get_pos()), self.radius * SCALE if self.radius else R_POINT
         pygame.draw.circle(screen, self.color, p, 3, 0)
-        if r>0.0001: pygame.draw.circle(screen, self.color, p, r, 1)
-        if self.angle: arrow(screen, self.color, p, self.angle, max(10,r), 2)
+        if self.radius: pygame.draw.circle(screen, self.color, p, max(10, r), 1)
+        if self.angle: arrow(screen, self.color, p, self.angle, max(10, r), 2)
         if self.name: draw_text(screen, self.name, *p)
 
 def drawGrid(screen, dx, dy):
@@ -94,6 +99,17 @@ def drawGrid(screen, dx, dy):
     for i in range(ny):
         pygame.draw.line(screen, c, (0,i*dy+hh), (WIDTH, i * dy + hh))
         if i>0: pygame.draw.line(screen, c, (0,-i*dy+hh), (WIDTH, -i * dy + hh))
+
+def try_add_pt(pt, eps=0.1):
+    dd = [dist(p, pt) for p in points]
+    if len(dd) > 0:
+        i = np.argmin(dd)
+        if dd[i] > eps: points.append(pt)
+        else: points[i] = 0.5 * np.add(points[i], pt)
+    else: points.append(pt)
+
+def add_ext_pt(pt, eps=0.1):
+    points_ext.append(pt)
 
 KEY=None # to read from external scripts
 
@@ -154,15 +170,18 @@ if __name__=="__main__":
 
 #USAGE:
 # import display2d_v2 as display2d
+# from display2d_v2 import ExtPt
 #
 # display2d.start()
 # display2d.points=[[1,1], [2,2], [-1,2]] # ordinary points
+# display2d.try_add_pt([2.5,2.2],eps=0.1)
 # display2d.agents=[[1, -1, 0.5], [1.5, -2, 1]] # robot positions
 #
 # display2d.points_ext=[ # points / objects with direction and color
-#     display2d.ExtPt(1.5, 1.5, 0.1, 1, (100,100,0), "Pt1"),
-#     display2d.ExtPt(2.5, 0.5, 0.5, 1, (100,100,0), "Pt2"),
-#     display2d.ExtPt(-1.5, 1.5, 0.5, 1, (100,100,0), "Pt3") ]
+#     ExtPt(1.5, 1.5, 0.1, 1, (100,100,0), "Pt1"),
+#     ExtPt(2.5, 0.5, 0.5, 1, (100,100,0), "Pt2"),
+#     ExtPt(-1.5, 1.5, 0.5, 1, (100,100,0), "Pt3") ]
+# display2d.add_ext_pt(ExtPt(-2.5, 0.5, None, 1, (50,240,0), "Pt4"))
 #
 # # curves (trajectories, zones, ...)
 # display2d.curves=[[(0,0), (1,1), (2,1), (3,0.5)]]
