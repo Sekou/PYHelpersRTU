@@ -103,7 +103,7 @@ def try_add_pt(pt, eps=0.01):
     if len(dd) > 0:
         i = np.argmin(dd)
         if dd[i] < eps:
-            else: points[i] = 0.5 * np.add(points[i], pt)
+            points[i] = 0.5 * np.add(points[i], pt)
             return
     points.append(pt)
 
