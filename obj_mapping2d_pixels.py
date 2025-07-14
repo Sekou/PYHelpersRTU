@@ -159,9 +159,10 @@ class Map:
         dd=[dist(p, pt) for p in self.pts]
         if len(dd)>0:
             i=np.argmin(dd)
-            if dd[i]>eps: self.pts.append(pt)
-            else: self.pts[i]=0.5*np.add(self.pts[i], pt)
-        else: self.pts.append(pt)
+            if dd[i]<eps:
+                self.pts[i]=0.5*np.add(self.pts[i], pt)
+                return
+        self.pts.append(pt)
     def try_add_circle(self, pt, r, eps=0.1):
         n=int(2*np.pi*r/eps)
         da=2*np.pi/n
