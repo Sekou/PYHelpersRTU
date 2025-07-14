@@ -35,7 +35,7 @@ def save_screenshot(screen):
 
 def save_data():
     res= {}
-    res["points"]=points
+    res["points"]=[list(p) for p in points]
     res["points_ext"]=[p.as_dict() for p in points_ext]
     res["curves"]=curves
     res["agents"]=agents
