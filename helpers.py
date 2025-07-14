@@ -1,3 +1,5 @@
+#Various helper functions (author: Sekou Diane, 2024-2025)
+
 def prob_sel(probs): #вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
     if m==0: return np.random.randint(len(probs))
