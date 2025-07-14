@@ -100,7 +100,7 @@ def drawGrid(screen, dx, dy):
         pygame.draw.line(screen, c, (0,i*dy+hh), (WIDTH, i * dy + hh))
         if i>0: pygame.draw.line(screen, c, (0,-i*dy+hh), (WIDTH, -i * dy + hh))
 
-def try_add_pt(pt, eps=0.1):
+def try_add_pt(pt, eps=0.01):
     dd = [dist(p, pt) for p in points]
     if len(dd) > 0:
         i = np.argmin(dd)
@@ -108,7 +108,7 @@ def try_add_pt(pt, eps=0.1):
         else: points[i] = 0.5 * np.add(points[i], pt)
     else: points.append(pt)
 
-def add_ext_pt(pt, eps=0.1):
+def add_ext_pt(pt, eps=0.01):
     points_ext.append(pt)
 
 KEY=None # to read from external scripts
