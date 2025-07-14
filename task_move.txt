@@ -1,3 +1,8 @@
+#2025, S. Diane
+#Two-wheeled robot task for Coppelia Sim
+#Behaviour depends on vlin and vrot: 
+#robot is either moving to a point or 
+#looking at a target while staying in place
 class TaskMove:
     def __init__(self, x, y, vlin=0.5, vrot=0.5):
         self.x, self.y=x,y
