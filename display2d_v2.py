@@ -7,7 +7,11 @@ import numpy as np
 import time, datetime as dt
 
 WIDTH, HEIGHT = 800, 600
-SCALE=80
+SCALE=75
+
+KEY = None # to read from external scripts
+INFO = None # to set from external scripts
+INFO_TEXT_SZ=25
 
 points=[]
 points_ext=[]
@@ -46,7 +50,6 @@ def save_data():
         f.write(str(res))
 
 COLORS=get_some_colors()
-
 Y_AXIS_UP=True
 k=(-1 if Y_AXIS_UP else 1)
 R_POINT=15
@@ -111,8 +114,6 @@ def try_add_pt(pt, eps=0.01):
 def add_ext_pt(pt, eps=0.01):
     points_ext.append(pt)
 
-KEY=None # to read from external scripts
-
 def rot(p, ang):
     s,c=math.sin(ang), math.cos(ang)
     x=p[0]*c-p[1]*s
@@ -156,6 +157,9 @@ def displayLoop():
         # coordinate system axes
         arrow(screen, (255,0,0), trP((0,0)), 0, 30, 2)
         arrow(screen, (0,255,0), trP((0,0)), math.pi/2, 30, 2)
+
+        if INFO:
+            draw_text(screen, INFO, 5, 5, sz=INFO_TEXT_SZ)
 
         pygame.display.flip()
         timer.tick(fps)
