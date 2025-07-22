@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 pygame.font.init()
-def drawText(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
+def draw_text(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
     font = pygame.font.SysFont('Comic Sans MS', sz)
     screen.blit(font.render(s, True, (0,0,0)), (x,y))
 
@@ -26,7 +26,7 @@ def main():
 
         screen.fill((255, 255, 255))     
 
-        drawText(screen, f"Test = {1}", 5, 5)
+        draw_text(screen, f"Test = {1}", 5, 5)
 
         pygame.display.flip()
         timer.tick(fps)
