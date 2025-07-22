@@ -14,16 +14,15 @@ def main():
     pygame.display.set_caption('Animation 2D')
     timer = pygame.time.Clock()
     fps = 20
-
+    dt=1/fps
+    
     while True:
         for ev in pygame.event.get():
             if ev.type==pygame.QUIT:
                 sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_r:
-                    print("Hi")
-
-        dt=1/fps        
+                    print("Hi")                
 
         screen.fill((255, 255, 255))     
 
