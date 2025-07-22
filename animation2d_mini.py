@@ -5,8 +5,7 @@ import math
 pygame.font.init()
 def drawText(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
     font = pygame.font.SysFont('Comic Sans MS', sz)
-    surf=font.render(s, True, (0,0,0))
-    screen.blit(surf, (x,y))
+    screen.blit(font.render(s, True, (0,0,0)), (x,y))
 
 sz = (800, 600)
 
