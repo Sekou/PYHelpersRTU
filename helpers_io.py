@@ -1,3 +1,5 @@
+#2025, S. Diane
+
 #возвращает короткое имя файла (без пути и расширения)
 def get_short_name(file_path):
     pathname, extension = os.path.splitext(file_path)
