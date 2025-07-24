@@ -5,6 +5,11 @@ def get_short_name(file_path):
     pathname, extension = os.path.splitext(file_path)
     return pathname.replace("\\", "/").split('/')[-1]
 
+#возвращает имя папки для заданного файла
+def get_dir_name(file_path):
+    res = file_path.replace("\\", "/")
+    return file_path[:res.rfind("/")]
+    
 #создает директорию для файла по его пути
 def check_create_file_dir(file):
     file_=file.replace("\\", "/")
