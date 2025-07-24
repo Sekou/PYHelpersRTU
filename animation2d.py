@@ -4,8 +4,8 @@ import numpy as np
 import math
 
 pygame.font.init()
-def draw_text(screen, s, x, y, sz=15, color=(0, 0, 0)):  # отрисовка текста
-    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, color), (x, y))
+def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
 def rot(v, ang): #поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
