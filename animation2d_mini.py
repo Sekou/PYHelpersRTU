@@ -3,9 +3,8 @@ import numpy as np
 import math
 
 pygame.font.init()
-def draw_text(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
-    font = pygame.font.SysFont('Comic Sans MS', sz)
-    screen.blit(font.render(s, True, (0,0,0)), (x,y))
+def draw_text(screen, s, x, y, sz=15, color=(0, 0, 0)):  # отрисовка текста
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, color), (x, y))
 
 sz = (800, 600)
 
