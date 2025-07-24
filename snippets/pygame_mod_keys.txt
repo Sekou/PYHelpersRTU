@@ -1,0 +1,3 @@
+if event.type == pygame.KEYDOWN:
+    if event.key == pygame.K_s and (event.mod & pygame.KMOD_CTRL):
+        print("Ctrl + 'S' was pressed!") # Perform the shortcut operation
