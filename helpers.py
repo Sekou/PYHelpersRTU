@@ -1,5 +1,8 @@
 #Various helper functions (author: Sekou Diane, 2024-2025)
 
+def draw_text(screen, s, x, y, sz=15, color=(0, 0, 0)):  # отрисовка текста
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, color), (x, y))
+    
 def prob_sel(probs): #вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
     if m==0: return np.random.randint(len(probs))
