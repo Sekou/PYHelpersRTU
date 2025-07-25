@@ -65,8 +65,7 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
     if denom == 0: return None  # отрезки параллельны или совпадают
     t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
     u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
-    if 0 <= t <= 1 and 0 <= u <= 1:
-        return (x1 + t * (x2 - x1), y1 + t * (y2 - y1))
+    if 0 <= t <= 1 and 0 <= u <= 1: return (x1 + t * (x2 - x1), y1 + t * (y2 - y1))
     return None
 
 #пересечения отрезка с прямоугольником
