@@ -70,8 +70,7 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
 
 #пересечения отрезка с прямоугольником
 def get_segm_intersection_rect(A, B, x, y, w, h):
-    res=[]
-    pp=[[x,y], [x+w,y], [x+w,y+h], [x,y+h]]
+    res, pp=[], [[x,y], [x+w,y], [x+w,y+h], [x,y+h]]
     for i in range(4):
         p1, p2 = pp[i-1], pp[i]
         p=get_segm_intersection(A, B, p1, p2)
