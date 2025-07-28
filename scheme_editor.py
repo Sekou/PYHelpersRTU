@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import simpledialog
 import numpy as np
 import math
+import json
 
 # Константы
 WIDTH, HEIGHT = 800, 600
@@ -250,12 +251,10 @@ if __name__ == "__main__":
                 sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_1:
-                    import json
                     with open("scheme.json", "w") as f:
                         D=canvas.to_dict()
                         json.dump(D, f)
                 if ev.key == pygame.K_2:
-                    import json
                     with open("scheme.json", "r") as f:
                         D=json.load(f)
                         canvas.from_dict(D)
