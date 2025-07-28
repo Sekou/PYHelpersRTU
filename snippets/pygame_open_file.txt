@@ -1,12 +1,17 @@
 1
 import tkinter as tk
-from tkinter import filedialog
-root = tk.Tk()
-root.withdraw()
+from tkinter import simpledialog, filedialog
+tk.Tk().withdraw()
 
 2
 if ev.key == pygame.K_o:
-    file_path = filedialog.askopenfilename()
-    if file_path:
-        with open(file_path, "r") as f:
-            text=f.read()
+    if file_path := filedialog.askopenfilename()
+        with open(file_path, "r") as f: text=f.read()
+
+3
+if ev.key == pygame.K_s:
+    if file_path := filedialog.asksaveasfilename(initialdir="."):
+        with open(file_path, "w") as f: json.dump(canvas.to_dict(), f)
+if ev.key == pygame.K_o:
+    if file_path := filedialog.askopenfilename(initialdir="."):
+        with open(file_path, "r") as f: canvas.from_dict(json.load(f))
