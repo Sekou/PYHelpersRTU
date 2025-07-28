@@ -278,8 +278,7 @@ if __name__ == "__main__":
                                     obj_under.set_pos(ev.pos[0] + offset_x, ev.pos[1] + offset_y)
                                     draw_all(screen, canvas)
                                 if ev.type == pygame.MOUSEBUTTONUP:
-                                    if ev.button == 1:
-                                        mode = "paint"
+                                    if ev.button == 1: mode = "paint"
                         # Протягивание стрелки
                         if mode == "arrow":
                             tmp_obj = Obj(*ev.pos) #создание кончика стрелки
