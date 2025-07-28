@@ -204,7 +204,7 @@ class Canvas:
     def find_arrow(self, pos):
         for o in self.objs:
             for a in o.arrows:
-                if a.contains_point(ev.pos): return a
+                if a.contains_point(pos): return a
         return None
     def to_dict(self):
         return [o.to_dict() for o in self.objs]
