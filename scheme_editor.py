@@ -251,13 +251,11 @@ if __name__ == "__main__":
                 sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_1:
-                    with open("scheme.json", "w") as f:
-                        D=canvas.to_dict()
-                        json.dump(D, f)
+                    with open("tmp/scheme1.json", "w") as f:
+                        json.dump(canvas.to_dict(), f)
                 if ev.key == pygame.K_2:
-                    with open("scheme.json", "r") as f:
-                        D=json.load(f)
-                        canvas.from_dict(D)
+                    with open("tmp/scheme1.json", "r") as f:
+                        canvas.from_dict(json.load(f))
                 if ev.key == pygame.K_n:
                     canvas.objs=[]
                 if ev.key == pygame.K_c:
