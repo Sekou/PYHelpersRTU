@@ -67,10 +67,10 @@ def pt_segm_dist(p, p1, p2): #расстояние от точки до отре
     b = p1[1] - k * p1[0]
     return np.abs(-k * p[0] + p[1] - b) / math.sqrt(k * k + 1)
 
-id=0
+block_id=0
 def get_next_id():
-    global id
-    return (id:=id+1)
+    global block_id
+    return (block_id:=block_id+1)
 
 # Создание экрана
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -220,6 +220,8 @@ class Canvas:
                 a2=Arrow(o.get_pos(), o2.get_pos())
                 a2.obj1, a2.obj2, a2.text = o, o2, txt
                 o.arrows[i]=a2
+    def get_max_id(self, res=0):
+        return max([o.id for o in self.objs])
 
 # Функция для запроса текста
 def ask_for_text(text):
@@ -251,11 +253,12 @@ if __name__ == "__main__":
                 sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_1:
-                    with open("tmp/scheme1.json", "w") as f:
+                    with open("tmp/scheme.json", "w") as f:
                         json.dump(canvas.to_dict(), f)
                 if ev.key == pygame.K_2:
-                    with open("tmp/scheme1.json", "r") as f:
+                    with open("tmp/scheme.json", "r") as f:
                         canvas.from_dict(json.load(f))
+                        block_id=canvas.get_max_id()
                 if ev.key == pygame.K_n:
                     canvas.objs=[]
                 if ev.key == pygame.K_c:
@@ -296,7 +299,7 @@ if __name__ == "__main__":
                                         obj_next= canvas.find_object(ev.pos)
                                         if obj_next and obj_under!=obj_next: #закрепление кончика стрелки на выбранном объекте
                                             new_arrow.obj1, new_arrow.obj2=obj_under, obj_next
-                                            new_arrow.text="arrow"
+                                            new_arrow.text=""
                                         else: obj_under.arrows.remove(new_arrow)
                                     mode = "paint"
                 elif ev.button == 3:  # Правая кнопка мыши
