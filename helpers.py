@@ -2,6 +2,10 @@
 
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
+
+def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False):
+    for i,t in enumerate(text.split("\n")): # отрисовка многострочного текста
+        draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
     
 def prob_sel(probs): #вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
