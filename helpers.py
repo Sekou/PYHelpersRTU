@@ -162,3 +162,34 @@ def save_screenshot(screen):
     frmt_date = dt.datetime.fromtimestamp(
         time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
+
+# Функция для запроса текста
+def ask_for_text(text, cap="Введите текст", tit="Текст объекта:"):
+    (root := tk.Tk()).withdraw()  # Скрыть главное окно
+    def activate():
+        time.sleep(0.25)
+        try: pyautogui.getWindowsWithTitle("Введите текст")[0].activate()
+        except: pass
+    threading.Thread(target=activate).start()
+    text = simpledialog.askstring(cap, tit, initialvalue=text)
+    root.destroy()
+    return text
+
+# Функция для запроса многострочного текста
+def ask_multiline_string(text, cap="Введите текст", tit="Текст объекта:"):
+    (root := tk.Tk()).title(cap)
+    ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
+    text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=8, font=("Times New Roman", 15))
+    text_area.insert(tk.INSERT, text)
+    text_area.grid(column=0, row=2, pady=10, padx=10)
+    result=""
+    def read_text():
+        nonlocal result, root
+        result = text_area.get("1.0", tk.END).strip()
+        root.quit()
+    text_area.focus()
+    btn = ttk.Button(root, text="OK", command=read_text)
+    btn.grid(column=0, row=3, pady=10)
+    root.mainloop()
+    root.destroy()
+    return result
