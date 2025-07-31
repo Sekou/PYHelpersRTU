@@ -163,8 +163,8 @@ def save_screenshot(screen):
         time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
 
-# Функция для запроса текста
-def ask_for_text(text, cap="Введите текст", tit="Текст объекта:"):
+#функция для запроса текста
+def ask_for_text(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).withdraw()  # Скрыть главное окно
     def activate():
         time.sleep(0.25)
@@ -174,9 +174,9 @@ def ask_for_text(text, cap="Введите текст", tit="Текст объе
     text = simpledialog.askstring(cap, tit, initialvalue=text)
     root.destroy()
     return text
-
-# Функция для запроса многострочного текста
-def ask_multiline_string(text, cap="Введите текст", tit="Текст объекта:"):
+    
+#функция для запроса многострочного текста
+def ask_multiline_string(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).title(cap)
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=8, font=("Times New Roman", 15))
