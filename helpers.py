@@ -181,15 +181,21 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=8, font=("Times New Roman", 15))
     text_area.insert(tk.INSERT, text)
-    text_area.grid(column=0, row=2, pady=10, padx=10)
+    text_area.grid(column=0, row=2,  columnspan=2, pady=10, padx=10)
     result=""
     def read_text():
         nonlocal result, root
         result = text_area.get("1.0", tk.END).strip()
         root.quit()
+    def cancel():
+        nonlocal result, root
+        result = None
+        root.quit()
     text_area.focus()
     btn = ttk.Button(root, text="OK", command=read_text)
-    btn.grid(column=0, row=3, pady=10)
+    btn.grid(column=0, row=3, pady=10, padx=0)
+    btn2 = ttk.Button(root, text="Cancel", command=cancel)
+    btn2.grid(column=1, row=3, pady=10, padx=0)
     root.mainloop()
     root.destroy()
     return result
