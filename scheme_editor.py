@@ -182,7 +182,7 @@ class Rect(Obj):
         return {**super().to_dict(), "rect":[r.x,r.y,r.w,r.h]}
     def from_dict(self, D):
         super().from_dict(D)
-        self.rect=self.rect = pygame.Rect(*D["rect"])
+        self.rect = pygame.Rect(*D["rect"])
 
 #класс холста
 class Canvas:
