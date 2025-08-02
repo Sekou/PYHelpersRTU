@@ -110,7 +110,7 @@ class Obj:
                     pp[i]=pi[0]
                     pygame.draw.circle(surface, (255,0,0), pi[0], 3)
             a.p0, a.p1 = pp[0], pp[1]
-            a.draw(surface, objs)
+            a.draw(surface)
     def to_dict(self):
         D = {"id":self.id, "x":self.x, "y":self.y, "arrows":[[a.obj2.id, a.text] for a in self.arrows],
              "text":self.text, "type":self.__class__.__name__}
@@ -126,7 +126,7 @@ class Arrow:
         self.p0, self.p1=p0, p1
         self.obj1, self.obj2=None, None
         self.text=""
-    def draw(self, surface, objs):
+    def draw(self, surface):
         arrow2(surface, (0,0,0), self.p0, self.p1, 2)
         if self.text:
             c=np.mean((self.p0, self.p1), axis=0)
@@ -163,7 +163,7 @@ class Circle(Obj):
 class Rect(Obj):
     def __init__(self, x, y, text=""):
         super().__init__(x, y)
-        self.rect = pygame.Rect(x, y, RECT_WIDTH, RECT_HEIGHT)
+        self.rect = pygame.Rect(x-RECT_WIDTH/2, y-RECT_HEIGHT/2, RECT_WIDTH, RECT_HEIGHT)
         self.text=text
     def get_pos(self):
         return (self.rect.x+self.rect.width/2, self.rect.y+self.rect.height/2)
@@ -245,7 +245,7 @@ fps=20
 # Основная функция
 if __name__ == "__main__":
     canvas=Canvas()
-
+    last_pos=(0,0)
     mode="paint"
     while True:
         for ev in pygame.event.get():
@@ -262,11 +262,12 @@ if __name__ == "__main__":
                 if ev.key == pygame.K_n:
                     canvas.objs=[]
                 if ev.key == pygame.K_c:
-                    o=Circle(200,200, "circle")
+                    o=Circle(*last_pos, "circle")
                     canvas.objs.append(o)
                 if ev.key == pygame.K_r:
-                    o=Rect(200,300, "rect")
+                    o=Rect(*last_pos, "rect")
                     canvas.objs.append(o)
+            if ev.type == pygame.MOUSEMOTION: last_pos=ev.pos
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if ev.button == 1: # Левая кнопка мыши
                     if obj_under := canvas.find_object(ev.pos):
