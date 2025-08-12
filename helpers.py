@@ -178,6 +178,7 @@ def ask_for_text(text="", cap="Введите текст", tit="Текст об�
 #функция для запроса многострочного текста
 def ask_multiline_string(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).title(cap)
+    root.protocol("WM_DELETE_WINDOW", lambda: root.quit())
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=8, font=("Times New Roman", 15))
     text_area.insert(tk.INSERT, text)
