@@ -3,6 +3,9 @@
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
+def arr_to_str(arr, sep="\t"): #конвертирует одномерный массив в строку
+    return sep.join([f"{v:.3f}" for v in arr])
+
 def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False):
     for i,t in enumerate(text.split("\n")): # отрисовка многострочного текста
         draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
@@ -30,6 +33,18 @@ def lim_ang(ang): # ограничение угла в пределах +/-pi
 
 def lim_abs(val, amp): # ограничение значения по абсолютной величине
     return min(amp, max(-amp, val))
+
+def nonlin(a, b, nominal=1): # нелинейная функция (степенная)
+    return math.pow(abs(a/nominal), b-1) * a
+    
+def lin_nonlin(a, gamma, nominal=1): # линейно-нелинейная функция
+    return a if abs(a)<nominal else math.pow(abs(a/nominal), gamma-1) * a
+    
+def lin_nonlin_sat(v, gamma, th1, th2): # линейно-нелинейная функция с насыщением
+    return lim_abs(lin_nonlin(v, gamma, th1), th2)
+    
+def shift_to_zero(v, delta): # уменьшение значения по абсолютной величине
+    return max(0, v-delta) if v>0 else min(0, v+delta)
 
 def ang_to(p1, p2): # Угол от 1 точки на 2 точку
     return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
