@@ -7,7 +7,7 @@ def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False):
     for i,t in enumerate(text.split("\n")): # отрисовка многострочного текста
         draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
     
-def prob_sel(probs): #вероятностный выбор индекса элемента
+def prob_sel(probs): # вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
     if m==0: return np.random.randint(len(probs))
     for i in range(len(probs)):
@@ -15,18 +15,21 @@ def prob_sel(probs): #вероятностный выбор индекса эл�
         if s>=r: return i
     return -1
 
-def read_pts(filename): #чтение массива целочисленных точек
+def read_pts(filename): # чтение массива целочисленных точек
     with open(filename, "r") as f:
         return [[int(v) for v in l.split()] for l in f.readlines()]
 
-def rot(v, ang): #поворот вектора на угол
+def rot(v, ang): # поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
-def lim_ang(ang): #ограничение угла в пределах +/-pi
+def lim_ang(ang): # ограничение угла в пределах +/-pi
     while ang > math.pi: ang -= 2 * math.pi
     while ang <= -math.pi: ang += 2 * math.pi
     return ang
+
+def lim_abs(val, amp): # ограничение значения по абсолютной величине
+    return min(amp, max(-amp, val))
 
 def ang_to(p1, p2): # Угол от 1 точки на 2 точку
     return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
