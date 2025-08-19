@@ -47,6 +47,12 @@ def lin_interp(xx, yy, x): #линейная интерполяция по то�
     i=1 if x<xx[0] else 0
     while i<len(xx)-1 and x>xx[i]: i+=1
     return yy[i-1]+(x-xx[i-1])/(xx[i]-xx[i-1])*(yy[i]-yy[i-1])
+
+#подбор значения по монотонной нелинейной функции 
+def find_inv_x(f, y, xmin, xmax, step=0.1):
+    xx=np.arange(xmin, xmax, step)
+    dd=[abs(y-f(x)) for x in xx]
+    return xx[np.argmin(dd)]
     
 def shift_to_zero(v, delta): # уменьшение значения по абсолютной величине
     return max(0, v-delta) if v>0 else min(0, v+delta)
