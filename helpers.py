@@ -42,6 +42,11 @@ def lin_nonlin(a, gamma, nominal=1): # линейно-нелинейная фу�
     
 def lin_nonlin_sat(v, gamma, th1, th2): # линейно-нелинейная функция с насыщением
     return lim_abs(lin_nonlin(v, gamma, th1), th2)
+
+def lin_interp(xx, yy, x): #линейная интерполяция по точечным данным
+    i=1 if x<xx[0] else 0
+    while i<len(xx)-1 and x>xx[i]: i+=1
+    return yy[i-1]+(x-xx[i-1])/(xx[i]-xx[i-1])*(yy[i]-yy[i-1])
     
 def shift_to_zero(v, delta): # уменьшение значения по абсолютной величине
     return max(0, v-delta) if v>0 else min(0, v+delta)
