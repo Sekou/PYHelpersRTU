@@ -228,3 +228,12 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     root.mainloop()
     root.destroy()
     return result
+
+#матрица поворота трехмерного вектора или объекта
+def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
+    cr, cp, cy = math.cos(roll), math.cos(pitch), math.cos(yaw)
+    sr, sp, sy = math.sin(roll), math.sin(pitch), math.sin(yaw)
+    mrol = [[1, 0, 0, 0], [0, cr, -sr, 0], [0, sr, cr, 0], [0, 0, 0, 1]]  # x
+    mpit = [[cp, 0, sp, 0], [0, 1, 0, 0], [-sp, 0, cp, 0], [0, 0, 0, 1]]  # y
+    myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]  # z
+    return np.array(mrol) @ mpit @ myaw
