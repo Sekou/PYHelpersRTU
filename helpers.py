@@ -229,7 +229,7 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     root.destroy()
     return result
 
-#матрица поворота трехмерного вектора или объекта
+#матрица поворота трехмерного вектора или объекта (3д-модели, камеры, дрона.ю датчика...)
 def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
     cr, cp, cy = math.cos(roll), math.cos(pitch), math.cos(yaw)
     sr, sp, sy = math.sin(roll), math.sin(pitch), math.sin(yaw)
