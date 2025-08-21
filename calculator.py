@@ -5,7 +5,7 @@ from tkinter import scrolledtext, messagebox
 import re
 
 def proc_format():
-    input = txt_input_query.get("1.0", tk.END).strip()
+    input = txt_input.get("1.0", tk.END).strip()
     txt_output.delete(1.0, tk.END)
     if re.fullmatch(r"^[\d+\-*/().]+$", input) is not None:
         res=eval(input)
