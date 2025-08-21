@@ -18,12 +18,12 @@ root.title("Расчет")
 lbl_instruct = tk.Label(root, text="Введите выражение:")
 lbl_instruct.pack(pady=5)
 
-txt_input_query = tk.Text(root, height=2, width=70)
-txt_input_query.pack(pady=5)
+txt_input = tk.Text(root, height=2, width=70)
+txt_input.pack(pady=5)
 
 # создаем кнопку обработки
-btn_convert = tk.Button(root, text="Рассчитать", command=proc_format)
-btn_convert.pack(pady=5)
+btn_calc = tk.Button(root, text="Рассчитать", command=proc_format)
+btn_calc.pack(pady=5)
 
 # место для вывода результата
 lbl_instruct = tk.Label(root, text="Рассчитанный результат: ")
