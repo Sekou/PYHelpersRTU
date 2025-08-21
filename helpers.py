@@ -56,6 +56,9 @@ def find_inv_x(f, y, xmin, xmax, step=0.1):
 def shift_to_zero(v, delta): # уменьшение значения по абсолютной величине
     return max(0, v-delta) if v>0 else min(0, v+delta)
 
+def shift_to(v, target, delta): # сдвиг значения к целевой переменной
+    return max(target, v-delta) if v>target else min(target, v+delta)
+
 def ang_to(p1, p2): # Угол от 1 точки на 2 точку
     return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
     
