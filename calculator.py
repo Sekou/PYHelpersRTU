@@ -1,3 +1,5 @@
+#S. Diane, expression calculator, 2025
+
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
 import re
