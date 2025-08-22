@@ -32,5 +32,15 @@ lbl_instruct.pack(pady=5)
 txt_output = tk.Text(root, height=2, width=70)
 txt_output.pack(pady=5)
 
+# Учет русской раскладки
+def run_cmd(root, name):
+    if isinstance(widget:=root.focus_get(), tk.Text): widget.event_generate(name)
+def keypress(e):
+    if e.keycode == 86 and e.keysym != 'v': run_cmd(root, "<<Paste>>")
+    elif e.keycode == 67 and e.keysym != 'c': run_cmd(root, "<<Copy>>")
+    elif e.keycode == 88 and e.keysym != 'x': run_cmd(root, "<<Cut>>")
+    elif e.keycode == 65 and e.keysym != 'a': run_cmd(root, "<<SelectAll>>")
+root.bind("<Control-KeyPress>", keypress)
+
 # запуск приложения
 root.mainloop()
