@@ -209,19 +209,19 @@ def ask_for_text(text="", cap="Введите текст", tit="Текст об�
 #функция для запроса многострочного текста
 def ask_multiline_string(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).title(cap)
-    root.protocol("WM_DELETE_WINDOW", lambda: root.quit())
+    def cancel():
+        nonlocal result, root
+        result = None
+        root.quit()
+    root.protocol("WM_DELETE_WINDOW", lambda: cancel)
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
-    text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=40, height=8, font=("Times New Roman", 15))
+    text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=20, font=("Calibri", 12))
     text_area.insert(tk.INSERT, text)
     text_area.grid(column=0, row=2,  columnspan=2, pady=10, padx=10)
     result=""
     def read_text():
         nonlocal result, root
         result = text_area.get("1.0", tk.END).strip()
-        root.quit()
-    def cancel():
-        nonlocal result, root
-        result = None
         root.quit()
     text_area.focus()
     btn = ttk.Button(root, text="OK", command=read_text)
