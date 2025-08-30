@@ -6,9 +6,21 @@ def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка те�
 def arr_to_str(arr, sep="\t"): #конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
 
-def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False):
-    for i,t in enumerate(text.split("\n")): # отрисовка многострочного текста
+def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, sep="\n"):
+    for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
         draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
+
+# разбивка длинной строки на более маленькие для компактной отрисовки
+def insert_str_breaks(s, max_w_len=15, sep="\\"): 
+    n, n2=len(s), int(math.sqrt(len(s)))+1
+    lst, shift, cnt, trigger=list(s), 0, 0, False
+    for i in range(n):
+        if i>0 and any([j%n2==0 for j in [i, i+1, i+2]]): trigger=True
+        if ((cnt:=cnt+1)>=max_w_len or s[i].isspace()) and trigger:
+            if s[i].isspace(): lst[i + shift] = sep
+            else: lst.insert(i - 1 + (shift:=shift+1), sep)
+            cnt, trigger=0, False
+    return "".join(lst)
     
 def prob_sel(probs): # вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
