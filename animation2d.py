@@ -22,7 +22,7 @@ def rot_arr(vv, ang): # функция для поворота массива н
 def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p1, p2))
 
-def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
+def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина, высота и угол поворота прямогуольника
     pts = [
         [- w/2, - h/2],
         [+ w/2, - h/2],
