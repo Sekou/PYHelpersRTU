@@ -79,8 +79,7 @@ def dist(p1, p2): #расстояние между точками
 
 def rot_segm(segm, ang): #центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
-    v1=np.subtract(segm[0], c)
-    v2=np.subtract(segm[1], c)
+    v1,v2=np.subtract(segm[0], c), np.subtract(segm[1], c)
     return list(np.add([rot(v1, ang), rot(v2, ang)], c))
     
 def pt_segm_dist(p, p1, p2): #расстояние от точки до отрезка
@@ -222,8 +221,7 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     result=""
     def cancel():
         nonlocal result, root
-        result = None
-        root.quit()
+        result = None; root.quit()
     root.protocol("WM_DELETE_WINDOW", cancel)
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=20, font=("Calibri", 12))
@@ -238,8 +236,7 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     btn.grid(column=0, row=3, pady=10, padx=0)
     btn2 = ttk.Button(root, text="Cancel", command=cancel)
     btn2.grid(column=1, row=3, pady=10, padx=0)
-    root.mainloop()
-    root.destroy()
+    root.mainloop(); root.destroy()
     return result
 
 #матрица поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
