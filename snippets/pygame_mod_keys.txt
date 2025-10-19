@@ -1,3 +1,11 @@
+#Variant 1
+keys = pygame.key.get_pressed()
+    if keys[pygame.K_LSHIFT] and keys[pygame.K_w]:
+        print("Left Shift + W are pressed")
+
+#Variant 2
 if event.type == pygame.KEYDOWN:
     if event.key == pygame.K_s and (event.mod & pygame.KMOD_CTRL):
         print("Ctrl + 'S' was pressed!") # Perform the shortcut operation
+    
+    
