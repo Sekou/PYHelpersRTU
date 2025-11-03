@@ -47,6 +47,9 @@ def draw_plot(screen, p1, width, height, valsx, valsy, scale_x=1, scale_y=1, sig
         if dx>b or dx<a or dy>c or dy<d: continue
         else: pygame.draw.line(screen, (0,0,255), pa, pb, 2)
 
-
-
+# Example
+# wpx, hpx, wreal, hreal=750, 500, 100, 30*2
+# sc1, sc2 = wpx/wreal, hpx/hreal
+# xx,yy=[0,50,100], [5,7,6]
+# draw_plot(screen, (25,300), wpx, hpx, xx, yy, sc1, sc2, signed_y=True
 
