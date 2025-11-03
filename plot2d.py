@@ -28,11 +28,11 @@ def draw_plot_mini(screen, p1, width, height, valsx, valsy, sx=1, sy=1):
     for pa, pb in zip(pp[1:], pp[:-1]):
         pygame.draw.line(screen, (0,0,255), pa, pb, 2)
 
-def draw_plot(screen, p1, width, height, valsx, valsy, sx=1, sy=1, fullX=False, fullY=False):
+def draw_plot(screen, p1, width, height, valsx, valsy, sx=1, sy=1, signed_x=False, signed_y=False):
     p1=np.array(p1)
     a, b, c, d = 0, width, 0, -height
-    if fullX: a, b = -width/2, width/2
-    if fullY: c, d = height/2, -height/2
+    if signed_x: a, b = -width/2, width/2
+    if signed_y: c, d = height/2, -height/2
     draw_arrow(screen, (0,0,0), p1+[a,0], p1+[b,0], 2, 15)
     draw_arrow(screen, (0,0,0), p1+[0,c], p1+[0,d], 2, 15)
     a1, a2=max(abs(a), abs(b))/sx, max(abs(c), abs(d))/sy
@@ -46,4 +46,5 @@ def draw_plot(screen, p1, width, height, valsx, valsy, sx=1, sy=1, fullX=False, 
         dx,dy=pb[0]-p1[0],pb[1]-p1[1]
         if dx>b or dx<a or dy>c or dy<d: continue
         else: pygame.draw.line(screen, (0,0,255), pa, pb, 2)
+
 
