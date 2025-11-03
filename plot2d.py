@@ -35,7 +35,7 @@ def draw_plot(screen, p1, width, height, valsx, valsy, scale_x=1, scale_y=1, sig
     if signed_y: c, d = height/2, -height/2
     draw_arrow(screen, (0,0,0), p1+[a,0], p1+[b,0], 2, 15)
     draw_arrow(screen, (0,0,0), p1+[0,c], p1+[0,d], 2, 15)
-    a1, a2=max(abs(a), abs(b))/sx, max(abs(c), abs(d))/sy
+    a1, a2=max(abs(a), abs(b))/scale_x, max(abs(c), abs(d))/scale_y
     s1, s2=f"{a1:.3f}".rstrip('0').rstrip('.'), f"{a2:.3f}".rstrip('0').rstrip('.')
     draw_text(screen, s1, *(p1+[b - 5*(2+len(s1)), 10]), 10)
     draw_text(screen, s2, *(p1+[-5*(2+len(s2)), d]), 10)
@@ -46,6 +46,7 @@ def draw_plot(screen, p1, width, height, valsx, valsy, scale_x=1, scale_y=1, sig
         dx,dy=pb[0]-p1[0],pb[1]-p1[1]
         if dx>b or dx<a or dy>c or dy<d: continue
         else: pygame.draw.line(screen, (0,0,255), pa, pb, 2)
+
 
 
 
