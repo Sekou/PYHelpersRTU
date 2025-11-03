@@ -28,7 +28,7 @@ def draw_plot_mini(screen, p1, width, height, valsx, valsy, sx=1, sy=1):
     for pa, pb in zip(pp[1:], pp[:-1]):
         pygame.draw.line(screen, (0,0,255), pa, pb, 2)
 
-def draw_plot(screen, p1, width, height, valsx, valsy, sx=1, sy=1, signed_x=False, signed_y=False):
+def draw_plot(screen, p1, width, height, valsx, valsy, scale_x=1, scale_y=1, signed_x=False, signed_y=False):
     p1=np.array(p1)
     a, b, c, d = 0, width, 0, -height
     if signed_x: a, b = -width/2, width/2
@@ -41,10 +41,11 @@ def draw_plot(screen, p1, width, height, valsx, valsy, sx=1, sy=1, signed_x=Fals
     draw_text(screen, s2, *(p1+[-5*(2+len(s2)), d]), 10)
     for l in [[a,c,b,c], [a,d,b,d], [a,c,a,d], [b,c,b,d]]:
         pygame.draw.line(screen, (150,150,150), p1+l[:2], p1+l[2:])
-    pp=list(zip(p1[0]+np.array(valsx)*sx, p1[1]-np.array(valsy)*sy))
+    pp=list(zip(p1[0]+np.array(valsx)*scale_x, p1[1]-np.array(valsy)*scale_y))
     for pa, pb in zip(pp[1:], pp[:-1]):
         dx,dy=pb[0]-p1[0],pb[1]-p1[1]
         if dx>b or dx<a or dy>c or dy<d: continue
         else: pygame.draw.line(screen, (0,0,255), pa, pb, 2)
+
 
 
