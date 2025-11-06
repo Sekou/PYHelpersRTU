@@ -248,3 +248,26 @@ def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z
     mpit = [[cp, 0, sp, 0], [0, 1, 0, 0], [-sp, 0, cp, 0], [0, 0, 0, 1]]  # y
     myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]  # z
     return np.array(mrol) @ mpit @ myaw
+
+# Функция для проекции 3D точки в 2D
+CAM_SCALE=150 #pixels per meter
+CAM_DIST=5 #distance from camera to scene origin
+def project_point(x, y, z, roll, pitch, yaw):
+    cp,sp,cy,sy,cr,sr=math.cos(pitch), math.sin(pitch), \
+                      math.cos(yaw), math.sin(yaw), math.cos(roll), math.sin(roll)
+    z, x = z*cp - x*sp, x*cp + z*sp
+    xs, ys, zs = x*cy - y*sy, -z*cr - y*sr, y*cr - z*sr
+    factor = CAM_DIST / (CAM_DIST + zs)
+    x_proj = xs * factor * CAM_SCALE + WIDTH // 2
+    y_proj = ys * factor * CAM_SCALE + int(HEIGHT *2/3)
+    return int(x_proj), int(y_proj)
+    
+# Функция отрисовки осей
+def draw_axes(screen, size, roll, pitch, yaw):
+    base_dirs = [(size, 0, 0), (0, size, 0), (0, 0, size)]
+    colors=[(255,100,100), (100,255,100), (100,100,255)]
+    for (rx, ry, rz), c in zip(base_dirs, colors):
+        # Проецируем точки на экран
+        start_2d = project_point(0,0,0, roll, pitch, yaw)
+        end_2d = project_point(rx, ry, rz, roll, pitch, yaw)
+        pygame.draw.line(screen, c, start_2d, end_2d, 2)
