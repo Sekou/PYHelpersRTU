@@ -192,6 +192,11 @@ def draw_arrow2(screen, color, p0, p1, w):
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
 
+#отрисовка сетки
+def draw_grid(screen, sz=1000, step=50):
+    for iy in np.arange(0, sz, step): pygame.draw.line(screen, (200,200,200), (0,iy), (sz,iy), 1)
+    for ix in np.arange(0, sz, step): pygame.draw.line(screen, (200,200,200), (ix, 0), (ix, sz), 1)
+
 #формирование нескольких различных цветов
 def get_some_colors():
     return [(220, 0, 0), (0, 220, 0), (0, 0, 220), (150, 150, 0), (0, 150, 150), (150, 0, 150),
