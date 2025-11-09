@@ -179,14 +179,14 @@ def polygon_area(coords):
     return 0.5 * np.abs(main_area + correction)
 
 #отрисовка стрелки по точке и углу
-def arrow(screen, color, p0, angle, lenpx, w):
+def draw_arrow(screen, color, p0, angle, lenpx, w):
     p1 = [p0[0] + lenpx * math.cos(angle), p0[1] + lenpx * math.sin(angle)]
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
     
 #отрисовка стрелки по 2 точкам
-def arrow2(screen, color, p0, p1, w):
+def draw_arrow2(screen, color, p0, p1, w):
     angle=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
