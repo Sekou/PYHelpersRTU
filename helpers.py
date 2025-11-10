@@ -94,6 +94,15 @@ def pt_segm_dist2(p, p1, p2): #расстояние от точки до огр�
     d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
     return d if 0<np.subtract(p1,p)@np.subtract(p2,p1)/dist(p1, p2)<1 else min(dist(p, p1), dist(p, p2))
 
+def get_insert_ind(points_, mouse_pos): #поиск отрезка для вставки новой точки
+    dd=[100500, dist(mouse_pos, points_[0]), dist(mouse_pos, points_[-1])]
+    ii, nmax=[0,-1,len(points_)], len(points_)-2
+    for i, (p1, p2) in enumerate(zip(points_[:-1], points_[1:])):
+        d,f=pt_segm_dist2(mouse_pos, p1, p2)
+        b = (f==0 or 0<i<nmax) or (d<dd[1] and i==0 and f<0 or d<dd[2] and i==nmax and f>0)
+        if b and d<dd[0]: dd[0], ii[0]=d,i
+    return ii[np.argmin(dd)]
+
 def project_pt(segm, pt): #точка-проекция точки на отрезок
     v2=np.subtract(pt, segm[0], dtype=float)
     v1=np.subtract(segm[1], segm[0], dtype=float)
@@ -198,9 +207,9 @@ def draw_arrow2(screen, color, p0, p1, w):
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
 
 #отрисовка сетки
-def draw_grid(screen, sz=1000, step=50):
-    for iy in np.arange(0, sz, step): pygame.draw.line(screen, (200,200,200), (0,iy), (sz,iy), 1)
-    for ix in np.arange(0, sz, step): pygame.draw.line(screen, (200,200,200), (ix, 0), (ix, sz), 1)
+def draw_grid(screen, szx=600, szy=400, stepx=50, stepy=50, c = (200,200,200)): #отрисовка сетки
+    for iy in np.arange(0, szy+stepy/2, stepy): pygame.draw.line(screen, c, r2i(0, 0+iy), r2i(0+szx, 0+iy), 1)
+    for ix in np.arange(0, szx+stepx/2, stepx): pygame.draw.line(screen, c, r2i(0+ix, 0), r2i(0+ix, 0+szy), 1)
 
 #формирование нескольких различных цветов
 def get_some_colors():
