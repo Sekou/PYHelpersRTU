@@ -85,9 +85,14 @@ def rot_segm(segm, ang): #центральный поворот отрезка �
     v1,v2=np.subtract(segm[0], c), np.subtract(segm[1], c)
     return list(np.add([rot(v1, ang), rot(v2, ang)], c))
     
-def pt_segm_dist(p, p1, p2): #расстояние от точки до отрезка
+def pt_segm_dist(p, p1, p2): #расстояние от точки до прямой (заданной отрезком)
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
     return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
+
+def pt_segm_dist2(p, p1, p2): #расстояние от точки до ограниченного отрезка
+    dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
+    d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
+    return d if 0<np.subtract(p1,p)@np.subtract(p2,p1)/dist(p1, p2)<1 else min(dist(p, p1), dist(p, p2))
 
 def project_pt(segm, pt): #точка-проекция точки на отрезок
     v2=np.subtract(pt, segm[0], dtype=float)
