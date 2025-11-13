@@ -6,7 +6,7 @@ def flatten(lst): # разглаживание вложенного списка
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
-def arr_to_str(arr, sep="\t"): #конвертирует одномерный массив в строку
+def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
 
 def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, sep="\n"):
@@ -58,12 +58,12 @@ def lin_nonlin(a, gamma, nominal=1): # линейно-нелинейная фу�
 def lin_nonlin_sat(v, gamma, th1, th2): # линейно-нелинейная функция с насыщением
     return lim_abs(lin_nonlin(v, gamma, th1), th2)
 
-def lin_interp(xx, yy, x): #линейная интерполяция по точечным данным
+def lin_interp(xx, yy, x): # линейная интерполяция по точечным данным
     i=1 if x<xx[0] else 0
     while i<len(xx)-1 and x>xx[i]: i+=1
     return yy[i-1]+(x-xx[i-1])/(xx[i]-xx[i-1])*(yy[i]-yy[i-1])
 
-#подбор значения по монотонной нелинейной функции 
+# подбор значения по монотонной нелинейной функции 
 def find_inv_x(f, y, xmin, xmax, step=0.1):
     xx=np.arange(xmin, xmax, step)
     return xx[np.argmin([abs(y-f(x)) for x in xx])]
@@ -74,27 +74,27 @@ def shift_to_zero(v, delta): # уменьшение значения по абс
 def shift_to(v, target, delta): # сдвиг значения к целевой переменной
     return max(target, v-delta) if v>target else min(target, v+delta)
 
-def ang_to(p1, p2): # Угол от 1 точки на 2 точку
+def ang_to(p1, p2): # угол от 1 точки на 2 точку
     return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
     
-def dist(p1, p2): #расстояние между точками
+def dist(p1, p2): # расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
 
-def rot_segm(segm, ang): #центральный поворот отрезка на угол
+def rot_segm(segm, ang): # центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
     v1,v2=np.subtract(segm[0], c), np.subtract(segm[1], c)
     return list(np.add([rot(v1, ang), rot(v2, ang)], c))
     
-def pt_segm_dist(p, p1, p2): #расстояние от точки до прямой (заданной отрезком)
+def pt_segm_dist(p, p1, p2): # расстояние от точки до прямой (заданной отрезком)
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
     return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
 
-def pt_segm_dist2(p, p1, p2): #расстояние от точки до ограниченного отрезка
+def pt_segm_dist2(p, p1, p2): # расстояние от точки до ограниченного отрезка
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
     d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
     return d if 0<np.subtract(p1,p)@np.subtract(p2,p1)/dist(p1, p2)<1 else min(dist(p, p1), dist(p, p2))
 
-def get_insert_ind(points_, mouse_pos): #поиск отрезка для вставки новой точки
+def get_insert_ind(points_, mouse_pos): # поиск отрезка для вставки новой точки
     dd=[100500, dist(mouse_pos, points_[0]), dist(mouse_pos, points_[-1])]
     ii, nmax=[0,-1,len(points_)], len(points_)-2
     for i, (p1, p2) in enumerate(zip(points_[:-1], points_[1:])):
@@ -103,24 +103,24 @@ def get_insert_ind(points_, mouse_pos): #поиск отрезка для вст
         if b and d<dd[0]: dd[0], ii[0]=d,i
     return ii[np.argmin(dd)]
 
-def project_pt(segm, pt): #точка-проекция точки на отрезок
+def project_pt(segm, pt): # точка-проекция точки на отрезок
     v2=np.subtract(pt, segm[0], dtype=float)
     v1=np.subtract(segm[1], segm[0], dtype=float)
     v1_=v1/np.linalg.norm(v1)
     L2=np.dot(v1_, v2)
     return segm[0] + L2*v1_
 
-def check_proj(segm, pt): #проверка попадания проецирцемой точки внетрь отрезка
+def check_proj(segm, pt): # проверка попадания проецирцемой точки внетрь отрезка
     v2=np.subtract(pt, segm[0], dtype=float)
     v1=np.subtract(segm[1], segm[0], dtype=float)
     L1=np.linalg.norm(v1)
     return 0<=np.dot(v1/L1, v2)<=L1
 
-def check_intersection(A,B,C,D): #проверка пересечения двух отрезков
+def check_intersection(A,B,C,D): # проверка пересечения двух отрезков
     ccw = lambda A, B, C: (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
     return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
 
-def get_segm_intersection(A, B, C, D): #поиск точки пересечения двух отрезков
+def get_segm_intersection(A, B, C, D): # поиск точки пересечения двух отрезков
     (x1, y1), (x2, y2), (x3, y3), (x4, y4) = A, B, C, D
     denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
     if denom == 0: return None  # отрезки параллельны или совпадают
@@ -129,7 +129,7 @@ def get_segm_intersection(A, B, C, D): #поиск точки пересечен
     if 0 <= t <= 1 and 0 <= u <= 1: return (x1 + t * (x2 - x1), y1 + t * (y2 - y1))
     return None
 
-#пересечения отрезка с прямоугольником
+# пересечения отрезка с прямоугольником
 def get_segm_intersection_rect(A, B, x, y, w, h):
     res, pp=[], [[x,y], [x+w,y], [x+w,y+h], [x,y+h]]
     for i in range(4):
@@ -138,7 +138,7 @@ def get_segm_intersection_rect(A, B, x, y, w, h):
         if p: res.append(p)
     return res
     
-#пересечения отрезка с окружностью
+# пересечения отрезка с окружностью
 def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9):
     (p1x, p1y), (p2x, p2y), (cx, cy) = A, B, pos
     (x1, y1), (x2, y2) = (p1x - cx, p1y - cy), (p2x - cx, p2y - cy)
@@ -157,7 +157,7 @@ def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9
         if len(pts) == 2 and abs(discriminant) <= tangent_tol: return [pts[0]] # If line is tangent to circle, return just one point
         else: return pts
 
-#проверяем, находится ли точка внутри многоугольника
+# проверяем, находится ли точка внутри многоугольника
 def pt_inside_ngon(point, vertices):
     (x, y), c = point, 0
     for i in range(len(vertices)):
@@ -167,7 +167,7 @@ def pt_inside_ngon(point, vertices):
             c ^= (x - x1 < ratio*(x2 - x1))
     return c
 
-#определяем точки, лежащие внутри многоугольника
+# определяем точки, лежащие внутри многоугольника
 def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
     pts=[]
     for x in range(xmin, xmax, step):
@@ -176,7 +176,7 @@ def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
             if check: pts.append([x,y])
     return pts
     
-#определяем периметр многоугольника
+# определяем периметр многоугольника
 def polygon_perimeter(points):
     res=0
     for i in range(len(points)):
@@ -192,38 +192,38 @@ def polygon_area(coords):
     correction = x_[-1] * y_[0] - y_[-1] * x_[0]
     return 0.5 * np.abs(main_area + correction)
 
-#отрисовка стрелки по точке и углу
+# отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, angle, lenpx, w):
     p1 = [p0[0] + lenpx * math.cos(angle), p0[1] + lenpx * math.sin(angle)]
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
     
-#отрисовка стрелки по 2 точкам
+# отрисовка стрелки по 2 точкам
 def draw_arrow2(screen, color, p0, p1, w):
     angle=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
 
-#отрисовка сетки
+# отрисовка сетки
 def draw_grid(screen, szx=600, szy=400, stepx=50, stepy=50, c = (200,200,200)): #отрисовка сетки
     for iy in np.arange(0, szy+stepy/2, stepy): pygame.draw.line(screen, c, r2i(0, 0+iy), r2i(0+szx, 0+iy), 1)
     for ix in np.arange(0, szx+stepx/2, stepx): pygame.draw.line(screen, c, r2i(0+ix, 0), r2i(0+ix, 0+szy), 1)
 
-#формирование нескольких различных цветов
+# формирование нескольких различных цветов
 def get_some_colors():
     return [(220, 0, 0), (0, 220, 0), (0, 0, 220), (150, 150, 0), (0, 150, 150), (150, 0, 150),
      (120, 50, 50), (50, 120, 50), (50, 50, 120), (100, 100, 50), (50, 100, 100), (100, 50, 100)]
 
-#сохранение скриншота в pygame
+# сохранение скриншота в pygame
 def save_screenshot(screen):
     import time, datetime as dt
     frmt_date = dt.datetime.fromtimestamp(
         time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
 
-#функция для запроса текста
+# функция для запроса текста
 def ask_for_text(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).withdraw()  # Скрыть главное окно
     def activate():
@@ -235,7 +235,7 @@ def ask_for_text(text="", cap="Введите текст", tit="Текст об�
     root.destroy()
     return text
     
-#функция для запроса многострочного текста
+# функция для запроса многострочного текста
 def ask_multiline_string(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).title(cap)
     result=""
@@ -259,7 +259,7 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     root.mainloop(); root.destroy()
     return result
 
-#матрица поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
+# матрица поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
 def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
     cr, cp, cy = math.cos(roll), math.cos(pitch), math.cos(yaw)
     sr, sp, sy = math.sin(roll), math.sin(pitch), math.sin(yaw)
@@ -268,7 +268,7 @@ def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z
     myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]  # z
     return np.array(mrol) @ mpit @ myaw
 
-# Функция для проекции 3D точки в 2D
+# функция для проекции 3D точки в 2D
 CAM_SCALE=150 #pixels per meter
 CAM_DIST=5 #distance from camera to scene origin
 def project_point(x, y, z, roll, pitch, yaw):
@@ -281,7 +281,7 @@ def project_point(x, y, z, roll, pitch, yaw):
     y_proj = ys * factor * CAM_SCALE + int(HEIGHT *2/3)
     return int(x_proj), int(y_proj)
     
-# Функция отрисовки осей
+# функция отрисовки осей
 def draw_axes(screen, size, roll, pitch, yaw):
     base_dirs = [(size, 0, 0), (0, size, 0), (0, 0, size)]
     colors=[(255,100,100), (100,255,100), (100,100,255)]
@@ -290,3 +290,7 @@ def draw_axes(screen, size, roll, pitch, yaw):
         start_2d = project_point(0,0,0, roll, pitch, yaw)
         end_2d = project_point(rx, ry, rz, roll, pitch, yaw)
         pygame.draw.line(screen, c, start_2d, end_2d, 2)
+
+# загрузка изображений из папки
+def load_images_from_folder(dir):
+    return list(filter(lambda v: v is not None, [cv2.imread(os.path.join(dir,f)) for f in os.listdir(dir)]))
