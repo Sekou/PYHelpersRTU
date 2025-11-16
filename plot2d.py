@@ -31,7 +31,6 @@ def adjust_scale(k=1):
     SCALEX, SCALEY=WIDTH/DW*0.45*k, HEIGHT/DH*0.45*k
 
 # Параметры выделения точки
-pt = None
 pt_radius = 8 # расстояние для выбора точки мышью
 
 def draw_text(screen, s, x, y, sz=12, с=(0, 0, 0)):  # отрисовка текста
@@ -182,3 +181,4 @@ if __name__ == "__main__": run()
 #         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 570)
 # plot2d.user_draw_callback=user_draw_callback
 # threading.Thread(plot2d.run()).start()
+
