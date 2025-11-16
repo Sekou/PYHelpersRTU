@@ -82,6 +82,14 @@ def dist(p1, p2): # расстояние между точками
 
 def line_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
+
+def calc_integral(points, calc_moment=False): # интеграл функции под ломанной линией 
+    integral = 0
+    for i in range(len(points) - 1):
+        x0, y0, x1, y1 = points[i], points[i + 1]
+        v = (y0 + y1) / 2 * (x1 - x0)
+        integral += v*(x0+x1)/2 if calc_moment else v
+    return integral
     
 def rot_segm(segm, ang): # центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
