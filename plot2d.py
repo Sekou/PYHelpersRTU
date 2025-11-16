@@ -173,12 +173,13 @@ if __name__ == "__main__": run()
 # def user_draw_callback(screen, points, points_img, ind_under):
 #     Ll=line_len(points)
 #     Ln=ngon_len(points)
-#     plot2d.draw_text(screen, f"Ll = {Ll:.2f}, Ln = {Ln:.2f}", 5, 550)
+#     plot2d.draw_text(screen, f"Ll = {Ll:.2f}, Ln = {Ln:.2f}", 5, 560)
 #     I=calc_integral(points)
-#     plot2d.draw_text(screen, f"Integral = {I:.2f}", 5, 570)
+#     plot2d.draw_text(screen, f"Integral = {I:.2f}", 5, 580)
 #     if plot2d.CLOSED:
 #         S=ngon_area(points)
-#         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 570)
+#         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 580)
 # plot2d.user_draw_callback=user_draw_callback
 # threading.Thread(plot2d.run()).start()
+
 
