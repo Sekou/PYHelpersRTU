@@ -186,8 +186,6 @@ def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
             if check: pts.append([x,y])
     return pts
 
-
-
 def ngon_len(pts): # периметр многоугольника
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts, pts[1:]+[pts[0]]))
     
