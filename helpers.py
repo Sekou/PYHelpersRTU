@@ -53,6 +53,10 @@ def lim_ang2(ang): # ограничение угла в пределах +/-pi
 def lim_abs(val, amp): # ограничение значения по абсолютной величине
     return min(amp, max(-amp, val))
 
+def round_pt(p, stepx, stepy): #округление координат точки (для снэппинга)
+    p = [p[0] + stepx / 2, p[1] + stepy / 2]
+    return [p[0] - p[0] % stepx, p[1] - p[1] % stepy]
+
 def nonlin(a, b, nominal=1): # нелинейная функция (степенная)
     return math.pow(abs(a/nominal), b-1) * a
     
