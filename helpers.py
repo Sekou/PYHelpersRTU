@@ -86,7 +86,7 @@ def line_len(pts): # длина ломанной линии
 def calc_integral(points, calc_moment=False): # интеграл функции под ломанной линией 
     integral = 0
     for i in range(len(points) - 1):
-        x0, y0, x1, y1 = points[i], points[i + 1]
+        (x0, y0), (x1, y1) = points[i], points[i + 1]
         v = (y0 + y1) / 2 * (x1 - x0)
         integral += v*(x0+x1)/2 if calc_moment else v
     return integral
