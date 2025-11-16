@@ -82,9 +82,6 @@ def dist(p1, p2): # расстояние между точками
 
 def line_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
-
-def ngon_len(pts): # длина многоугольника
-    return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts, pts[1:]+[pts[0]]))
     
 def rot_segm(segm, ang): # центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
@@ -181,22 +178,21 @@ def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
             check = pt_inside_ngon([x, y], ngon_pts)
             if check: pts.append([x,y])
     return pts
+
+
+
+def ngon_len(pts): # периметр многоугольника
+    return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts, pts[1:]+[pts[0]]))
     
-# определяем периметр многоугольника
-def polygon_perimeter(points):
-    res=0
-    for i in range(len(points)):
-        A, B=points[i], points[(i+1)%len(points)]
-        res+=dist(A, B)
-    return res
+def ngon_len2(pts): # периметр многоугольника 2
+    return sum(dist(pts[i], pts[(i+1)%len(pts)]) for i in range(len(pts)))
     
 #определяем площадь многоугольника
-def polygon_area(coords):
+def ngon_area(coords):
     x, y = [p[0] for p in coords], [p[1] for p in coords] # get x and y in vectors
     x_, y_ = x - np.mean(x), y - np.mean(y) # shift coordinates
     main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:]) # calculate area
-    correction = x_[-1] * y_[0] - y_[-1] * x_[0]
-    return 0.5 * np.abs(main_area + correction)
+    return 0.5 * np.abs(main_area + x_[-1] * y_[0] - y_[-1] * x_[0]) # correction added
 
 # отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, angle, lenpx, w):
