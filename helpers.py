@@ -80,6 +80,12 @@ def ang_to(p1, p2): # угол от 1 точки на 2 точку
 def dist(p1, p2): # расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
 
+def line_len(pts): # длина ломанной линии
+    return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
+
+def ngon_len(pts): # длина многоугольника
+    return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts, pts[1:]+[pts[0]]))
+    
 def rot_segm(segm, ang): # центральный поворот отрезка на угол
     c=np.mean(segm, axis=0)
     v1,v2=np.subtract(segm[0], c), np.subtract(segm[1], c)
