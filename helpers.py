@@ -189,8 +189,8 @@ def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
 def ngon_len(pts): # периметр многоугольника
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts, pts[1:]+[pts[0]]))
     
-def ngon_len2(pts): # периметр многоугольника 2
-    return sum(dist(pts[i], pts[(i+1)%len(pts)]) for i in range(len(pts)))
+def ngon_len2(pts):  # периметр многоугольника 2
+    return sum(np.linalg.norm(np.subtract(pts[i], pts[(i + 1) % len(pts)])) for i in range(len(pts)))
     
 #определяем площадь многоугольника
 def ngon_area(coords):
