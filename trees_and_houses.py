@@ -2,7 +2,7 @@
 
 import pygame, sys, math, numpy as np
 
-class Tree:
+class Tree: #Ель
     def __init__(self, x, y):
         self.x, self.y = x, y
         self.color=(0,125,0)
@@ -22,7 +22,7 @@ class Tree:
         s, c = math.sin(a), math.cos(a)
         pygame.draw.line(screen, self.color, p2+[0,dy], p2+[l*c, l*s+dy], 2)
 
-class Tree2:
+class Tree2: #Дуб
     def __init__(self, x, y):
         self.x, self.y = x, y
         self.color=(0,125,0)
@@ -35,6 +35,33 @@ class Tree2:
         pp = [[0,-14], [-6,-12], [-7,-9], [-10,-7], [-12,-2], [-9,2], [-12,6], [-13,11],
               [-6,15], [6,16], [12,13], [13,7], [9,4], [11,0], [10,-7], [7,-9], [6,-12]]
         pygame.draw.polygon(screen, (0, 150, 0), p1*0.2+p2*0.8+pp, 2)
+
+class Tree3: #Береза
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.color=(0,125,0)
+    def get_pos(self):
+        return [self.x, self.y]
+    def draw(self, screen):
+        p1 = np.array(self.get_pos())
+        p2 = p1+[0,-25]
+        p3 = p1+[0,-35]
+        pygame.draw.line(screen, self.color, p1, p3, 2)
+        pygame.draw.circle(screen, self.color, p3, 3, 2)
+        self.draw_branch(screen, p2, 10, -0.7, 0)
+        self.draw_branch(screen, p2, 15, -0.7, 8)
+        self.draw_branch(screen, p2, 15, -0.7, 16)
+        self.draw_branch(screen, p2, 10, 0.7+math.pi, 0)
+        self.draw_branch(screen, p2, 15, 0.7+math.pi, 8)
+        self.draw_branch(screen, p2, 15, 0.7+math.pi, 16)
+    def draw_branch(self, screen, p2, l, a, dy):
+        s, c = math.sin(a), math.cos(a)
+        p3 = p2+[0,dy]
+        p4 = p3+[l/2*c, l/2*s]
+        p5 = p3+[l*c, l*s]
+        pygame.draw.line(screen, self.color, p3, p5, 2)
+        pygame.draw.circle(screen, self.color, p4, 3, 2)
+        pygame.draw.circle(screen, self.color, p5, 3, 2)
 
 class House:
     def __init__(self, x, y):
@@ -109,5 +136,6 @@ if __name__ == "__main__":
 
         # Обновляем экран
         pygame.display.flip()
+
 
 
