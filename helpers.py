@@ -308,3 +308,10 @@ def draw_axes(screen, size, roll, pitch, yaw):
 # загрузка изображений из папки
 def load_images_from_folder(dir):
     return list(filter(lambda v: v is not None, [cv2.imread(os.path.join(dir,f)) for f in os.listdir(dir)]))
+
+def show_traj_3d(traj): # график трехмерной линии 
+    import matplotlib.pyplot as plt
+    ax = plt.figure().add_subplot(projection='3d')
+    ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
+    ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
+    ax.legend(); plt.show()
