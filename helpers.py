@@ -315,3 +315,16 @@ def show_traj_3d(traj): # график трехмерной линии
     ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
     ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
     ax.legend(); plt.show()
+
+def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из углов: Z-Y-X (Yaw-Pitch-Roll)
+    R_x = np.array([[1, 0, 0], [0, np.cos(phi), -np.sin(phi)], [0, np.sin(phi), np.cos(phi)]])
+    R_y = np.array([[np.cos(theta), 0, np.sin(theta)], [0, 1, 0], [-np.sin(theta), 0, np.cos(theta)]])
+    R_z = np.array([[np.cos(psi), -np.sin(psi), 0], [np.sin(psi), np.cos(psi), 0], [0, 0, 1]])
+    return R_z @ R_y @ R_x
+
+def read_txyz_from_csv(file, sep = ',' ): # загрузка массива из CSV
+    res = []
+    with open(file, "r", encoding="utf-8") as f: lines = f.readlines()
+    for line in lines[1:]: # Предполагаем, что первая строка — заголовки
+        res.append([float(p) for p in line.strip().split(sep)])
+    return res
