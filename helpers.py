@@ -322,9 +322,6 @@ def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из уг
     R_z = np.array([[np.cos(psi), -np.sin(psi), 0], [np.sin(psi), np.cos(psi), 0], [0, 0, 1]])
     return R_z @ R_y @ R_x
 
-def read_txyz_from_csv(file, sep = ',' ): # загрузка массива из CSV
-    res = []
+def read_txyz_from_csv(file, sep = ',' ): # 1 строка — заголовки
     with open(file, "r", encoding="utf-8") as f: lines = f.readlines()
-    for line in lines[1:]: # Предполагаем, что первая строка — заголовки
-        res.append([float(p) for p in line.strip().split(sep)])
-    return res
+    return [[float(p) for p in l.strip().split(sep)] for l in lines[1:]]
