@@ -11,7 +11,7 @@ def rot(v, ang): #поворот вектора на угол
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
-    return ang%(2*arc) if ang>0 else (ang%(2*arc)-2*arc)
+    ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
 
 def rot_arr(vv, ang): # функция для поворота массива на угол
     return [rot(v, ang) for v in vv]
