@@ -109,7 +109,7 @@ LIGHT_POS=[0, 0, 2.5]
 def enable_light():
     glEnable(GL_LIGHTING), glEnable(GL_LIGHT0), glEnable(GL_COLOR_MATERIAL)
     glLight(GL_LIGHT0, GL_POSITION, (*LIGHT_POS, 1))  # point light from the left, top, front
-    glLightfv(GL_LIGHT0, GL_AMBIENT, (0.1, 0.1, 0.1, 1))
+    glLightfv(GL_LIGHT0, GL_AMBIENT, (0.2, 0.2, 0.2, 1))
     glLightfv(GL_LIGHT0, GL_DIFFUSE, (0.9, 0.9, 0.9, 1))
 
 def disable_light():
@@ -121,16 +121,41 @@ def set_material(diffuse, specular, shininess):
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular)
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess)
 
+# Функция для рисования 4-угольника по индексам вершин
+def draw_quad(verts, verts_idx):
+    glBegin(GL_QUADS)
+    for idx in verts_idx: glVertex3fv(verts[idx])
+    glEnd()
+
 # Функция для рисования полигона по индексам вершин
 def draw_polygon(verts, verts_idx):
-    glBegin(GL_QUADS)
-    for idx in verts_idx:
-        glVertex3fv(verts[idx])
+    glBegin(GL_POLYGON)
+    for idx in verts_idx: glVertex3fv(verts[idx])
     glEnd()
 
 ROOM_SZ=5
-def draw_room_and_cube():
 
+def convex_hull(points):
+    points, lower, upper = sorted(points), [], []
+    def cross(o, a, b): return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    for p in points: # Строим нижнюю оболочку
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0: lower.pop()
+        lower.append(p)
+    for p in reversed(points):# Строим верхнюю оболочку
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0: upper.pop()
+        upper.append(p)
+    return lower + [p for p in upper if not p in lower]
+
+def draw_shadow_polygon(projected_verts, inner=True):
+    vv=[v[:2] for v in projected_verts]
+    verts=[[*v, 0.01] for v in convex_hull(vv)]
+    draw_polygon(verts, list(range(len(verts))))
+
+def draw_parallepiped(verts, inner=True):
+    iii=[[0, 1, 2, 3], [7, 6, 5, 4], [0, 3, 7, 4], [1, 5, 6, 2], [0, 4, 5, 1], [2, 6, 7, 3]]
+    for ii in iii: draw_quad(verts, ii if inner else ii[::-1])  # низ; верх; лево; право; зад; перед
+
+def draw_room_and_cube():
     # Координаты стен комнаты (параллелепипед)
     room_vertices = [
         # Нижняя плоскость (пол)
@@ -140,16 +165,11 @@ def draw_room_and_cube():
     ]
 
     # Материал для комнаты (мягкий, матовый)
-    set_material(diffuse=[0.7, 0.7, 0.7, 1], specular=[0.1, 0.1, 0.1, 1], shininess=10)
+    set_material(diffuse=[0.9, 0.9, 0.9, 1], specular=[0.2, 0.2, 0.2, 1], shininess=20)
 
     # Рисуем комнату
     glColor3f(0.7, 0.7, 0.7) # цвет стен
-    draw_polygon(room_vertices, [0,1, 2,3]) # пол
-    draw_polygon(room_vertices, [7,6, 5,4]) # потолок
-    draw_polygon(room_vertices, [0,3, 7,4]) # левая стена
-    draw_polygon(room_vertices, [1,5, 6,2]) # правая стена
-    draw_polygon(room_vertices, [0,4, 5,1]) # задняя стена
-    draw_polygon(room_vertices, [2,6, 7,3]) # передняя стена
+    draw_parallepiped(room_vertices, True)
 
     # Координаты куба внутри комнаты
     cube_size = 0.7
@@ -165,18 +185,38 @@ def draw_room_and_cube():
     ]
 
     # Материал для куба (глянцевый/блестящий)
-    set_material(diffuse=[1, 0, 0, 1], specular=[1, 1, 1, 1], shininess=100)
+    set_material(diffuse=[1, 1, 1, 1], specular=[1, 1, 1, 1], shininess=100)
 
     # Рисуем куб
     glColor3f(1.0, 0.0, 0.0)  # красный цвет для куба
-    draw_polygon(cube_vertices, [0, 1, 2, 3][::-1])  # пол
-    draw_polygon(cube_vertices, [7, 6, 5, 4][::-1])  # потолок
-    draw_polygon(cube_vertices, [0, 3, 7, 4][::-1])  # левая стена
-    draw_polygon(cube_vertices, [1, 5, 6, 2][::-1])  # правая стена
-    draw_polygon(cube_vertices, [0, 4, 5, 1][::-1])  # задняя стена
-    draw_polygon(cube_vertices, [2, 6, 7, 3][::-1])  # передняя стена
+    draw_parallepiped(cube_vertices, False)
+
+    draw_shadow_for_cube(cube_vertices, LIGHT_POS)
 
 display = (800, 600)
+
+def draw_shadow_for_cube(cube_vertices, light_pos):
+    # Включаем stencil buffer
+    glEnable(GL_STENCIL_TEST), glClear(GL_STENCIL_BUFFER_BIT)
+    # Устанавливаем режим заполнения stencil-буфера при рендеринге теней
+    glColorMask(False, False, False, False)  # цвет не рисуем
+    glDepthMask(False)  # глубину отключаем
+    glStencilFunc(GL_ALWAYS, 1, 0xFF)  # всегда обновляем stencil
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE)  # обновление при рисовании тени
+    # Для тени проецируем вершины объекта на плоскость z=0
+    projected_vertices = []
+    for v in cube_vertices:
+        denom = (light_pos[2] - v[2])
+        t = 0 if denom == 0 else (-v[2] / denom)
+        x_proj, y_proj = v[0] + t * (light_pos[0] - v[0]), v[1] + t * (light_pos[1] - v[1])
+        projected_vertices.append([x_proj, y_proj, 0.01])  # z близко к 0 для тени
+    glColorMask(True, True, True, True), glDepthMask(True) # Восстановление режима
+    # Рисуем тень цветом — где stencil == 1
+    glStencilFunc(GL_EQUAL, 1, 0xFF), glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP)
+    glEnable(GL_BLEND), glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    glColor4f(0.0, 0.0, 0.0, 0.2)  # полупрозрачная тень
+    draw_shadow_polygon(projected_vertices) #повторная отрисовка объекта в проекции
+    glDisable(GL_BLEND), glDisable(GL_STENCIL_TEST)
 
 def main():
     pygame.init()
@@ -187,6 +227,8 @@ def main():
     cam.save_pos()
 
     ind_frame, last_key, last_info = 0, 0, ""
+
+    DEBUG=True
 
     while True:
         for event in pygame.event.get():
@@ -209,6 +251,7 @@ def main():
                         points2d.append(list(q))
                     print("PTS 3d: ", points)
                     print("PTS 2d: ", points2d)
+                if event.key==pygame.K_0: DEBUG=not DEBUG
 
         keys = pygame.key.get_pressed()  # get the state of all keys
 
@@ -253,14 +296,15 @@ def main():
         draw_room_and_cube()  # drawing objects
 
         LIGHT_POS[:2]=1*np.sin(ind_frame/10), 1*np.cos(ind_frame/10)
-        # disable_light(), glColor((1, 1, 1)), glPointSize(10.0), glBegin(GL_POINTS), glVertex3fv(LIGHT_POS), glEnd()
 
-        glDisable(GL_DEPTH_TEST)
-        cam.draw_world_axes()
-        glMatrixMode(GL_MODELVIEW), glLoadIdentity()
-        glOrtho(0, display[0], 0, display[1], -1, 1)
-        cam.draw_world_axes_ortho_2d()
-        cam.draw_cam_axes_ortho_2d(x0y0=(display[0]-30, 30))
+        if DEBUG:
+            disable_light(), glColor((1, 1, 1)), glPointSize(10.0), glBegin(GL_POINTS), glVertex3fv(LIGHT_POS), glEnd()
+            glDisable(GL_DEPTH_TEST)
+            cam.draw_world_axes()
+            glMatrixMode(GL_MODELVIEW), glLoadIdentity()
+            glOrtho(0, display[0], 0, display[1], -1, 1)
+            cam.draw_world_axes_ortho_2d()
+            cam.draw_cam_axes_ortho_2d(x0y0=(display[0]-30, 30))
 
         pygame.display.flip()
         pygame.time.wait(20)
