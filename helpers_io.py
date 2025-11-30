@@ -38,3 +38,8 @@ def ask_file():
     from tkinter import filedialog
     tk.Tk().withdraw()
     return filedialog.askopenfilename(initialdir=".")
+
+#выводит матрицу в 1 строку
+def show_mat(mat, prec=5):
+    res=[[round(x, prec) for x in r] for r in mat]
+    return str(res)
