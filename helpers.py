@@ -335,4 +335,4 @@ def convex_hull(points): # выпуклая оболочка набора точ
     for p in reversed(points):# Строим верхнюю оболочку
         while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0: upper.pop()
         upper.append(p)
-    return lower + upper[:-1]
+    return lower + [p for p in upper if not p in lower]
