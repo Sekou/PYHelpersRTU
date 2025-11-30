@@ -41,5 +41,4 @@ def ask_file():
 
 #выводит матрицу в 1 строку
 def show_mat(mat, prec=5):
-    res=[[round(x, prec) for x in r] for r in mat]
-    return str(res)
+    return str([[round(x, prec) for x in r] for r in mat])
