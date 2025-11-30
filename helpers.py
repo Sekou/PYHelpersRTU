@@ -325,3 +325,14 @@ def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из уг
 def read_txyz_from_csv(file, sep = ',' ): # 1 строка — заголовки
     with open(file, "r", encoding="utf-8") as f: lines = f.readlines()
     return [[float(p) for p in l.strip().split(sep)] for l in lines[1:]]
+
+def convex_hull(points): # выпуклая оболочка набора точек
+    points, lower, upper = sorted(points), [], []
+    def cross(o, a, b): return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    for p in points: # Строим нижнюю оболочку
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0: lower.pop()
+        lower.append(p)
+    for p in reversed(points):# Строим верхнюю оболочку
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0: upper.pop()
+        upper.append(p)
+    return lower + upper[:-1]
