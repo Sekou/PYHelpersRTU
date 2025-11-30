@@ -45,7 +45,7 @@ class Camera:
         mrol = [[1, 0, 0, 0], [0, cr, -sr, 0], [0, sr, cr, 0], [0, 0, 0, 1]]  # x
         # calc full view transformation
         mshift = [[1, 0, 0, X], [0, 1, 0, Y], [0, 0, 1, Z], [0, 0, 0, 1]]
-        camMatrix = np.array(myaw) @ mpit @ mrol @ mshift
+        camMatrix = np.array(mpit) @ mrol @ myaw @ mshift
         if swap_axes: camMatrix = self.swapCS @ camMatrix
         return camMatrix
 
