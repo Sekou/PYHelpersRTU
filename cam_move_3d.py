@@ -178,7 +178,7 @@ def main():
         glMatrixMode(GL_MODELVIEW), glLoadIdentity()
 
         ci=cam.get_info()
-        if ci!=last_info: print(f"i={ind_frame}: ", last_info:=ci, 12, display, (0, 0))
+        if ci!=last_info: print(f"i={ind_frame}: ", last_info:=ci)
 
         glPointSize(5.0)
 
