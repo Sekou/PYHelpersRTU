@@ -42,3 +42,6 @@ def ask_file():
 #выводит матрицу в 1 строку
 def show_mat(mat, prec=5):
     return str([[round(x, prec) for x in r] for r in mat])
+
+#выводит дробное число в округленном формате (например, pad_round(1.2,3,3) = 001.200)
+def pad_round(x, p, n): return f"{x:0{1+p+n+(x<0 and 1 or 0)}.{n}f}"
