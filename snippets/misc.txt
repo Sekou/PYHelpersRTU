@@ -1,0 +1,2 @@
+def rot(v, ang): #поворот вектора на угол (сложный способ)
+    return np.transpose(np.multiply([[v[0],-v[1]], [v[0], v[1]]],[[math.sin(ang)], [math.cos(ang)]]))[0]
