@@ -192,10 +192,8 @@ if __name__=="__main__":
             if event.type == pygame.KEYDOWN:
                 last_key=event.key
                 if event.key==pygame.K_1: # print matricies
-                    MP = cam.calc_proj_matrix()
-                    print("PROJ: ", show_mat(MP))
-                    MV = cam.calc_view_matrix(False)
-                    print("VIEW: ", show_mat(MV))
+                    print("PROJ: ", show_mat(MP:=cam.calc_proj_matrix()))
+                    print("VIEW: ", show_mat(MV:=cam.calc_view_matrix(False)))
                     print("FULL: ", show_mat(MP @ MV))
                     print("SCREEN: ", show_mat(cam.calc_screen_matrix()))
                 if event.key==pygame.K_2: # print points
@@ -233,8 +231,8 @@ if __name__=="__main__":
         ci=cam.get_info()
         if ci!=last_info: print(f"i={ind_frame}: ", last_info:=ci)
 
-        glMultMatrixf(np.transpose(cam.calc_proj_matrix())) # 1 projection matrix (column-major order)
-        glMultMatrixf(np.transpose(cam.calc_view_matrix())) # 2 view matrix (column-major order)
+        glMultMatrixf(MP:=np.transpose(cam.calc_proj_matrix())) # 1 projection matrix (column-major order)
+        glMultMatrixf(MV:=np.transpose(cam.calc_view_matrix())) # 2 view matrix (column-major order)
 
         enable_light()
         glEnable(GL_DEPTH_TEST)
