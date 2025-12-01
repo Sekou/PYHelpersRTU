@@ -31,8 +31,7 @@ class Camera:
         X, Y, Z = -self.x, -self.y, -self.z
         y, p, r = -self.yaw * self.kPI, -self.pitch * self.kPI, -self.roll * self.kPI
         # calc rotation matricies
-        cr, cp, cy = cos(r), cos(p), cos(y)
-        sr, sp, sy = sin(r), sin(p), sin(y)
+        cr, cp, cy, sr, sp, sy = cos(r), cos(p), cos(y), sin(r), sin(p), sin(y)
         myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]  # z
         mpit = [[cp, 0, sp, 0], [0, 1, 0, 0], [-sp, 0, cp, 0], [0, 0, 0, 1]]  # y
         mrol = [[1, 0, 0, 0], [0, cr, -sr, 0], [0, sr, cr, 0], [0, 0, 0, 1]]  # x
@@ -254,3 +253,4 @@ if __name__=="__main__":
         pygame.time.wait(20)
         if ind_frame == 0: print(f"MP={MP}\n", f"MV={MV}\n")
         ind_frame+=1
+
