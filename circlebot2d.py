@@ -41,4 +41,4 @@ if __name__=="__main__":
         draw_text(screen, f"Test = {1}", 5, 5)
         pygame.display.flip(), timer.tick(fps)
 
-#template file by S. Diane, RTU MIREA, 2024
+#template file by S. Diane, RTU MIREA, 2024-2025
