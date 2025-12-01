@@ -3,12 +3,8 @@ import sys, pygame, numpy as np, math
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=20, color=(0,0,0)): #отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, (0,0,0)), (x,y))
-def rot(v, ang): #поворот вектора на угол
-    s, c = math.sin(ang), math.cos(ang); return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
-def rot_arr(vv, ang): return [rot(v, ang) for v in vv]# функция для поворота массива на угол
-def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) #расстояние между точками
 
 class Robot:
     def __init__(self, x, y):
