@@ -313,6 +313,7 @@ def show_traj_3d(traj): # график трехмерной линии
     import matplotlib.pyplot as plt
     ax = plt.figure().add_subplot(projection='3d')
     ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
+    # ax.set_xlim(-1, 1); ax.set_ylim(-1, 1); ax.set_zlim(-1, 1)
     ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
     ax.legend(); plt.show()
 
