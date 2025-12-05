@@ -24,7 +24,7 @@ data=np.array([ #t ax ay az gx gy gz
 times, ax_list, ay_list, az_list, gx_list, gy_list, gz_list = data
 
 def find_traj(phi, theta, psi):
-    g_earth0=[0, 0, 9.8] # Предполагаем, что изначально датчик вертикален
+    g_earth0=[0, 0, -9.8] # Вектор ускорения свободного падения
     velocity = np.zeros(3)
     position = np.zeros(3)
     positions=[[*position]]
