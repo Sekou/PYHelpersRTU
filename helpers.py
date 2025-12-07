@@ -15,7 +15,7 @@ def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, s
 
 # разбивка длинной строки на более маленькие для компактной отрисовки
 def insert_str_breaks(s, max_w_len=15, sep="\\"): 
-    n, n2=len(s), int(math.sqrt(len(s)))+1
+    n, n2=len(s), int(len(s)**0.5)+1
     lst, shift, cnt, trigger=list(s), 0, 0, False
     for i in range(n):
         if i>0 and any([j%n2==0 for j in [i, i+1, i+2]]): trigger=True
@@ -104,11 +104,11 @@ def rot_segm(segm, ang): # центральный поворот отрезка 
     
 def pt_segm_dist(p, p1, p2): # расстояние от точки до прямой (заданной отрезком)
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
-    return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
+    return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / (k * k + 1)**0.5 # числитель: p[1]-(k*p[0]+b)
 
 def pt_segm_dist2(p, p1, p2): # расстояние от точки до ограниченного отрезка
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
-    d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
+    d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / (k * k + 1)**0.5 # числитель: p[1]-(k*p[0]+b)
     return d if 0<np.subtract(p1,p)@np.subtract(p2,p1)/dist(p1, p2)<1 else min(dist(p, p1), dist(p, p2))
 
 def get_insert_ind(points_, mouse_pos): # поиск отрезка для вставки новой точки
