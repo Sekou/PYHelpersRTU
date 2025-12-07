@@ -84,7 +84,7 @@ def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
 
 def pt_segm_dist2(p, p1, p2): #расстояние от точки до ограниченного отрезка
-    dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
+    k = (p2[1]-p1[1]) / (0.0000001 if p2[0]==p1[0] else (p2[0]-p1[0]))
     d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / math.sqrt(k * k + 1) # числитель: p[1]-(k*p[0]+b)
     pr=np.subtract(p,p1)@np.subtract(p2,p1)/((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
     return (d, 0) if 0<pr<1 else (min(dist(p, p1), dist(p, p2)), np.sign(pr))
@@ -181,5 +181,6 @@ if __name__ == "__main__": run()
 #         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 580)
 # plot2d.user_draw_callback=user_draw_callback
 # threading.Thread(plot2d.run()).start()
+
 
 
