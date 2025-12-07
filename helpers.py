@@ -189,8 +189,7 @@ def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9
     (p1x, p1y), (p2x, p2y), (cx, cy) = A, B, pos
     (x1, y1), (x2, y2) = (p1x - cx, p1y - cy), (p2x - cx, p2y - cy)
     dx, dy = (x2 - x1), (y2 - y1)
-    dr = (dx ** 2 + dy ** 2) ** .5
-    big_d = x1 * y2 - x2 * y1
+    dr, big_d = (dx ** 2 + dy ** 2) ** .5, big_d = x1 * y2 - x2 * y1
     discriminant = R ** 2 * dr ** 2 - big_d ** 2
     if discriminant < 0: return [] # No intersection between circle and line
     else:  # There may be 0, 1, or 2 pts with the segment
