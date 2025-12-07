@@ -106,10 +106,11 @@ def pt_segm_dist(p, p1, p2): # расстояние от точки до пря�
     dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
     return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / (k * k + 1)**0.5 # числитель: p[1]-(k*p[0]+b)
 
-def pt_segm_dist2(p, p1, p2): # расстояние от точки до ограниченного отрезка
-    dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
-    d = np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / (k * k + 1)**0.5 # числитель: p[1]-(k*p[0]+b)
-    return d if 0<np.subtract(p1,p)@np.subtract(p2,p1)/dist(p1, p2)<1 else min(dist(p, p1), dist(p, p2))
+def pt_segm_dist2(p, p1, p2):  # расстояние от точки до ограниченного отрезка
+    dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx == 0 else dx)
+    d = np.abs(k * (p1[0] - p[0]) - p1[1] + p[1]) /(k * k + 1)**0.5  # числитель: p[1]-(k*p[0]+b)
+    v1,v12,v2=np.subtract(p, p1), np.subtract(p2, p1), np.subtract(p, p2)
+    return d if 0 < v1 @ v12 / (v12@v12) < 1 else min(v1@v1, v2@v2)**0.5
 
 def get_insert_ind(points_, mouse_pos): # поиск отрезка для вставки новой точки
     dd=[100500, dist(mouse_pos, points_[0]), dist(mouse_pos, points_[-1])]
