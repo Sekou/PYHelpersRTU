@@ -99,6 +99,25 @@ def best_greedy_tsp(pts): # лучшее из частных жадных раз
     ss = [greedy_tsp(pts, i) for i in range(len(pts))]
     return ss[np.argmin([path_len(s) for s in ss])]
 
+#@njit()
+def get_permutations(A, k): #вектор индексов перестановки из A по k
+    r = [[_ for _ in range(0)]]
+    for i in range(k): r = [[a] + b for a in A for b in r if not a in b]
+    return r
+
+#@njit
+def find_euler_path(pts: NDArray[np.float64]): #поиск кратчайшего пути через n точек
+    n = len(pts)  # print("Num permutations: ",math.factorial(n))
+    graph = [[0] * n for _ in range(n)] # Создаем матрицу расстояний
+    for i,p in enumerate(pts):
+        for j,q in enumerate(pts):
+            if i!=j: graph[i][j] = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
+    best_path, min_len=None, np.inf
+    for perm in get_permutations(range(n), n): # Генерируем все перестановки узлов
+        l=path_len(path:=[pts[i] for i in perm])
+        if l<min_len: best_path, min_len = path, l
+    return best_path # Возвращаем найденный гамильтонов цикл
+
 def calc_integral(pts, calc_moment=False): 
     integral = 0 # интеграл функции под ломанной линией
     for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
