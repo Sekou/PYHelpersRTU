@@ -141,7 +141,7 @@ def rot_segm(segm, ang): # центральный поворот отрезка 
     return list(np.add([rot(v1, ang), rot(v2, ang)], c))
     
 def pt_segm_dist(p, p1, p2): # расстояние от точки до прямой (заданной отрезком)
-    dx, dy = np.subtract(p2, p1); k = dy / (0.0000001 if dx==0 else dx)
+    k = (p2[1]-p1[1]) / (0.0000001 if p2[0]==p1[0] else (p2[0]-p1[0]))
     return np.abs(k * (p1[0]-p[0]) - p1[1] + p[1]) / (k * k + 1)**0.5 # числитель: p[1]-(k*p[0]+b)
 
 def pt_segm_dist2(p, p1, p2):  # расстояние от точки до ограниченного отрезка
