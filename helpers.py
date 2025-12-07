@@ -87,7 +87,7 @@ def ang_to(p1, p2): # угол от 1 точки на 2 точку
 def dist(p1, p2): # расстояние между точками
     return np.linalg.norm(np.subtract(p2, p1))
 
-def line_len(pts): # длина ломанной линии
+def path_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
 
 def greedy_tsp(pts, ind): # жадное разомкнутое решение задачи коммивояжера (поиск в глубину)
@@ -97,7 +97,7 @@ def greedy_tsp(pts, ind): # жадное разомкнутое решение �
 
 def best_greedy_tsp(pts): # лучшее из частных жадных разомкнутых решений задачи коммивояжера
     ss = [greedy_tsp(pts, i) for i in range(len(pts))]
-    return ss[np.argmin([line_len(s) for s in ss])]
+    return ss[np.argmin([path_len(s) for s in ss])]
 
 def calc_integral(pts, calc_moment=False): 
     integral = 0 # интеграл функции под ломанной линией
