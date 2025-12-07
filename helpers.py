@@ -120,10 +120,11 @@ def find_euler_path(pts: NDArray[np.float64]): #поиск кратчайшег�
     graph = [[0] * n for _ in range(n)] # создаем матрицу расстояний
     for i,p in enumerate(pts):
         for j,q in enumerate(pts):
-            if i!=j: graph[i][j] = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
+            if i<=j: graph[j][i] = graph[i][j] = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
     best_path, min_len=None, np.inf
     for perm in get_permutations(range(n), n): # генерируем все перестановки узлов
-        l=path_len(path:=[pts[i] for i in perm])
+        path = [pts[i] for i in perm]
+        l=path_len(path)
         if l<min_len: best_path, min_len = path, l
     return best_path # возвращаем найденный гамильтонов цикл
 
