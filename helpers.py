@@ -95,8 +95,17 @@ def greedy_tsp(pts, ind): # жадное разомкнутое решение �
     while len(buf): res+=[buf.pop(np.argmin([np.hypot(*(res[-1] - p)) for p in buf]))]
     return res
 
+def greedy_tsp_fast(pts, ind): # ускоренное жадное разомкнутое решение задачи коммивояжера (поиск в глубину)
+    n, buf, res = len(pts), [i for i in range(len(pts)) if i!=ind], [ind]
+    G2 = [[0] * n for _ in range(n)] # создаем матрицу квадратов расстояний
+    for i,p in enumerate(pts):
+        for j,q in enumerate(pts):
+            if i<=j: G2[j][i] = G2[i][j] = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
+    while len(buf): res += [buf.pop(np.argmin([G2[res[-1]][i] for i in buf]))]
+    return [np.array(pts[i]) for i in res]
+
 def best_greedy_tsp(pts): # лучшее из частных жадных разомкнутых решений задачи коммивояжера
-    ss = [greedy_tsp(pts, i) for i in range(len(pts))]
+    ss = [greedy_tsp_fast(pts, i) for i in range(len(pts))]
     return ss[np.argmin([path_len(s) for s in ss])]
 
 #@njit()
