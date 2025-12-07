@@ -91,7 +91,7 @@ def path_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
 
 def greedy_tsp(pts, ind): # жадное разомкнутое решение задачи коммивояжера (поиск в глубину)
-    buf, res = [np.array(pts[i]) for i in range(len(pts)) if i!=ind], [pts[ind]]
+    buf, res = [np.array(pts[i]) for i in range(len(pts)) if i!=ind], [np.array(pts[ind])]
     while len(buf): res+=[buf.pop(np.argmin([np.hypot(*(res[-1] - p)) for p in buf]))]
     return res
 
