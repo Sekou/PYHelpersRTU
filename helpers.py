@@ -117,15 +117,15 @@ def get_permutations(A, k): #вектор индексов перестанов�
 #@njit
 def find_euler_path(pts: NDArray[np.float64]): #поиск кратчайшего пути через n точек
     n = len(pts)  # print("Num permutations: ",math.factorial(n))
-    graph = [[0] * n for _ in range(n)] # Создаем матрицу расстояний
+    graph = [[0] * n for _ in range(n)] # создаем матрицу расстояний
     for i,p in enumerate(pts):
         for j,q in enumerate(pts):
             if i!=j: graph[i][j] = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2
     best_path, min_len=None, np.inf
-    for perm in get_permutations(range(n), n): # Генерируем все перестановки узлов
+    for perm in get_permutations(range(n), n): # генерируем все перестановки узлов
         l=path_len(path:=[pts[i] for i in perm])
         if l<min_len: best_path, min_len = path, l
-    return best_path # Возвращаем найденный гамильтонов цикл
+    return best_path # возвращаем найденный гамильтонов цикл
 
 def calc_integral(pts, calc_moment=False): 
     integral = 0 # интеграл функции под ломанной линией
