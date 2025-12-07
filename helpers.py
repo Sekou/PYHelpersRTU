@@ -90,6 +90,15 @@ def dist(p1, p2): # расстояние между точками
 def line_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
 
+def greedy_tsp(pts, ind): # жадное разомкнутое решение задачи коммивояжера (поиск в глубину)
+    buf, res = [np.array(pts[i]) for i in range(len(pts)) if i!=ind], [pts[ind]]
+    while len(buf): res+=[buf.pop(np.argmin([np.hypot(*(res[-1] - p)) for p in buf]))]
+    return res
+
+def best_greedy_tsp(pts): # лучшее из частных жадных разомкнутых решений задачи коммивояжера
+    ss = [greedy_tsp(pts, i) for i in range(len(pts))]
+    return ss[np.argmin([line_len(s) for s in ss])]
+
 def calc_integral(pts, calc_moment=False): 
     integral = 0 # интеграл функции под ломанной линией
     for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
@@ -338,12 +347,3 @@ def convex_hull(points): # выпуклая оболочка набора точ
         while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0: upper.pop()
         upper.append(p)
     return lower + [p for p in upper if not p in lower]
-
-def greedy_tsp(pts, ind): # жадное разомкнутое решение задачи коммивояжера (поиск в глубину)
-    buf, res = [*pts[:ind], *pts[ind + 1:]], [pts[ind]]
-    while len(buf): res+=[buf.pop(np.argmin([np.hypot(*np.subtract(res[-1], p)) for p in buf]))]
-    return res
-
-def best_greedy_tsp(pts): # лучшее из частных жадных разомкнутых решений задачи коммивояжера
-    ss = [greedy_tsp(pts, i) for i in range(len(pts))]
-    return ss[np.argmin([line_len(s) for s in ss])]
