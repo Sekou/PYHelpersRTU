@@ -126,7 +126,7 @@ def find_euler_path(pts: NDArray[np.float64]): #поиск кратчайшег�
         path = [pts[i] for i in perm]
         l=path_len(path)
         if l<min_len: best_path, min_len = path, l
-    return best_path # возвращаем найденный гамильтонов цикл
+    return best_path # возвращаем найденный путь Эйлера
 
 def calc_integral(pts, calc_moment=False): 
     integral = 0 # интеграл функции под ломанной линией
