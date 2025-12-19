@@ -14,7 +14,7 @@ def rotArr(vv, ang): # функция для поворота массива н�
     return [rot(v, ang) for v in vv]
 def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p1, p2))
-def drawRotRect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
+def drawRotRect(screen, color, pc, w, h, ang): #точка центра, ширина высота и угол поворота прямогуольника
     pts = [[- w/2, - h/2], [+ w/2, - h/2], [+ w/2, + h/2], [- w/2, + h/2]]
     pygame.draw.polygon(screen, color, np.add(rotArr(pts, ang), pc), 2)
 
@@ -128,3 +128,4 @@ if __name__=="__main__":
         timer.tick(fps)
 
 #template file by S. Diane, RTU MIREA, 2024
+
