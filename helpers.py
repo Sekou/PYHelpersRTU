@@ -50,7 +50,7 @@ def rot_arr(vv, ang): # функция для поворота массива н
 def rot_arr_around(vv, ang, c): # функция для поворота массива на угол вокруг точки
     return list(np.add(c, [rot([v[0]-c[0], v[1]-c[1]], ang) for v in vv]))
 
-def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернутый прямоугольник (по точке центра, ширине, высоте и уголу)
+def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернутый прямоугольник (по точке центра, ширине, высоте и углу)
     pygame.draw.polygon(screen, color, np.add(rot_arr([[-w/2, -h/2], [+w/2, -h/2], [+w/2, +h/2], [-w/2, +h/2]], ang), pc), 2)
     
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
