@@ -86,11 +86,12 @@ while running:
             mousedown=False
             p2 = pygame.Vector2(pygame.mouse.get_pos())
             force_direction = p2 - p1
-            force_magnitude = 500  # произвольная сила
-            force = force_direction.normalize() * force_magnitude
-            # Применим силу к центру или точке вне центра для вращения
-            body.apply_force(force, application_point=p1)
-            p1, p2 = None, None
+            if np.linalg.norm(force_direction)>0:
+                force_magnitude = 500  # произвольная сила
+                force = force_direction.normalize() * force_magnitude
+                # Применим силу к центру или точке вне центра для вращения
+                body.apply_force(force, application_point=p1)
+                p1, p2 = None, None
 
     body.update(dt) # Обновление
 
@@ -101,5 +102,6 @@ while running:
     clock.tick(fps)
 
 pygame.quit()
+
 
 #2025, by S. Diane
