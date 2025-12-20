@@ -5,7 +5,7 @@ def flatten(lst): # разглаживание вложенного списка
     
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
-
+    
 def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
 
@@ -49,6 +49,9 @@ def rot_arr(vv, ang): # функция для поворота массива н
 
 def rot_arr_around(vv, ang, c): # функция для поворота массива на угол вокруг точки
     return list(np.add(c, [rot([v[0]-c[0], v[1]-c[1]], ang) for v in vv]))
+
+def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернутый прямоугольник (по точке центра, ширине, высоте и уголу)
+    pygame.draw.polygon(screen, color, np.add(rotArr([[-w/2, -h/2], [+w/2, -h/2], [+w/2, +h/2], [-w/2, +h/2]], ang), pc), 2)
     
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
