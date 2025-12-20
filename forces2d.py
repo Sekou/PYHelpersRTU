@@ -14,21 +14,21 @@ def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернут�
     pygame.draw.polygon(screen, color, np.add(rot_arr([[-w/2, -h/2], [+w/2, -h/2], [+w/2, +h/2], [-w/2, +h/2]], ang), pc), 2)
 
 class Body:
-    def __init__(self, rect, density=1):
-        self.rect = rect
+    def __init__(self, x0, y0, w, h, density=1):
+        self.x0, self.y0, self.w, self.h = x0, y0, w, h
         self.density = density
         # Положение центра масс
-        self.pos = pygame.Vector2(rect.center)
+        self.pos = np.array([self.x0, self.y0], dtype=float)
         # Физические свойства
-        self.velocity = pygame.Vector2(0, 0)
+        self.velocity = np.array([0.0, 0.0])
         self.angular_velocity = 0  # радианы в секунду
         self.angle = 0  # текущий угол в радианах
         # Расчет массы и момента инерции
-        self.mass = self.rect.width * self.rect.height * self.density
+        self.mass = self.w * self.h * self.density
         # Для прямоугольного сегмента момент инерции относительно центра
-        self.moment_of_inertia = (self.mass * (self.rect.width ** 2 + self.rect.height ** 2)) / 12
+        self.moment_of_inertia = (self.mass * (self.w ** 2 + self.h ** 2)) / 12
         # Вектор силы, приложенной к сегменту
-        self.force = pygame.Vector2(0, 0)
+        self.force = np.array([0.0, 0.0])
         # Крутящий момент
         self.torque = 0
 
@@ -51,11 +51,11 @@ class Body:
         self.angular_velocity += angular_acceleration * dt
         self.angle += self.angular_velocity * dt
         # Обновление силы и момента для следующего шага
-        self.force = pygame.Vector2(0, 0)
+        self.force = np.array([0.0, 0.0])
         self.torque = 0
 
     def draw(self, surface):
-        draw_rot_rect(screen, (0,0,0), self.pos, self.rect.width, self.rect.height, self.angle)
+        draw_rot_rect(screen, (0,0,0), self.pos, self.w, self.h, self.angle)
 
 # Инициализация pygame
 pygame.init()
@@ -70,7 +70,7 @@ fps=20
 running = True
 
 # Тестовый объект
-body = Body(pygame.Rect(350, 250, 100, 50), 0.001)
+body = Body(350, 250, 100, 50, 0.001)
 
 while running:
     dt = 1/fps  # Время в секундах
@@ -105,3 +105,4 @@ pygame.quit()
 
 
 #2025, by S. Diane
+
