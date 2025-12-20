@@ -5,17 +5,16 @@ def flatten(lst): # разглаживание вложенного списка
     
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
+
+def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, sep="\n"):
+    for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
+        draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
     
 def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
 
 def check_ccw(A, B, C): #triangle direction: CCW for Y-axis up, but CW for Y-axis down
     return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
-
-def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, sep="\n"):
-    for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
-        draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
-
 # разбивка длинной строки на более маленькие для компактной отрисовки
 def insert_str_breaks(s, max_w_len=15, sep="\\"): 
     n, n2=len(s), int(len(s)**0.5)+1
