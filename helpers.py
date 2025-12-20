@@ -40,6 +40,15 @@ def read_pts(filename): # чтение массива целочисленных
 def rot(v, ang): # поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
+
+def rot_around(v, ang, c): # поворот вектора на угол вокруг точки
+    return list(np.add(c, rot([v[0]-c[0], v[1]-c[1]], ang)))
+
+def rot_arr(vv, ang): # функция для поворота массива на угол
+    return [rot(v, ang) for v in vv]
+
+def rot_arr_around(vv, ang, c): # функция для поворота массива на угол вокруг точки
+    return list(np.add(c, [rot([v[0]-c[0], v[1]-c[1]], ang) for v in vv]))
     
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
