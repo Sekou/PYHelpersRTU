@@ -25,19 +25,20 @@ def open_trackbar_dialog(params, names): # диалог с трекбарами 
     root.title("Задать параметры"), root.geometry("300x250"), root.resizable(False, False)
     def to_scale_value(val): return int((val + 1) * 50) # Конвертация параметров из диапазона (-1, 1) к (0, 100)
     def from_scale_value(val): return (val / 50) - 1 # Конвертация параметров из диапазона (0, 100) к (-1, 1)
-    tracks, result=[], {} # Создание трекбаров
+    tracks, result=[], None # Создание трекбаров
     for prm, name in zip(params, names):
         ttk.Label(root, text=name).pack()
         tracks.append(ttk.Scale(root, from_=0, to=100, orient='horizontal'))
         tracks[-1].set(to_scale_value(prm)), tracks[-1].pack()
     def on_ok(): # Получение значений с трекбаров и преобразование в диапазон (-1, 1)
-        result['params'] = [from_scale_value(tr.get()) for tr in tracks]
+        nonlocal result
+        result = [from_scale_value(tr.get()) for tr in tracks]
         root.destroy()
     def on_cancel(): root.destroy()
     ttk.Button(root, text="OK", command=on_ok).pack(pady=5) # Кнопка OK
     ttk.Button(root, text="Отмена", command=on_cancel).pack() # Кнопка Cancel
     root.mainloop()
-    return result.get('params', None)
+    return result
 
 def main():
     clock = pygame.time.Clock()
@@ -79,4 +80,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
