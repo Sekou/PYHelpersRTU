@@ -303,25 +303,23 @@ def ask_for_text(text="", cap="Введите текст", tit="Текст об�
     return text
     
 # функция для запроса многострочного текста
-def ask_multiline_string(text="", cap="Введите текст", tit="Текст объекта:"):
-    (root := tk.Tk()).title(cap)
-    result=""
-    def cancel():
-        nonlocal result, root
-        result = None
+def open_trackbar_dialog(params, names): # диалог с трекбарами для задания параметров
+    root, tracks, result = tk.Tk(), [], None
+    root.title("Задать параметры"), root.geometry("300x450"), root.resizable(False, False)
+    def to_scale_value(val): return int((val + 1) * 50) # Конвертация параметров из диапазона (-1, 1) к (0, 100)
+    def from_scale_value(val): return (val / 50) - 1 # Конвертация параметров из диапазона (0, 100) к (-1, 1)
+    for prm, name in zip(params, names):# Создание трекбаров
+        ttk.Label(root, text=name).pack()
+        tracks.append(ttk.Scale(root, from_=0, to=100, orient='horizontal'))
+        tracks[-1].set(to_scale_value(prm)), tracks[-1].pack()
+    def on_ok(): # Получение значений с трекбаров и преобразование в диапазон (-1, 1)
+        nonlocal result
+        result = [from_scale_value(tr.get()) for tr in tracks]
         root.quit()
-    root.protocol("WM_DELETE_WINDOW", cancel)
-    ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
-    text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=20, font=("Calibri", 12))
-    text_area.insert(tk.INSERT, text)
-    text_area.grid(column=0, row=2,  columnspan=2, pady=10, padx=10)
-    def read_text():
-        nonlocal result, root
-        result = text_area.get("1.0", tk.END).strip()
-        root.quit()
-    text_area.focus()
-    ttk.Button(root, text="OK", command=read_text).grid(column=0, row=3, pady=10, padx=0)
-    ttk.Button(root, text="Cancel", command=cancel).grid(column=1, row=3, pady=10, padx=0)
+    def on_cancel(): root.quit()
+    root.protocol("WM_DELETE_WINDOW", on_cancel)
+    ttk.Button(root, text="OK", command=on_ok).pack(pady=5) # Кнопка OK
+    ttk.Button(root, text="Отмена", command=on_cancel).pack() # Кнопка Cancel
     root.mainloop(); root.destroy()
     return result
 
