@@ -21,12 +21,11 @@ objects = [# Объекты (прямоугольники)
 ]
 
 def open_trackbar_dialog(params, names): # диалог с трекбарами для задания параметров
-    root = tk.Tk()
+    root, tracks, result = tk.Tk(), [], None 
     root.title("Задать параметры"), root.geometry("300x250"), root.resizable(False, False)
     def to_scale_value(val): return int((val + 1) * 50) # Конвертация параметров из диапазона (-1, 1) к (0, 100)
     def from_scale_value(val): return (val / 50) - 1 # Конвертация параметров из диапазона (0, 100) к (-1, 1)
-    tracks, result=[], None # Создание трекбаров
-    for prm, name in zip(params, names):
+    for prm, name in zip(params, names):# Создание трекбаров
         ttk.Label(root, text=name).pack()
         tracks.append(ttk.Scale(root, from_=0, to=100, orient='horizontal'))
         tracks[-1].set(to_scale_value(prm)), tracks[-1].pack()
@@ -80,5 +79,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
