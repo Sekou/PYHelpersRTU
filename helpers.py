@@ -308,7 +308,8 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
     result=""
     def cancel():
         nonlocal result, root
-        result = None; root.quit()
+        result = None
+        root.quit()
     root.protocol("WM_DELETE_WINDOW", cancel)
     ttk.Label(root, text=tit, font=("Bold", 12)).grid(column=0, row=1)
     text_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=20, font=("Calibri", 12))
@@ -319,10 +320,8 @@ def ask_multiline_string(text="", cap="Введите текст", tit="Текс
         result = text_area.get("1.0", tk.END).strip()
         root.quit()
     text_area.focus()
-    btn = ttk.Button(root, text="OK", command=read_text)
-    btn.grid(column=0, row=3, pady=10, padx=0)
-    btn2 = ttk.Button(root, text="Cancel", command=cancel)
-    btn2.grid(column=1, row=3, pady=10, padx=0)
+    ttk.Button(root, text="OK", command=read_text).grid(column=0, row=3, pady=10, padx=0)
+    ttk.Button(root, text="Cancel", command=cancel).grid(column=1, row=3, pady=10, padx=0)
     root.mainloop(); root.destroy()
     return result
 
