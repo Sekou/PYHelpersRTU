@@ -36,7 +36,7 @@ def open_trackbar_dialog(params, names): # диалог с трекбарами 
     def on_cancel(): root.destroy()
     ttk.Button(root, text="OK", command=on_ok).pack(pady=5) # Кнопка OK
     ttk.Button(root, text="Отмена", command=on_cancel).pack() # Кнопка Cancel
-    root.mainloop()
+    root.mainloop(); root.destroy()
     return result
 
 def main():
@@ -79,6 +79,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
