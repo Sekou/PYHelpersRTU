@@ -175,11 +175,9 @@ def get_insert_ind(points_, mouse_pos): # поиск отрезка для вс�
     return ii[np.argmin(dd)]
 
 def project_pt(segm, pt): # точка-проекция точки на отрезок
-    v2=np.subtract(pt, segm[0], dtype=float)
-    v1=np.subtract(segm[1], segm[0], dtype=float)
+    v1, v2=np.subtract(segm[1], segm[0], dtype=float), np.subtract(pt, segm[0], dtype=float)
     v1_=v1/np.linalg.norm(v1)
-    L2=np.dot(v1_, v2)
-    return segm[0] + L2*v1_
+    return segm[0] + np.dot(v1_, v2)*v1_
 
 def check_proj(segm, pt): # проверка попадания проецирцемой точки внетрь отрезка
     v2=np.subtract(pt, segm[0], dtype=float)
