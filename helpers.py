@@ -37,7 +37,9 @@ def read_pts(filename): # чтение массива целочисленных
     with open(filename, "r") as f:
         return [[int(v) for v in l.split()] for l in f.readlines()]
 
-def rot(v, ang): # поворот вектора на угол
+def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
+    
+def rot2(v, ang): # поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
