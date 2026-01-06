@@ -1,3 +1,4 @@
+#2025, Forces simulation, by S. Diane
 import pygame, math, numpy as np
 
 def rot(v, ang): # поворот вектора на угол
@@ -102,7 +103,4 @@ while running:
     clock.tick(fps)
 
 pygame.quit()
-
-
-#2025, by S. Diane
 
