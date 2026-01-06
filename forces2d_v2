@@ -46,12 +46,6 @@ class Contact:
                 # print("Duplicate")
                 return True
 
-class Joint:
-    def __init__(self, b1, b2, p1, p2):
-        self.b1, self.b2=b1, b2
-        self.pos1, self.pos2 = p1, p2
-        self.torque=0
-
 class World:
     def __init__(self):
         self.bodies=[]
