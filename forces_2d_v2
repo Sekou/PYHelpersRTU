@@ -1,0 +1,173 @@
+#2025, Forces simulation, by S. Diane
+import pygame, math, numpy as np
+
+THRESHOLD = 10
+FORCE_MAGNITUDE = 500
+
+def dist(p1, p2): return np.linalg.norm(np.subtract(p2, p1)) # расстояние между точками
+def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
+def rot_arr(vv, ang): return [rot(v, ang) for v in vv] # функция для поворота массива на угол
+def draw_arrow2(screen, color, p0, p1, w): # отрисовка стрелки по 2 точкам
+    ang=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
+    p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
+    for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
+def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернутый прямоугольник (по точке центра, ширине, высоте и уголу)
+    pygame.draw.polygon(screen, color, np.add(rot_arr([[-w/2, -h/2], [+w/2, -h/2], [+w/2, +h/2], [-w/2, +h/2]], ang), pc), 2)
+def pt_segm_dist2(p, p1, p2):  # расстояние от точки до ограниченного отрезка
+    k = (p2[1]-p1[1]) / (0.0000001 if p2[0]==p1[0] else (p2[0]-p1[0]))
+    d = np.abs(k * (p1[0] - p[0]) - p1[1] + p[1]) /(k * k + 1)**0.5  # числитель: p[1]-(k*p[0]+b)
+    v1,v12,v2=np.subtract(p, p1), np.subtract(p2, p1), np.subtract(p, p2)
+    return d if 0 < v1 @ v12 / (v12@v12) < 1 else min(v1@v1, v2@v2)**0.5
+def project_pt(segm, pt): # точка-проекция точки на отрезок
+    v1, v2=np.subtract(segm[1], segm[0], dtype=float), np.subtract(pt, segm[0], dtype=float)
+    return segm[0] + np.dot(v1, v2)*v1/np.dot(v1,v1)
+def check_ccw(A, B, C): #triangle direction: CCW for Y-axis up, but CW for Y-axis down
+    return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
+def find_collision(b1, b2, eps):
+    pp1, ss1, pp2, ss2 = b1.get_pts(), b1.get_segments(), b2.get_pts(), b2.get_segments()
+    dmin, p_, s_, n_= eps, None, None, None
+    for p in pp1:
+        for s in ss2:
+            if (d:=pt_segm_dist2(p, *s))<dmin: dmin, p_, s_ = d, p, s
+    if s_ is not None:
+        n_ = rot(s_[1]-s_[0], -np.pi/2)
+        n_=n_/np.linalg.norm(n_)*dmin
+        if check_ccw(*s_, p_): n_*=0
+    p2=None if s_ is None else project_pt(s_, p_)
+    return p_, s_, n_, p2
+
+class Contact:
+    def __init__(self, b1, b2):
+        self.b1, self.b2=b1, b2
+        self.p, self.s, self.n, self.p_=find_collision(b1, b2, THRESHOLD)
+    def is_duplicate(self, contacts, thr):
+        for c in contacts:
+            if min(dist(c.p, self.p_), dist(c.p_, self.p))<thr:
+                # print("Duplicate")
+                return True
+
+class Joint:
+    def __init__(self, b1, b2, p1, p2):
+        self.b1, self.b2=b1, b2
+        self.pos1, self.pos2 = p1, p2
+        self.torque=0
+
+class World:
+    def __init__(self):
+        self.bodies=[]
+    def draw(self, screen):
+        for b in self.bodies: b.draw(screen)
+    def add_body(self, b):
+        self.bodies.append(b)
+    def update(self, dt):
+        for b in self.bodies: b.update(dt)
+    def find_contacts(self):
+        res, res2=[], []
+        for i in range(len(self.bodies)):
+            for j in range(len(self.bodies)):
+                if i!=j: res.append(Contact(self.bodies[i], self.bodies[j]))
+        res=[c for c in res if c.p is not None]
+        for c in res:
+            if c.p is not None and not c.is_duplicate(res2, THRESHOLD):
+                res2.append(c)
+        return res2
+
+class Body:
+    def __init__(self, x0, y0, w, h, density=1):
+        self.density, self.w, self.h = density, w, h
+        self.pos = np.array([x0, y0], dtype=float) # Положение центра масс
+        self.velocity = np.array([0.0, 0.0]) # пикс в секунду
+        self.angular_velocity = 0  # радианы в секунду
+        self.angle = 0  # текущий угол в радианах
+        self.mass = self.w * self.h * self.density # Расчет массы и момента инерции
+        self.inertia = (self.mass * (self.w ** 2 + self.h ** 2)) / 12 # момент инерции относительно центра
+        self.force = np.array([0.0, 0.0]) # Вектор силы, приложенной к сегменту
+        self.torque = 0 # Крутящий момент
+    def apply_force(self, force, application_point=None):
+        self.force += force
+        if application_point is not None:
+            r = application_point - self.pos # Вектор от центра масс до точки приложения силы
+            torque_from_force = np.cross(r,force) # Момент силы (крутящий момент)
+            self.torque += torque_from_force
+    def update(self, dt):
+        # Поступательное движение
+        acceleration = self.force / self.mass
+        self.velocity += acceleration * dt
+        self.pos += self.velocity * dt
+        # Вращательное движение
+        angular_acceleration = self.torque / self.inertia
+        self.angular_velocity += angular_acceleration * dt
+        self.angle += self.angular_velocity * dt
+        # Обновление силы и момента для следующего шага
+        self.force = np.array([0.0, 0.0])
+        self.torque = 0
+    def draw(self, surface):
+        draw_rot_rect(screen, (0,0,0), self.pos, self.w, self.h, self.angle)
+    def get_pts(self):
+        w,h=self.w/2, self.h/2
+        return np.add(rot_arr([[-w,-h], [+w,-h], [+w,+h], [-w,+h]], self.angle), self.pos)
+    def get_segments(self):
+        pp=self.get_pts()
+        return np.array(list(zip(pp, list(pp[1:])+[pp[0]])))
+
+# Инициализация pygame
+pygame.init()
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+clock = pygame.time.Clock()
+
+p1, p2 = None, None
+mousedown=False
+
+fps=20
+running = True
+
+world=World()
+# Тестовые объекты
+world.add_body(Body(250, 400, 100, 50, 0.001))
+world.add_body(Body(450, 350, 70, 40, 0.001))
+world.add_body(Body(350, 250, 70, 40, 0.001))
+
+def draw_collision(screen, p, s, n, p_, c1=(255,0,0), c2=(0,0,255)):
+    for pt, c, sgn in zip([p,p_], [c1,c2], [1, -1]):
+        pygame.draw.circle(screen, c, pt, 5, 2)
+        pygame.draw.line(screen, c, pt, np.add(p, sgn*n), 2)
+
+while running:
+    dt = 1/fps  # Время в секундах
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: running = False
+        elif event.type == pygame.MOUSEMOTION:
+            if mousedown: p2 = pygame.Vector2(pygame.mouse.get_pos())
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            p2 = p1 = pygame.Vector2(pygame.mouse.get_pos())
+            mousedown=True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            mousedown=False
+            p2 = pygame.Vector2(pygame.mouse.get_pos())
+            force_direction = p2 - p1
+            if np.linalg.norm(force_direction)>0:
+                force = force_direction.normalize() * FORCE_MAGNITUDE
+                # Применим силу к центру или точке вне центра для вращения
+                world.bodies[0].apply_force(force, application_point=p1)
+                p1, p2 = None, None
+
+    world.update(dt) # Обновление
+
+    screen.fill((255, 255, 255))
+    world.draw(screen) # Отрисовка
+    if p1 is not None and p2 is not None: draw_arrow2(screen, (255,0,0), p1, p2, 2)
+
+    cc=world.find_contacts()
+
+    for c in cc:
+        f=c.n/np.linalg.norm(c.n)*FORCE_MAGNITUDE/5
+        c.b1.apply_force(f, application_point=c.p)
+        c.b2.apply_force(-f, application_point=c.p_)
+        draw_collision(screen, c.p, c.s, c.n, c.p_, (255,0,0), (0,0,255))
+
+    pygame.display.flip()
+    clock.tick(fps)
+
+pygame.quit()
+
