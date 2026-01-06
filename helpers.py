@@ -1,4 +1,4 @@
-#Various helper functions (author: Sekou Diane, 2024-2025)
+#Various helper functions (author: Sekou Diane, 2024-2026)
 
 def flatten(lst): # разглаживание вложенного списка в линейный вид
     return [e for l in filter(lambda v:type(v)==list,lst) for e in flatten(l)]+[*filter(lambda v:type(v)!=list,lst)]
