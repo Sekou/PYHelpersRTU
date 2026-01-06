@@ -259,8 +259,8 @@ def ngon_area(coords):
     return 0.5 * np.abs(main_area + x_[-1] * y_[0] - y_[-1] * x_[0]) # correction added
 
 # отрисовка стрелки по точке и углу
-def draw_arrow(screen, color, p0, angle, lenpx, w):
-    p1 = [p0[0] + lenpx * math.cos(angle), p0[1] + lenpx * math.sin(angle)]
+def draw_arrow(screen, color, p0, ang, lenpx, w):
+    p1 = [p0[0] + lenpx * math.cos(ang), p0[1] + lenpx * math.sin(ang)]
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
@@ -271,7 +271,7 @@ def draw_arrow2(screen, color, p0, p1, w):
     p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
     p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
-
+        
 # отрисовка сетки
 def draw_grid(screen, szx=600, szy=400, stepx=50, stepy=50, c = (200,200,200)): #отрисовка сетки
     for iy in np.arange(0, szy+stepy/2, stepy): pygame.draw.line(screen, c, r2i(0, 0+iy), r2i(0+szx, 0+iy), 1)
@@ -386,3 +386,17 @@ def convex_hull(points): # выпуклая оболочка набора точ
         while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0: upper.pop()
         upper.append(p)
     return lower + [p for p in upper if not p in lower]
+
+
+#SHORTER VERSIONS
+# отрисовка стрелки по точке и углу
+def draw_arrow(screen, color, p0, ang, lenpx, w):
+    p1 = [p0[0] + lenpx * math.cos(ang), p0[1] + lenpx * math.sin(ang)]
+    p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
+    for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
+    
+# отрисовка стрелки по 2 точкам
+def draw_arrow2(screen, color, p0, p1, w): # отрисовка стрелки по 2 точкам
+    ang=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
+    p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
+    for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
