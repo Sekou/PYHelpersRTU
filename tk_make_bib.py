@@ -39,10 +39,10 @@ def run():
     ]
 
     i=0
-    for l in lines: # создаем текстовые поля для ввода короткого названия ГОСТ
-        tk.Label(root, text=l[0]).grid(row=i*2, column=0, columnspan=3)
+    for name,val in lines: # создаем текстовые поля для ввода короткого названия ГОСТ
+        tk.Label(root, text=name).grid(row=i*2, column=0, columnspan=3)
         (tx := tk.Text(root, height=2, width=70)).grid(row=i*2+1, column=0, columnspan=3)
-        if len(l[1]): tx.insert(tk.END, l[1])
+        if len(val): tx.insert(tk.END, val)
         txt_fields.append(tx)
         i+=1
 
