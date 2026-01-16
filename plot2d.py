@@ -31,7 +31,7 @@ def adjust_scale(k=1):
     SCALEX, SCALEY=WIDTH/DW*0.45*k, HEIGHT/DH*0.45*k
 
 # Параметры выделения точки
-pt_radius = 8 # расстояние для выбора точки мышью
+PT_RADIUS = 8 # расстояние для выбора точки мышью
 
 def draw_text(screen, s, x, y, sz=12, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
@@ -59,7 +59,7 @@ def draw(screen, points, points_img):
     for b,(d1,d2) in zip([True, CY, CX, CX and CY], [[1,1],[1,-1],[-1,1],[-1,-1]]):
         if b: draw_grid(screen, d1*DW, d2*DH, d1*STEP, d2*STEP) #сетка
     if len(points_img) > 1: pygame.draw.lines(screen, LINE_COLOR, False, points_img, 2) #линия
-    r=pt_radius if not NICE else 3
+    r=PT_RADIUS if not NICE else 3
     if CLOSED:
         pygame.draw.line(screen, LINE_COLOR, points_img[0], points_img[-1], 1 if not NICE else 2)
         pygame.draw.circle(screen, (0,0,0), points_img[0], r*1.5, 1)
@@ -77,7 +77,7 @@ def draw(screen, points, points_img):
 def get_ind_point_under(points_img, mouse_pos):
     for i, point in enumerate(points_img):
         dx, dy = point[0] - mouse_pos[0], point[1] - mouse_pos[1]
-        if (dx ** 2 + dy ** 2) ** 0.5 <= pt_radius: return i
+        if (dx ** 2 + dy ** 2) ** 0.5 <= PT_RADIUS: return i
     return -1
 
 def dist(p1, p2): #расстояние между точками
@@ -181,6 +181,7 @@ if __name__ == "__main__": run()
 #         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 580)
 # plot2d.user_draw_callback=user_draw_callback
 # threading.Thread(plot2d.run()).start()
+
 
 
 
