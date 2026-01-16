@@ -20,6 +20,8 @@ CLOSED=False
 SNAP=False
 NICE=False #hide axes and big points
 
+PT_RADIUS = 8 # расстояние для выбора точки мышью
+
 # Начальные точки (пример)
 points = [[100, 500], [200, 300], [300, 400], [400, 200], [500, 350], [600, 250], [700, 400]]
 ind_under=-1
@@ -29,9 +31,6 @@ def adjust_scale(k=1):
     pp = np.array(points)
     DW, DH=max([abs(x) for x in pp[:,0]]), max([abs(y) for y in pp[:,1]])
     SCALEX, SCALEY=WIDTH/DW*0.45*k, HEIGHT/DH*0.45*k
-
-# Параметры выделения точки
-PT_RADIUS = 8 # расстояние для выбора точки мышью
 
 def draw_text(screen, s, x, y, sz=12, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
@@ -181,6 +180,7 @@ if __name__ == "__main__": run()
 #         plot2d.draw_text(screen, f"Area = {S:.2f}", 200, 580)
 # plot2d.user_draw_callback=user_draw_callback
 # threading.Thread(plot2d.run()).start()
+
 
 
 
