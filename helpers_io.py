@@ -1,5 +1,9 @@
-#2025, S. Diane
+#2025-2026, S. Diane
 
+def get_timestamped_filename(): #возвращает имя файла с временной отметкой
+    import datetime as dt
+    return dt.datetime.fromtimestamp(time.time()).strftime("%Y%m%d_%H%M")
+    
 #возвращает короткое имя файла или папки (без пути и расширения)
 def get_short_name(file_path):
     pathname, extension = os.path.splitext(file_path)
