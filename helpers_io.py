@@ -45,3 +45,15 @@ def show_mat(mat, prec=5):
 
 #выводит дробное число в округленном формате (например, pad_round(1.2,3,3) = 001.200)
 def pad_round(x, p, n): return f"{x:0{1+p+n+(x<0 and 1 or 0)}.{n}f}"
+
+#конверсия многоугольника в строку
+def ngon_to_str(pts, prec=3): return "; ".join(f"{round(x,prec):g} {round(y,prec):g}" for x, y in pts)
+
+#конверсия многоугольника из строки
+def ngon_from_str(s): return [[float(x[0]),float(x[1])] for x in [xx.split(" ") for xx in s.split("; ")]]
+
+#конверсия массива в строку
+def arr_to_str(arr, prec=3): return " ".join(f"{round(x,prec):g}" for x in arr)
+
+#конверсия массива из строки
+def arr_from_str(s): return [float(x) for x in s.split(" ")]
