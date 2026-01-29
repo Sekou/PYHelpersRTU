@@ -409,8 +409,7 @@ def place_pts_into_ngon(pts, ngon, k0=0.5): # перенос и масштаби
 def repell_pts_from_ngon(pts, ngon, target_dist=100):  #отталкивание точек друг от краев многоугольника
     res = [[*p] for p in pts]
     for i in range(len(pts)):
-        p_=project_ngon_pt(ngon, pts[i])
-        v=np.subtract(pts[i], p_)
+        v=np.subtract(pts[i], project_ngon_pt(ngon, pts[i]))
         d=np.linalg.norm(v)
         res[i] += v * min(target_dist * 0.1, target_dist / d ** 3)
     return res
