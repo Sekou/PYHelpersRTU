@@ -387,6 +387,42 @@ def convex_hull(points): # выпуклая оболочка набора точ
         upper.append(p)
     return lower + [p for p in upper if not p in lower]
 
+def project_pt_lim(segm, pt): # ограниченная проекция точки на отрезок
+    v1, v2=np.subtract(segm[1], segm[0], dtype=float), np.subtract(pt, segm[0], dtype=float)
+    denom, nom=np.dot(v1,v1), np.dot(v1, v2)
+    return segm[0] + max(0,min(denom, nom))*v1/denom
+
+def project_ngon_pt(ngon, pt): # проекция точки на многоугольник
+    p,dmin=None, np.inf
+    for i in range(len(ngon)):
+        p2=project_pt_lim([ngon[i-1], ngon[i]], pt)
+        if (d:=dist(pt, p2)) < dmin: p, dmin = p2, d
+    return p
+
+def place_pts_into_ngon(pts, ngon, k0=0.5): # перенос и масштабирование точек внутри многоугольника
+    c1, c2 = np.mean(pts, axis=0), np.mean(ngon, axis=0)
+    approx_r1=max(dist(p, c1) for p in pts)
+    approx_r2=sum(dist(p1, p2) for p1, p2 in zip(ngon, ngon[1:]+ngon[:1]))/2/np.pi
+    k=k0*approx_r2/approx_r1
+    return [(p-c1)*k+c2 for p in pts]
+
+def repell_pts_from_ngon(pts, ngon, target_dist=100):  #отталкивание точек друг от краев многоугольника
+    res = [[*p] for p in pts]
+    for i in range(len(pts)):
+        p_=project_ngon_pt(ngon, pts[i])
+        v=np.subtract(pts[i], p_)
+        d=np.linalg.norm(v)
+        res[i] += v * min(target_dist * 0.1, target_dist / d ** 3)
+    return res
+
+def repell_pts(pts, target_dist=100): #отталкивание точек друг от друга
+    res=[[*p] for p in pts]
+    for i in range(len(pts)):
+        for j in list(range(i))+list(range(i+1, len(res))):
+            v=np.subtract(pts[j], pts[i])
+            d=np.linalg.norm(v)
+            res[j] +=  v * min(target_dist * 0.1, target_dist / d ** 3)
+    return res
 
 #SHORTER VERSIONS
 # отрисовка стрелки по точке и углу
@@ -400,3 +436,4 @@ def draw_arrow2(screen, color, p0, p1, w): # отрисовка стрелки �
     ang=math.atan2(p1[1]-p0[1],p1[0]-p0[0])
     p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
+
