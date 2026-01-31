@@ -402,7 +402,7 @@ def project_ngon_pt(ngon, pt): # проекция точки на многоуг
 def place_pts_into_ngon(pts, ngon, k0=0.5): # перенос и масштабирование точек внутри многоугольника
     c1, c2 = np.mean(pts, axis=0), np.mean(ngon, axis=0)
     approx_r1=max(dist(p, c1) for p in pts)
-    approx_r2=sum(dist(p1, p2) for p1, p2 in zip(ngon, ngon[1:]+ngon[:1]))/2/np.pi
+    approx_r2=sum(dist(p1, p2) for p1, p2 in zip(ngon, [*ngon[1:],ngon[0]]))/2/np.pi
     k=k0*approx_r2/approx_r1
     return [(p-c1)*k+c2 for p in pts]
 
