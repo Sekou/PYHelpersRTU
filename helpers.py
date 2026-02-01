@@ -428,7 +428,7 @@ def fill_ngon_with_points(num_pts, ngon): #заполнение многоуго
     c, r2 = np.mean(ngon, axis=0), 0.99 * r * r / 4
     front_segments = [[c - [r / 2, 0], c + [r / 2, 0]]]
     segments, visited_pts = [*front_segments], {tuple(pt) for pt in front_segments[0]}
-    while len(front_segments) and len(visited_pts) < n:
+    while len(front_segments) and len(visited_pts) < num_pts:
         p1, p2 = front_segments.pop(0)  # берем отрезок и от его центра проводим высоту: h=r*sqrt(3)/2
         p = np.add(p1, p2) / 2 + [[0, -1], [1, 0]] @ np.subtract(p2, p1) * 0.8660254037844386
         if pt_inside_ngon(p, ngon) and len(ss := [[p1, p], [p, p2]]):
