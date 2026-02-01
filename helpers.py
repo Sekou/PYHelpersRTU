@@ -423,7 +423,7 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
             res[j] +=  v * min(target_dist * 0.1, target_dist / d ** 3)
     return res
 
-def fill_ngon_with_points(num_pts): #заполнение многоугольника требуемым числом точек
+def fill_ngon_with_points(num_pts, ngon): #заполнение многоугольника требуемым числом точек
     r=1.055*(ngon_area(ngon)/n)**0.5
     c, r2 = np.mean(ngon, axis=0), 0.99 * r * r / 4
     front_segments = [[c - [r / 2, 0], c + [r / 2, 0]]]
