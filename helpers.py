@@ -423,6 +423,19 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
             res[j] +=  v * min(target_dist * 0.1, target_dist / d ** 3)
     return res
 
+def fill_ngon(num_pts): #заполнение многоугольника требуемым числом точек
+    r=1.055*(ngon_area(ngon)/n)**0.5
+    c, r2 = np.mean(ngon, axis=0), 0.99 * r * r / 4
+    front_segments = [[c - [r / 2, 0], c + [r / 2, 0]]]
+    segments, visited_pts = [*front_segments], {tuple(pt) for pt in front_segments[0]}
+    while len(front_segments) and len(visited_pts) < n:
+        p1, p2 = front_segments.pop(0)  # берем отрезок и от его центра проводим высоту: h=r*sqrt(3)/2
+        p = np.add(p1, p2) / 2 + [[0, -1], [1, 0]] @ np.subtract(p2, p1) * 0.8660254037844386
+        if pt_inside_ngon(p, ngon) and len(ss := [[p1, p], [p, p2]]):
+            if all((p[0] - x) ** 2 + (p[1] - y) ** 2 >= r2 for x, y in visited_pts):
+                visited_pts.add(tuple(p)), front_segments.extend(ss), segments.extend(ss)
+    return list(visited_pts)
+
 #SHORTER VERSIONS
 # отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, ang, lenpx, w):
