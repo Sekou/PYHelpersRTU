@@ -424,7 +424,7 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
     return res
 
 def fill_ngon_with_points(num_pts, ngon): #заполнение многоугольника требуемым числом точек
-    r=1.055*(ngon_area(ngon)/n)**0.5
+    r=1.055*(ngon_area(ngon)/num_pts)**0.5
     c, r2 = np.mean(ngon, axis=0), 0.99 * r * r / 4
     front_segments = [[c - [r / 2, 0], c + [r / 2, 0]]]
     segments, visited_pts = [*front_segments], {tuple(pt) for pt in front_segments[0]}
