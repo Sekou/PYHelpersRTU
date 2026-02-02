@@ -423,18 +423,19 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
             res[j] +=  v * min(target_dist * 0.1, target_dist / d ** 3)
     return res
 
-def fill_ngon_with_points(num_pts, ngon): #заполнение многоугольника требуемым числом точек
-    r=1.055*(ngon_area(ngon)/num_pts)**0.5
-    c, r2 = np.mean(ngon, axis=0), 0.99 * r * r / 4
-    front_segments = [[c - [r / 2, 0], c + [r / 2, 0]]]
-    segments, visited_pts = [*front_segments], {tuple(pt) for pt in front_segments[0]}
-    while len(front_segments) and len(visited_pts) < num_pts:
-        p1, p2 = front_segments.pop(0)  # берем отрезок и от его центра проводим высоту: h=r*sqrt(3)/2
-        p = np.add(p1, p2) / 2 + [[0, -1], [1, 0]] @ np.subtract(p2, p1) * 0.8660254037844386
-        if pt_inside_ngon(p, ngon) and len(ss := [[p1, p], [p, p2]]):
-            if all((p[0] - x) ** 2 + (p[1] - y) ** 2 >= r2 for x, y in visited_pts):
-                visited_pts.add(tuple(p)), front_segments.extend(ss), segments.extend(ss)
-    return list(visited_pts)
+def fill_ngon_with_points(num_pts, ngon, k=0.95): #заполнение многоугольника требуемым числом точек
+    area = ngon_area(ngon)
+    r, h = k * (area / num_pts) ** 0.5, k * np.sqrt(3)/2 * (area / num_pts) ** 0.5
+    (x0, y0), (x1, y1) = np.min(ngon, axis=0), np.max(ngon, axis=0)
+    pp, delta_x, delta_s, s_sum = [], h / 2, r * h / 2, 0
+    for i, y in enumerate(np.arange(y0 + h / 2, y1, h)):
+        d = delta_x/2 if i % 2 == 0 else -delta_x/2
+        for x in np.arange(x0 + d, x1, r):
+            if (s_sum:=s_sum + delta_s) > area: break
+            if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #NOTE DEPENDENCY
+    if (z:=len(pp) - num_pts)>0:
+        for d, p in sorted([dist(p, project_ngon_pt(ngon, p)), p] for p in pp)[:z]: pp.remove(p) #NOTE DEPENDENCY
+    return pp
 
 #SHORTER VERSIONS
 # отрисовка стрелки по точке и углу
