@@ -258,6 +258,9 @@ def ngon_area(coords):
     main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:]) # calculate area
     return 0.5 * np.abs(main_area + x_[-1] * y_[0] - y_[-1] * x_[0]) # correction added
 
+def pt_ngon_dist(ngon, pt): # расстояние от точки до многоугольника
+    return min(pt_segm_dist(pt, p1, p2) for p1, p2 in zip(ngon, [*ngon[1:],ngon[0]]))
+    
 # отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, ang, lenpx, w):
     p1 = [p0[0] + lenpx * math.cos(ang), p0[1] + lenpx * math.sin(ang)]
@@ -424,7 +427,7 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
     return res
 
 def fill_ngon_with_points(num_pts, ngon, k=0.95): #заполнение многоугольника требуемым числом точек
-    area = ngon_area(ngon)
+    area = ngon_area(ngon) #WARN: DEPENDENCY
     r, h = k * (area / num_pts) ** 0.5, k * np.sqrt(3)/2 * (area / num_pts) ** 0.5
     (x0, y0), (x1, y1) = np.min(ngon, axis=0), np.max(ngon, axis=0)
     pp, delta_x, delta_s, s_sum = [], h / 2, r * h / 2, 0
@@ -432,9 +435,9 @@ def fill_ngon_with_points(num_pts, ngon, k=0.95): #заполнение мног
         d = delta_x/2 if i % 2 == 0 else -delta_x/2
         for x in np.arange(x0 + d, x1, r):
             if (s_sum:=s_sum + delta_s) > area: break
-            if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #NOTE DEPENDENCY
-    if (z:=len(pp) - num_pts)>0:
-        for d, p in sorted([dist(p, project_ngon_pt(ngon, p)), p] for p in pp)[:z]: pp.remove(p) #NOTE DEPENDENCY
+            if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #WARN: DEPENDENCY
+    if (z := len(pp) - num_pts) > 0:
+        for d, p in sorted([pt_ngon_dist(p, ngon), p] for p in pp)[:z]: pp.remove(p) #WARN: DEPENDENCY
     return pp
 
 #SHORTER VERSIONS
