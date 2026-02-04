@@ -258,7 +258,7 @@ def ngon_area(coords):
     main_area = np.dot(x_[:-1], y_[1:]) - np.dot(y_[:-1], x_[1:]) # calculate area
     return 0.5 * np.abs(main_area + x_[-1] * y_[0] - y_[-1] * x_[0]) # correction added
 
-def pt_ngon_dist(ngon, pt): # расстояние от точки до многоугольника
+def pt_ngon_dist(pt, ngon): # расстояние от точки до многоугольника
     return min(pt_segm_dist(pt, p1, p2) for p1, p2 in zip(ngon, [*ngon[1:],ngon[0]]))
     
 # отрисовка стрелки по точке и углу
