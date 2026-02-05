@@ -426,7 +426,7 @@ def repell_pts(pts, target_dist=100): #отталкивание точек др�
             res[j] +=  v * min(target_dist * 0.1, target_dist / d ** 3)
     return res
 
-def fill_ngon_with_pts_triangular(num_pts, ngon, k=0.95): #заполнение многоугольника требуемым числом точек
+def fill_ngon_with_pts_triangular(num_pts, ngon, k=0.95): #заполнение многоугольника по треугольной сетке требуемым числом точек
     area = ngon_area(ngon) #WARN: DEPENDENCY
     r, h = k * (area / num_pts) ** 0.5, k * np.sqrt(3)/2 * (area / num_pts) ** 0.5
     (x0, y0), (x1, y1) = np.min(ngon, axis=0), np.max(ngon, axis=0)
@@ -438,6 +438,13 @@ def fill_ngon_with_pts_triangular(num_pts, ngon, k=0.95): #заполнение 
             if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #WARN: DEPENDENCY
     if (z := len(pp) - num_pts) > 0:
         for d, p in sorted([pt_ngon_dist(p, ngon), p] for p in pp)[:z]: pp.remove(p) #WARN: DEPENDENCY
+    return pp
+
+def fill_ngon_with_pts_square_auto(step, ngon): #заполнение многоугольника точками по квадратной сетке с нужным шагом
+    (x0, y0), (x1, y1), pp = np.min(ngon, axis=0), np.max(ngon, axis=0), []
+    for i, y in enumerate(np.arange(y0 + step / 2, y1, step)):
+        for x in np.arange(x0 + step / 2, x1, step):
+            if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #WARN: DEPENDENCY
     return pp
 
 #SHORTER VERSIONS
