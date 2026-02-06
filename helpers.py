@@ -180,6 +180,14 @@ def project_pt(segm, pt): # точка-проекция точки на отре
     v1, v2=np.subtract(segm[1], segm[0], dtype=float), np.subtract(pt, segm[0], dtype=float)
     return segm[0] + np.dot(v1, v2)*v1/np.dot(v1,v1)
 
+def project_pt_along(segm, pt, vec): # точка-проекция точки на отрезок в направлении вектора
+    (x1, y1), (x2, y2), (x3, y3), (x4, y4) = segm[0], segm[1], pt, np.add(pt, vec)
+    denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+    if denom == 0: return None  # отрезки параллельны или совпадают
+    t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom
+    u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom
+    return (x1 + t * (x2 - x1), y1 + t * (y2 - y1)) if 0 <= t <= 1 and u >= 0 else None
+
 def check_proj(segm, pt): # проверка попадания проецирцемой точки внетрь отрезка
     v2=np.subtract(pt, segm[0], dtype=float)
     v1=np.subtract(segm[1], segm[0], dtype=float)
