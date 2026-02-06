@@ -235,7 +235,7 @@ def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9
         else: return pts
 
 # проверяем, находится ли точка внутри многоугольника
-def pt_inside_ngon(point, vertices):
+def pt_inside_ngon(point, vertices): #ngon_contains_pt
     (x, y), c = point, 0
     for i in range(len(vertices)):
         (x1, y1), (x2, y2) = vertices[i-1], vertices[i]
