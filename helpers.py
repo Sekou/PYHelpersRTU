@@ -2,7 +2,8 @@
 
 def flatten(lst): # разглаживание вложенного списка в линейный вид
     return [e for l in filter(lambda v:type(v)==list,lst) for e in flatten(l)]+[*filter(lambda v:type(v)!=list,lst)]
-    
+
+# pygame.font.init()
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
