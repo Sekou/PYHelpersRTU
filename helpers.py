@@ -44,6 +44,9 @@ def rot2(v, ang): # поворот вектора на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
+#определяем глобальный угол вектора
+def get_vec_ang(vec): return math.atan2(vec[1], vec[0])
+
 def rot_around(v, ang, c): # поворот вектора на угол вокруг точки
     return list(np.add(c, rot([v[0]-c[0], v[1]-c[1]], ang)))
 
