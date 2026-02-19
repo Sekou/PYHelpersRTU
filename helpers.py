@@ -276,8 +276,8 @@ def pt_ngon_dist(pt, ngon): # расстояние от точки до мног
 # отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, ang, lenpx, w):
     p1 = [p0[0] + lenpx * math.cos(ang), p0[1] + lenpx * math.sin(ang)]
-    p2 = [p1[0] - 10 * math.cos(angle + 0.5), p1[1] - 10 * math.sin(angle + 0.5)]
-    p3 = [p1[0] - 10 * math.cos(angle - 0.5), p1[1] - 10 * math.sin(angle - 0.5)]
+    p2 = [p1[0] - 10 * math.cos(ang + 0.5), p1[1] - 10 * math.sin(ang + 0.5)]
+    p3 = [p1[0] - 10 * math.cos(ang - 0.5), p1[1] - 10 * math.sin(ang - 0.5)]
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
     
 # отрисовка стрелки по 2 точкам
