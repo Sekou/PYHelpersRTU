@@ -1,6 +1,4 @@
-import sys, pygame
-import numpy as np
-import math
+import sys, pygame, numpy as np, math
 
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
@@ -20,29 +18,19 @@ def dist(p1, p2): #расстояние между точками
     return np.linalg.norm(np.subtract(p1, p2))
 
 def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина, высота и угол поворота прямогуольника
-    pts = [
-        [- w/2, - h/2],
-        [+ w/2, - h/2],
-        [+ w/2, + h/2],
-        [- w/2, + h/2],
-    ]
-    pts = rot_arr(pts, ang)
-    pts = np.add(pts, pc)
-    pygame.draw.polygon(screen, color, pts, 2)
+    pts = [[- w/2, - h/2],[+ w/2, - h/2],[+ w/2, + h/2],[- w/2, + h/2],]
+    pygame.draw.polygon(screen, color, np.add(rot_arr(pts, ang), pc), 2)
 
 sz = (800, 600)
 
-def main():
-    screen = pygame.display.set_mode(sz)
+if __name__=="__main__":
+    screen, timer, fps =  pygame.display.set_mode(sz), pygame.time.Clock(), 20
     pygame.display.set_caption('Animation 2D')
-    timer = pygame.time.Clock()
-    fps = 20
-    dt=1/fps   
+    dt = 1 / fps
 
     while True:
         for ev in pygame.event.get():
-            if ev.type==pygame.QUIT:
-                sys.exit(0)
+            if ev.type==pygame.QUIT: sys.exit(0)
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_r:
                     print("Hi")     
@@ -50,10 +38,6 @@ def main():
         screen.fill((255, 255, 255))     
 
         draw_text(screen, f"Test = {1}", 5, 5)
+        pygame.display.flip(), timer.tick(fps)
 
-        pygame.display.flip()
-        timer.tick(fps)
-
-main()
-
-#template file by S. Diane, RTU MIREA, 2024
+#template file by S. Diane, RTU MIREA, 2024-2026
