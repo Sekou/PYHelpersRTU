@@ -3,20 +3,11 @@ import sys, pygame, numpy as np, math
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
-
-def rot(v, ang): #поворот вектора на угол
-    s, c = math.sin(ang), math.cos(ang)
-    return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
-
+def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) #расстояние между точками
+def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
+def rot_arr(vv, ang): return [rot(v, ang) for v in vv] # функция для поворота массива на угол
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
-
-def rot_arr(vv, ang): # функция для поворота массива на угол
-    return [rot(v, ang) for v in vv]
-
-def dist(p1, p2): #расстояние между точками
-    return np.linalg.norm(np.subtract(p1, p2))
-
 def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина, высота и угол поворота прямогуольника
     pts = [[- w/2, - h/2],[+ w/2, - h/2],[+ w/2, + h/2],[- w/2, + h/2]]
     pygame.draw.polygon(screen, color, np.add(rot_arr(pts, ang), pc), 2)
