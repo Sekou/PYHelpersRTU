@@ -9,8 +9,8 @@ sz = (800, 600)
 def main():
     screen = pygame.display.set_mode(sz)
     pygame.display.set_caption('Animation 2D')
-    timer = pygame.time.Clock()
-    fps = 20; dt=1/fps
+    timer, fps = pygame.time.Clock(), 20
+    dt = 1 / fps
     
     while True:
         for ev in pygame.event.get():
