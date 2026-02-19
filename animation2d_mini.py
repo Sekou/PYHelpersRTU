@@ -6,10 +6,9 @@ def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка те�
 
 sz = (800, 600)
 
-def main():
-    screen = pygame.display.set_mode(sz)
+if __name__=="__main__":
+    screen, timer, fps = pygame.display.set_mode(sz), pygame.time.Clock(), 20
     pygame.display.set_caption('Animation 2D')
-    timer, fps = pygame.time.Clock(), 20
     dt = 1 / fps
     
     while True:
@@ -19,9 +18,6 @@ def main():
                 if ev.key == pygame.K_r: print("Hi")                
 
         screen.fill((255, 255, 255))     
+        
         draw_text(screen, f"Test = {1}", 5, 5)
-
-        pygame.display.flip()
-        timer.tick(fps)
-
-main()
+        pygame.display.flip(), timer.tick(fps)
