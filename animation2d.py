@@ -1,8 +1,8 @@
 import sys, pygame, numpy as np, math
 
 pygame.font.init()
-def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
-    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
+def draw_text(screen, s, x, y, sz=15, c=(0, 0, 0)):  # отрисовка текста
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, c), (x, y))
 def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) #расстояние между точками
 def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
 def rot_arr(vv, ang): return [rot(v, ang) for v in vv] # функция для поворота массива на угол
