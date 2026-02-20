@@ -5,3 +5,5 @@
 2021 Multi-Level Evolution for Robotic Design https://www.researchgate.net/publication/352818133_Multi-Level_Evolution_for_Robotic_Design
 IkeaBot https://dspace.mit.edu/bitstream/handle/1721.1/90593/rus_ikeabot.pdf?sequence=1
 IKEA-Building Robot / Nanyang Technological University in Singapore https://www.scientificamerican.com/article/ikea-building-robot-conquers-touchy-feely-challenge2/
+2025 Efficient Path Planning and Formation Control in Multi-Robot Systems: A Neural Fields and Auto-Switching Mechanism Approach
+2011 Object Path Planner for the Box Pushing Problem https://cdn.intechopen.com/pdfs/12645/InTech-Object_path_planner_for_the_box_pushing_problem.pdf
