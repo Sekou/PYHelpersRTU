@@ -1,0 +1,7 @@
+2D Traffic Simulator https://iamlutrarutra.wordpress.com/2020/01/03/my-biggest-c-project-2d-traffic-simulator/
+2019 Intelligent Coordination among Multiple Traffic Intersections Using Multi-Agent Reinforcement Learning https://www.researchgate.net/publication/337855763_Intelligent_Coordination_among_Multiple_Traffic_Intersections_Using_Multi-Agent_Reinforcement_Learning
+2017 Agent-based simulation framework for mixed traffic of cars, pedestrians and trams https://www.sciencedirect.com/science/article/pii/S0968090X17302668
+2025 Centralized agent-based model for efficient dispatching of autonomous taxis in smart cities https://www.sciencedirect.com/science/article/pii/S2046043025000899
+2021 Multi-Level Evolution for Robotic Design https://www.researchgate.net/publication/352818133_Multi-Level_Evolution_for_Robotic_Design
+IkeaBot https://dspace.mit.edu/bitstream/handle/1721.1/90593/rus_ikeabot.pdf?sequence=1
+IKEA-Building Robot / Nanyang Technological University in Singapore https://www.scientificamerican.com/article/ikea-building-robot-conquers-touchy-feely-challenge2/
