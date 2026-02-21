@@ -460,7 +460,7 @@ def fill_ngon_with_pts_square_auto(step, ngon): #заполнение много
     return pp
 
 #содержится ли объект в ограничивающей рамке (bounding box)
-def contains(obj, bb): return bb[0] < obj.x < bb[0] + bb[2] and bb[1] < obj.y < bb[1] + bb[3]
+def bb_contains(bb, obj): return bb[0] < obj.x < bb[0] + bb[2] and bb[1] < obj.y < bb[1] + bb[3]
 
 def spawn_points(x, y, r, type, num): #создает несколько точек в заданной позиции
     return [(np.random.normal(x, r), np.random.normal(y, r), type) for i in range(num)]
