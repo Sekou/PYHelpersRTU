@@ -459,6 +459,16 @@ def fill_ngon_with_pts_square_auto(step, ngon): #заполнение много
             if pt_inside_ngon([x, y], ngon): pp.append([x, y]) #WARN: DEPENDENCY
     return pp
 
+#содержится ли объект в ограничивающей рамке (bounding box)
+def contains(obj, bb): return bb[0] < obj.x < bb[0] + bb[2] and bb[1] < obj.y < bb[1] + bb[3]
+
+def spawn_points(x, y, r, type, num): #создает несколько точек в заданной позиции
+    return [(np.random.normal(x, r), np.random.normal(y, r), type) for i in range(num)]
+	
+def get_k_neighbours(pt, pts, k): #возвращает k ближайших соседей
+    ddpp=[[dist(p.get_pos(), pt.get_pos()), p] for p in pts] #пары (удаленность-точка)
+    return [p for d, p in sorted(ddpp, key=lambda dp: dp[0])[:k]]
+
 #SHORTER VERSIONS
 # отрисовка стрелки по точке и углу
 def draw_arrow(screen, color, p0, ang, lenpx, w):
