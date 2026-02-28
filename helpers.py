@@ -62,12 +62,12 @@ def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернут�
 # def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
 #     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
     
-# def lim_ang(ang): # ограничение угла в пределах +/-pi
-#     while ang > math.pi: ang -= 2 * math.pi
-#     while ang <= -math.pi: ang += 2 * math.pi
-#     return ang
+def lim_ang(ang): # ограничение угла в пределах +/-pi
+    while ang > math.pi: ang -= 2 * math.pi
+    while ang <= -math.pi: ang += 2 * math.pi
+    return ang
 
-def lim_ang(ang, arc=3.141592653589793): return (ang - 2 * arc) if ang > arc else (ang + 2 * arc) if ang <= -arc else ang
+# def lim_ang(ang, arc=3.141592653589793): return (ang - 2 * arc) if ang > arc else (ang + 2 * arc) if ang <= -arc else ang
 
 def check_ccw(A, B, C): #triangle direction: CCW for Y-axis up, but CW for Y-axis down
     return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
