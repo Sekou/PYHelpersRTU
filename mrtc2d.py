@@ -76,11 +76,11 @@ class Robot:
         self.speed,  self.vsteer = 0, 0
         self.traj = []  # точки траектории
         self.last_da = 0
-        self.manip = TwoLinkManipulator(self.getPos(), 2, 45)
-    def getPos(self): return [self.x, self.y]
+        self.manip = TwoLinkManipulator(self.get_pos(), 2, 45)
+    def get_pos(self): return [self.x, self.y]
     def clear(self): self.traj = []
     def draw(self, screen):
-        p = np.array(self.getPos())
+        p = np.array(self.get_pos())
         draw_rot_rect(screen, (0, 0, 0), p, self.L, self.W, self.alpha)
         dx, dy = self.L / 3, self.W / 3
         dd = [[-dx, -dy], [-dx, dy], [dx, -dy], [dx, dy]]
@@ -98,15 +98,15 @@ class Robot:
             da = self.speed * dt / R
             self.alpha += da
         self.steer = min(1, max(-1,self.steer+self.vsteer*dt))
-        self.manip.pos0 = self.getPos()
+        self.manip.pos0 = self.get_pos()
         self.manip.links[0].ext_ang = self.alpha   # NEW ext_ang !!!
         self.manip.sim(dt)
-        p = self.getPos()
+        p = self.get_pos()
         if len(self.traj) == 0 or dist(p, self.traj[-1]) > 10:
-            self.traj.append(self.getPos())
+            self.traj.append(self.get_pos())
             self.addedTrajPt = True
     def goto(self, pos, dt):
-        v = np.subtract(pos, self.getPos())
+        v = np.subtract(pos, self.get_pos())
         da = lim_ang(math.atan2(v[1], v[0]) - self.alpha)
         self.speed, self.vsteer = 50, 10*da + 10*(da-self.last_da)/dt #ПД-регулятор
         self.last_da=da
