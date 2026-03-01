@@ -45,12 +45,14 @@ class TwoLinkManipulator:
     def __init__(self, pos0, num_links, L0):
         self.pos0 = pos0
         self.links = [Link(L0 / (1 + 0.5*i), 0, pos0) for i in range(2)]
+        self.attached_obj=None
     def sim(self, dt):
         for l in self.links: l.sim(dt)
         self.upd_poses()
-    def set_angs(self, aa): #мгновенное движение манипулятора
+        if self.attached_obj: self.attached_obj.set_pos(self.get_end_pos())
+    def set_angs(self, aa): #плавное движение манипулятора
         for a, l in zip(aa, self.links): l.ang=a
-    def goto_angs(self, aa): #плавное движение манипулятора
+    def goto_angs(self, aa): #мгновенное движение манипулятора
         for a, l in zip(aa, self.links): l.vrot=10*(a-l.ang)
     def upd_poses(self):
         self.links[0].pos = self.pos0
