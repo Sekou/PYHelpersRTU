@@ -101,8 +101,7 @@ class Robot:
         self.manip.pos0 = self.get_pos()
         self.manip.links[0].ext_ang = self.alpha   # NEW ext_ang !!!
         self.manip.sim(dt)
-        p = self.get_pos()
-        if len(self.traj) == 0 or dist(p, self.traj[-1]) > 10:
+        if len(self.traj) == 0 or dist(self.get_pos(), self.traj[-1]) > 10:
             self.traj.append(self.get_pos())
             self.addedTrajPt = True
     def goto(self, pos, dt):
@@ -110,8 +109,10 @@ class Robot:
         da = lim_ang(math.atan2(v[1], v[0]) - self.alpha)
         self.speed, self.vsteer = 50, 10*da + 10*(da-self.last_da)/dt #ПД-регулятор
         self.last_da=da
-    def stretch_manip(self, goal):
-        self.manip.solve_ik(goal, self.alpha)
+    def stretch_manip(self, goal): self.manip.solve_ik(goal, self.alpha)
+    def stop(self):
+        self.speed=self.vsteer=0
+        for l in self.manip.links: l.vrot=0
 
 if __name__ == "__main__":
     screen, timer, fps = pygame.display.set_mode(sz), pygame.time.Clock(), 20
