@@ -484,14 +484,20 @@ def draw_arrow2(screen, color, p0, p1, w): # отрисовка стрелки �
     p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
 
-#рекурсивное решение ОЗК для 2d-манипулятора
-def solve_manipulator_ik(lens, angs, lims, p0, ang0, target, miu=0.5, rec=1): 
-    res, glob_angs, pp=[], np.cumsum([ang0, *angs])[1:], [np.array(p0)]
-    for l,a,lm in zip(lens, glob_angs, lims): pp.append(pp[-1]+[l * math.cos(a), l * math.sin(a)])
-    for p,a,ga,lm in list(zip(pp[:-1], angs, glob_angs, lims))[::-1]: # легче вращ. последн. зв.
-        delta = lim_ang(math.atan2(*np.subtract(target,p)[::-1]) - ga)
-        res.append(min(lm[1], max(lm[0], a + miu * delta))) #NEW 0.5 вместо 1
-    return list(reversed(res)) if rec <=1 else solve_manipulator_ik(lens, res, lims, p0, ang0, target, miu, rec-1)
-#example: [-0.996, 0.430, 1.046] = f( [30, 20, 15], [-0.92, 0.55, 1.22],
-#  [[-1.57, 1.57], [-1.57, 1.57], [-1.57, 1.57]], [424.33, 284.78], -0.267, (488, 223) )
+def manip_fk(lens, angs, p0, ang0): #решение ПЗК для 2d-манипулятора
+    res, glob_angs, p0 = [], np.cumsum([ang0, *angs])[1:], np.array(p0)
+    return np.cumsum([[l * math.cos(ga), l * math.sin(ga)] for l, ga in zip(lens, glob_angs)], axis=0)[-1]+p0
+
+def manip_ik(lens, angs, lims, p0, ang0, target, step=0.1, iters=1): #решение ОЗК для 2d-манипулятора
+    A, tg, E = [*angs], np.array(target), np.linalg.norm #подготовка к покоординатному спуску
+    for i in range(len(angs)-1, -1, -1): # легче вращ. последн. звено - начинаем с него
+        e0, e_last, e_min, a_best, dir = E(manip_fk(lens, A, p0, ang0) - tg), 0, np.inf, A[i], 1
+        while dir!=0: #пробегаемся сначала в плюс; если ошибка растет, то в минус
+            A[i], e = min(lims[i][1], max(lims[i][0], A[i]+dir*step)), E(manip_fk(lens, A, p0, ang0) - tg)
+            if e < e_min: e_min, a_best = e, A[i]
+            if e>e0 or e==e_last: A[i], dir=A[i]-(1.5+0.5*dir)*step, (-1 if dir==1 else 0)
+            e_last = e
+        A[i]=a_best
+    return A if iters<=1 else manip_ik(lens, A, lims, p0, ang0, target, step / 2, iters - 1)  #рекурсия
+#example: [-1.37, 1.17] = [100.0, 66.7], [-1.32, 1.32], [[-1.57, 1.57], [-1.57, 1.57]], (200, 200), 0, (297, 71)
 
