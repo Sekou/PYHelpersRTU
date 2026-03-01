@@ -104,11 +104,9 @@ def shift_to_zero(v, delta): # уменьшение значения по абс
 def shift_to(v, target, delta): # сдвиг значения к целевой переменной
     return max(target, v-delta) if v>target else min(target, v+delta)
 
-def ang_to(p1, p2): # угол от 1 точки на 2 точку
-    return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
+def ang_to(p1, p2): return math.atan2(p2[1] - p1[1], p2[0] - p1[0]) # угол от 1 точки на 2 точку
     
-def dist(p1, p2): # расстояние между точками
-    return np.linalg.norm(np.subtract(p2, p1))
+def dist(p1, p2): return np.linalg.norm(np.subtract(p2, p1)) # расстояние между точками
 
 def path_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
