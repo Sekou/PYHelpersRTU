@@ -1,0 +1,107 @@
+#IK-manipulator, S. Diane, 2026
+import sys, pygame, numpy as np, math
+
+sz = (800, 600)
+
+pygame.font.init()
+def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)):  # отрисовка текста
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
+def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
+def lim_ang(ang): # ограничение угла в пределах +/-pi
+    while ang > math.pi: ang -= 2 * math.pi
+    while ang <= -math.pi: ang += 2 * math.pi
+    return ang
+def rot_arr(vv, ang): return [rot(v, ang) for v in vv]  # функция для поворота массива на угол
+def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2))
+def draw_rot_rect(screen, color, pc, w, h, ang):  # точка центра, ширина высота прямоуг и угол поворота прямогуольника
+    pts = [[- w / 2, - h / 2], [+ w / 2, - h / 2], [+ w / 2, + h / 2], [- w / 2, + h / 2]]
+    pygame.draw.polygon(screen, color, np.add(rot_arr(pts, ang), pc), 2)
+
+def manip_fk(lens, angs, p0, ang0): #решение ПЗК для многозвенного 2d-манипулятора
+    res, glob_angs, p0 = [], np.cumsum([ang0, *angs])[1:], np.array(p0)
+    return np.cumsum([[l * math.cos(ga), l * math.sin(ga)] for l, ga in zip(lens, glob_angs)], axis=0)[-1]+p0
+
+def manip_ik(lens, angs, lims, p0, ang0, target, step=0.1, iters=1): #решение ОЗК для многозвенного 2d-манипулятора
+    A, tg, E = [*angs], np.array(target), np.linalg.norm #подготовка к покоординатному спуску
+    for i in range(len(angs)-1, -1, -1): # легче вращ. последн. звено - начинаем с него
+        e0, e_last, e_min, a_best, dir = E(manip_fk(lens, A, p0, ang0) - tg), 0, np.inf, A[i], 1
+        while dir!=0: #пробегаемся сначала в плюс; если ошибка растет, то в минус
+            A[i], e = min(lims[i][1], max(lims[i][0], A[i]+dir*step)), E(manip_fk(lens, A, p0, ang0) - tg)
+            if e < e_min: e_min, a_best = e, A[i]
+            if e>e0 or e==e_last: A[i], dir=A[i]-(1.5+0.5*dir)*step, (-1 if dir==1 else 0)
+            e_last = e
+        A[i]=a_best
+    return A if iters<=1 else manip_ik(lens, A, lims, p0, ang0, target, step / 2, iters - 1)  #рекурсия
+#example: [-1.37, 1.17] = [100.0, 66.7], [-1.32, 1.32], [[-1.57, 1.57], [-1.57, 1.57]], (200, 200), 0, (297, 71)
+
+class Link:
+    def __init__(self, L=20, ang=0, pos=[0, 0]):
+        self.pos = pos
+        self.L, self.ang = L, ang
+        self.min_ang, self.max_ang = -math.pi/2, math.pi/2 # NEW !!!
+        self.global_ang = 0
+        self.ext_ang = 0  # NEW ext_ang!!!
+        self.vrot = 1
+    def get_end_pos(self):
+        a = self.global_ang
+        return np.array(self.pos) + [self.L * math.cos(a), self.L * math.sin(a)]
+    def sim(self, dt): self.ang = min(self.max_ang, max(self.min_ang, lim_ang(self.ang + self.vrot * dt))) # NEW
+    def draw(self, screen):
+        pygame.draw.line(screen, (0, 0, 0), self.pos, self.get_end_pos(), 2)
+        pygame.draw.circle(screen, (0, 0, 0), self.pos, 2, 2)
+
+class Manipulator:
+    def __init__(self, pos0, num_links, L0):
+        self.pos0 = pos0
+        self.links = [Link(L0 / (1 + 0.5*i), 0, pos0) for i in range(num_links)]
+    def sim(self, dt):
+        for l in self.links: l.sim(dt)
+        self.upd_poses()
+    def set_base_ang(self, ang): self.links[0].ext_ang=ang
+    def set_angs(self, aa):
+        for a, l in zip(aa, self.links): l.ang=a
+    def goto_angs(self, aa):
+        for a, l in zip(aa, self.links): l.vrot=lim_ang(a-l.ang)
+    def upd_poses(self):
+        self.links[0].pos = self.pos0
+        self.links[0].global_ang = self.links[0].ext_ang + self.links[0].ang # NEW ext_ang
+        for i in range(1, len(self.links)):
+            self.links[i].global_ang = lim_ang(self.links[i - 1].global_ang + self.links[i].ang)
+            self.links[i].pos = self.links[i - 1].get_end_pos()
+    def draw(self, screen):
+        for l in self.links: l.draw(screen)
+        pygame.draw.circle(screen, (0, 0, 0), self.links[-1].get_end_pos(), 2, 2)
+    def get_end_pos(self):  # NEW !!!
+        return self.links[-1].get_end_pos()
+    def solve_ik(self, goal):
+        ll = self.links
+        lens = [l.L for l in ll]
+        angs = [l.ang for l in ll]
+        lims = [[l.min_ang, l.max_ang] for l in ll]
+        aa = manip_ik(lens, angs, lims, ll[0].pos, ll[0].ext_ang, goal, 0.1, 2)
+        self.goto_angs(aa)
+
+if __name__ == "__main__":
+    screen, timer, fps= pygame.display.set_mode(sz), pygame.time.Clock(), 20
+    time=0
+    goal=(400,400)
+    manip = Manipulator((200, 200), 7, 100)
+
+    while True:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT: sys.exit(0)
+            if ev.type == pygame.MOUSEBUTTONDOWN: goal = ev.pos
+        dt = 1 / fps
+        screen.fill((255, 255, 255))
+
+        manip.solve_ik(goal)
+        manip.sim(dt)
+
+        manip.draw(screen)
+        pygame.draw.circle(screen, (255, 0, 0), goal, 5, 2)
+        draw_text(screen, f"Time = {time:.3f}", 5, 5)
+
+        pygame.display.flip(), timer.tick(fps)
+        time += dt
+
+# template file by S. Diane, RTU MIREA, 2026
