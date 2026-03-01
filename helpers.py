@@ -482,11 +482,11 @@ def draw_arrow2(screen, color, p0, p1, w): # отрисовка стрелки �
     p2, p3 = np.subtract(p1, rot([10,0], ang + 0.5)), np.subtract(p1, rot([10,0], ang - 0.5))
     for a,b in [[p0, p1], [p1, p2], [p1, p3]]: pygame.draw.line(screen, color, a, b, w)
 
-def manip_fk(lens, angs, p0, ang0): #решение ПЗК для 2d-манипулятора
+def manip_fk(lens, angs, p0, ang0): #решение ПЗК для многозвенного 2d-манипулятора
     res, glob_angs, p0 = [], np.cumsum([ang0, *angs])[1:], np.array(p0)
     return np.cumsum([[l * math.cos(ga), l * math.sin(ga)] for l, ga in zip(lens, glob_angs)], axis=0)[-1]+p0
 
-def manip_ik(lens, angs, lims, p0, ang0, target, step=0.1, iters=1): #решение ОЗК для 2d-манипулятора
+def manip_ik(lens, angs, lims, p0, ang0, target, step=0.1, iters=1): #решение ОЗК для многозвенного 2d-манипулятора
     A, tg, E = [*angs], np.array(target), np.linalg.norm #подготовка к покоординатному спуску
     for i in range(len(angs)-1, -1, -1): # легче вращ. последн. звено - начинаем с него
         e0, e_last, e_min, a_best, dir = E(manip_fk(lens, A, p0, ang0) - tg), 0, np.inf, A[i], 1
@@ -499,3 +499,9 @@ def manip_ik(lens, angs, lims, p0, ang0, target, step=0.1, iters=1): #решен
     return A if iters<=1 else manip_ik(lens, A, lims, p0, ang0, target, step / 2, iters - 1)  #рекурсия
 #example: [-1.37, 1.17] = [100.0, 66.7], [-1.32, 1.32], [[-1.57, 1.57], [-1.57, 1.57]], (200, 200), 0, (297, 71)
 
+def mainp_ik_2_link(target, l1, l2, p0, a0, sign=1): #решение ОЗК для двухзвенного манипулятора
+    v=target-np.array(p0) #применяем формулу для решения треугольника
+    a2=sign*(math.pi-math.acos( min(1, max(-1, (l1**2+l2**2 - v@v)/2/l1/l2)) ))
+    ep=np.add([l1, 0],[l2*math.cos(a2), l2*math.sin(a2)])
+    amanip, agoal=math.atan2(ep[1], ep[0])+a0, math.atan2(v[1], v[0])
+    return [lim_ang(agoal-amanip), a2]
