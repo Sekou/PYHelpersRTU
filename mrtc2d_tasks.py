@@ -115,7 +115,7 @@ class Robot:
         self.speed=self.vsteer=0
         for l in self.manip.links: l.vrot=0
 
-class Obj: №небольшой объект на экране
+class Obj: #небольшой объект на экране
     def __init__(self, x, y): self.x, self.y, self.sz = x, y, 20
     def get_pos(self): return [self.x, self.y]
     def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
