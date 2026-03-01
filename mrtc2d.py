@@ -48,9 +48,9 @@ class TwoLinkManipulator:
     def sim(self, dt):
         for l in self.links: l.sim(dt)
         self.upd_poses()
-    def set_angs(self, aa): #плавное движение манипулятора
+    def set_angs(self, aa): #мгновенное движение манипулятора
         for a, l in zip(aa, self.links): l.ang=a
-    def goto_angs(self, aa): #мгновенное движение манипулятора
+    def goto_angs(self, aa): #плавное движение манипулятора
         for a, l in zip(aa, self.links): l.vrot=10*(a-l.ang)
     def upd_poses(self):
         self.links[0].pos = self.pos0
