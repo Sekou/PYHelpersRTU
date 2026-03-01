@@ -491,7 +491,7 @@ def solve_manipulator_ik(lens, angs, lims, p0, ang0, target, miu=0.5, rec=1):
     for p,a,ga,lm in list(zip(pp[:-1], angs, glob_angs, lims))[::-1]: # легче вращ. последн. зв.
         delta = lim_ang(math.atan2(*np.subtract(target,p)[::-1]) - ga)
         res.append(min(lm[1], max(lm[0], a + miu * delta))) #NEW 0.5 вместо 1
-    return list(reversed(res)) if rec <=1 else solve_ik(lens, res, lims, p0, ang0, target, miu, rec-1)
+    return list(reversed(res)) if rec <=1 else solve_manipulator_ik(lens, res, lims, p0, ang0, target, miu, rec-1)
 #example: [-0.996, 0.430, 1.046] = f( [30, 20, 15], [-0.92, 0.55, 1.22],
 #  [[-1.57, 1.57], [-1.57, 1.57], [-1.57, 1.57]], [424.33, 284.78], -0.267, (488, 223) )
 
