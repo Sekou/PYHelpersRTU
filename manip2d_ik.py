@@ -58,9 +58,9 @@ class Manipulator:
         for l in self.links: l.sim(dt)
         self.upd_poses()
     def set_base_ang(self, ang): self.links[0].ext_ang=ang
-    def set_angs(self, aa):
+        def set_angs(self, aa): #плавное движение
         for a, l in zip(aa, self.links): l.ang=a
-    def goto_angs(self, aa):
+    def goto_angs(self, aa): #мгновенное движение
         for a, l in zip(aa, self.links): l.vrot=lim_ang(a-l.ang)
     def upd_poses(self):
         self.links[0].pos = self.pos0
