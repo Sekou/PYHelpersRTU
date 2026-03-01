@@ -73,7 +73,7 @@ class Robot:
         self.x, self.y = x, y
         self.alpha, self.steer = alpha, 0
         self.L, self.W = 70, 40
-        self.speed,  self.vsteer = 0, 0
+        self.speed, self.vsteer = 0, 0
         self.traj = []  # точки траектории
         self.last_da = 0
         self.manip = TwoLinkManipulator(self.get_pos(), 2, 45)
