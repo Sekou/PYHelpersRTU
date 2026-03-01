@@ -505,3 +505,10 @@ def mainp_ik_2_link(target, l1, l2, p0, a0, sign=1): #решение ОЗК дл
     ep=np.add([l1, 0],[l2*math.cos(a2), l2*math.sin(a2)])
     amanip, agoal=math.atan2(ep[1], ep[0])+a0, math.atan2(v[1], v[0])
     return [lim_ang(agoal-amanip), a2]
+
+class Obj: #небольшой объект на экране
+    def __init__(self, x, y): self.x, self.y, self.sz = x, y, 20
+    def get_pos(self): return [self.x, self.y]
+    def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
+    def set_pos(self, p): self.x, self.y=p
+    def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2, 2)
