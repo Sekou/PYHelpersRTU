@@ -512,3 +512,8 @@ class Obj: #небольшой объект на экране
     def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
     def set_pos(self, p): self.x, self.y=p
     def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2, 2)
+
+class Task: #задача, выполняемая робтоом в течение некоторого врмени
+    def __init__(self): self.name, self.finished, self.error=self.__class__.__name__, False, False
+    def run(self, robot, objs, t, dt): print(f"{t:.2f}: {self.name}")
+    def draw(self, screen): pass
