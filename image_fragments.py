@@ -23,7 +23,7 @@ class Frame:
 
 def main():
     screen,timer,fps = pygame.display.set_mode(sz),pygame.time.Clock(),20
-    pygame.display.set_caption('Histogram Detector')
+    pygame.display.set_caption('Image Analysis')
 
     surf = pygame.image.load('img.jpg')
     img = pygame.surfarray.array3d(surf)
