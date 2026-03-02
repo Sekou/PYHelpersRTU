@@ -1,5 +1,4 @@
-import sys, pygame
-import numpy as np
+import sys, pygame, numpy as np
 
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=12, с=(100, 200, 100)):  # отрисовка текста
@@ -23,10 +22,8 @@ class Frame:
         return self.brightness
 
 def main():
-    screen = pygame.display.set_mode(sz)
+    screen,timer,fps = pygame.display.set_mode(sz),pygame.time.Clock(),20
     pygame.display.set_caption('Histogram Detector')
-    timer = pygame.time.Clock()
-    fps = 20; dt=1/fps
 
     surf = pygame.image.load('img.jpg')
     img = pygame.surfarray.array3d(surf)
@@ -52,8 +49,7 @@ def main():
         draw_text(screen, f"W*H = {W}*{H}", 5, 5)
         draw_text(screen, f"Brightness = {frame.brightness:.2f}", 5, 25)
 
-        pygame.display.flip()
-        timer.tick(fps)
+        pygame.display.flip(), timer.tick(fps)
 
 main()
 
