@@ -517,3 +517,7 @@ class Task: #задача, выполняемая робтоом в течени
     def __init__(self): self.name, self.finished, self.error=self.__class__.__name__, False, False
     def run(self, robot, objs, t, dt): print(f"{t:.2f}: {self.name}")
     def draw(self, screen): pass
+
+def draw_dynamic_plot(screen, arr, y0, k=50, w=800, c=(0, 0, 255)): #рисует бегущий график (например внизу экрана по всей его ширине)
+    arr = arr if 2 < len(arr) < w else [0, 0] if len(arr) < 2 else arr[-min(w, len(arr)):]
+    for i in range(len(arr)-1): pygame.draw.line(screen, c, [i, y0-arr[i]*k], [i+1, y0-arr[i+1]*k], 1)
