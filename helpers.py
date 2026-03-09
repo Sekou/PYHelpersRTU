@@ -521,21 +521,21 @@ class Task: #задача, выполняемая робтоом в течени
 def draw_dynamic_plot(screen, arr, y0, k=50, w=800, c=(0, 0, 255)): #рисует бегущий график (например внизу экрана по всей его ширине)
     arr = arr if 2 < len(arr) < w else [0, 0] if len(arr) < 2 else arr[-min(w, len(arr)):]
     for i in range(len(arr)-1): pygame.draw.line(screen, c, [i, y0-arr[i]*k], [i+1, y0-arr[i+1]*k], 1)
-
-def wrap_text(text, width=80): #разбивает строку на более мелкие строки чтоб уместить в текстовом поле
-    lines, current_line, current_length, index, n= [],"",0,0, len(text)
+		
+#разбивает строку на более мелкие строки, чтоб уместить в текстовом поле
+def wrap_text(text, width=80):
+    lines, ln, ln_sz, index, n = [], "", 0, 0, len(text)
     while index < n:
         if text[start:=index].isspace():# следующий токен - либо слово, либо пробелы
             while index < n and text[index].isspace(): index += 1 # собираем все пробелы
-            token = text[start:index]
-        else:
-            while index < n and not text[index].isspace(): index += 1 # собираем все слово
-            token = text[start:index]
-        token_length = len(token)
-        if current_length + token_length <= width:# поместится ли токен в текущую строку
-            current_line, current_length = current_line+token, current_length+token_length # добавл. токен в строку
-        else:
-            if current_line: lines.append(current_line.lstrip()) # если строка не пустая, сохр. её и нач. новую
-            current_line, current_length = token, token_length
-    if current_line: lines.append(current_line)# добавляем последнюю строку
-    return "\n".join(lines)
+        else: # собираем все слово
+            while index < n and not text[index].isspace(): index += 1
+        tk = text[start:index]
+        if ln_sz + len(tk) <= width: ln, ln_sz = ln + tk, ln_sz + len(tk) # добавл. токен в строку
+        else: # если строка не пустая, сохр. её и нач. новую
+            if ln: lines.append(ln.lstrip())
+            ln, ln_sz = tk, len(tk)
+    return "\n".join(lines+[ln] if ln else lines)
+
+#определение числа строк в текстбоксе tkinter
+def tk_get_lines_count(tktext): return int(tktext.index('end').split('.')[0]) - 1
