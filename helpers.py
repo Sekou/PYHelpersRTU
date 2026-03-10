@@ -13,19 +13,7 @@ def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, s
     
 def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
-    
-# разбивка длинной строки на более маленькие для компактной отрисовки
-def insert_str_breaks(s, max_w_len=15, sep="\\"): 
-    n, n2=len(s), int(len(s)**0.5)+1
-    lst, shift, cnt, trigger=list(s), 0, 0, False
-    for i in range(n):
-        if i>0 and any([j%n2==0 for j in [i, i+1, i+2]]): trigger=True
-        if ((cnt:=cnt+1)>=max_w_len or s[i].isspace()) and trigger:
-            if s[i].isspace(): lst[i + shift] = sep
-            else: lst.insert(i - 1 + (shift:=shift+1), sep)
-            cnt, trigger=0, False
-    return "".join(lst)
-    
+	
 def prob_sel(probs): # вероятностный выбор индекса элемента
     m, s, r=sum(probs), 0, np.random.rand()
     if m==0: return np.random.randint(len(probs))
@@ -521,7 +509,19 @@ class Task: #задача, выполняемая робтоом в течени
 def draw_dynamic_plot(screen, arr, y0, k=50, w=800, c=(0, 0, 255)): #рисует бегущий график (например внизу экрана по всей его ширине)
     arr = arr if 2 < len(arr) < w else [0, 0] if len(arr) < 2 else arr[-min(w, len(arr)):]
     for i in range(len(arr)-1): pygame.draw.line(screen, c, [i, y0-arr[i]*k], [i+1, y0-arr[i+1]*k], 1)
-		
+
+# разбивка длинной строки на более маленькие для компактной отрисовки
+def insert_str_breaks(s, max_w_len=15, sep="\\"): 
+    n, n2=len(s), int(len(s)**0.5)+1
+    lst, shift, cnt, trigger=list(s), 0, 0, False
+    for i in range(n):
+        if i>0 and any([j%n2==0 for j in [i, i+1, i+2]]): trigger=True
+        if ((cnt:=cnt+1)>=max_w_len or s[i].isspace()) and trigger:
+            if s[i].isspace(): lst[i + shift] = sep
+            else: lst.insert(i - 1 + (shift:=shift+1), sep)
+            cnt, trigger=0, False
+    return "".join(lst)
+	
 #разбивает строку на более мелкие строки, чтоб уместить в текстовом поле
 def wrap_text(text, width=80):
     lines, ln, ln_sz, index, n = [], "", 0, 0, len(text)
@@ -539,3 +539,12 @@ def wrap_text(text, width=80):
 
 #определение числа строк в текстбоксе tkinter
 def tk_get_lines_count(tktext): return int(tktext.index('end').split('.')[0]) - 1
+
+def len_str_intersection(a, b): # поиск максимального пересечения между 2 строками
+    (a, b), seqs=((a, b) if len(a)>=len(b) else (b,a)), [] #ensure a is longer than b
+    for pos1 in range(len(b)): seqs.extend([b[pos1:pos2] for pos2 in range(pos1+1, len(b)+1)])
+    seqs = [seq for seq in seqs if seq.strip() != ''] # remove empty sequences
+    max_len_match, max_match_sequence = 0, ''
+    for seq in seqs: # find segments in str b
+        if len(seq) > max_len_match and seq in a: max_len_match, max_match_sequence = len(seq), seq
+    return max_match_sequence
