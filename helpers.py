@@ -57,6 +57,15 @@ def lim_ang(ang): # ограничение угла в пределах +/-pi
 
 # def lim_ang(ang, arc=3.141592653589793): return (ang - 2 * arc) if ang > arc else (ang + 2 * arc) if ang <= -arc else ang
 
+def get_corner(p1, p, p2): return lim_ang(math.atan2(p1[1]-p[1], p1[0]-p[0])-math.atan2(p2[1]-p[1], p2[0]-p[0])) #угол
+	
+def get_normal(p1, p2): #единичный вектор, повернутый по часовой стрелке (в экранной СК)
+    return np.array([[0,1],[-1,0]])@np.subtract(p2, p1)/((p2[0]-p1[0])**2+(p2[1]-p1[1])**2)**0.5
+	
+def inc_segment(p1, p2, eps=1): #удлинение или сокращение отрезка
+    u = np.array(np.subtract(p2, p1), dtype=np.float64)
+    return list([p1, p2]+np.array((u, -u))*eps/np.linalg.norm(u))
+
 def check_ccw(A, B, C): #triangle direction: CCW for Y-axis up, but CW for Y-axis down
     return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
     
