@@ -10,20 +10,18 @@ def rot(v, ang): #функция для поворота на угол
     s, c = math.sin(ang), math.cos(ang)
     return [v[0] * c - v[1] * s, v[0] * s + v[1] * c]
 
-def limAng(ang):
+def lim_ang(ang):
     while ang > math.pi: ang -= 2 * math.pi
     while ang <= -math.pi: ang += 2 * math.pi
     return ang
 
-def rotArr(vv, ang): # функция для поворота массива на угол
-    return [rot(v, ang) for v in vv]
+def rot_arr(vv, ang): return [rot(v, ang) for v in vv]# функция для поворота массива на угол
 
-def dist(p1, p2):
-    return np.linalg.norm(np.subtract(p1, p2))
+def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2))
 
 def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
     pts = [[- w/2, - h/2],[+ w/2, - h/2],[+ w/2, + h/2],[- w/2, + h/2]]
-    pygame.draw.polygon(screen, color, np.add(rotArr(pts, ang), pc), 2)
+    pygame.draw.polygon(screen, color, np.add(rot_arr(pts, ang), pc), 2)
 
 class Robot:
     def __init__(self, x, y, alpha):
@@ -41,7 +39,7 @@ class Robot:
         p=np.array(self.get_pos())
         draw_rot_rect(screen, (0,0,0), p, self.L, self.W, self.alpha)
         dx, dy=self.L/3, self.W/3
-        dd=rotArr([[-dx,-dy], [-dx,dy], [dx,-dy], [dx,dy]], self.alpha)
+        dd=rot_arr([[-dx,-dy], [-dx,dy], [dx,-dy], [dx,dy]], self.alpha)
         for d, k in zip(dd, [0,0,1,1]):
             draw_rot_rect(screen, (0, 0, 0), p+d,
                         self.L/5, self.W/5, self.alpha+k*self.steer)
@@ -55,7 +53,7 @@ class Robot:
         if self.steer!=0:
             R = self.L/self.steer
             da = self.speed*dt/R
-            self.alpha+=da
+            self.alpha=lim_ang(self.alpha+da)
         if len(self.traj)==0 or dist(self.get_pos(), self.traj[-1])>10:
             self.traj.append(self.get_pos())
             self.added_traj_pt=True
@@ -63,7 +61,7 @@ class Robot:
     def goto(self, pos, dt):
         v=np.subtract(pos, self.get_pos())
         aGoal=math.atan2(v[1], v[0])
-        da=limAng(aGoal-self.alpha)
+        da=lim_ang(aGoal-self.alpha)
         self.steer += 0.5 * da * dt
         maxSteer=1
         if self.steer > maxSteer: self.steer = maxSteer
@@ -92,4 +90,4 @@ if __name__=="__main__":
         pygame.display.flip(), timer.tick(fps)
         time+=dt
 
-#template file by S. Diane, RTU MIREA, 2026
+#template file by S. Diane, RTU MIREA, 2024-2026
