@@ -1,13 +1,8 @@
-import itertools
-import sys, pygame
-import numpy as np
-import math
+import sys, pygame, numpy as np, math
 
 pygame.font.init()
-font = pygame.font.SysFont('Comic Sans MS', 20)
-def drawText(screen, s, x, y):
-    surf=font.render(s, True, (0,0,0))
-    screen.blit(surf, (x,y))
+def draw_text(screen, s, x, y):
+    screen.blit(pygame.font.SysFont('Comic Sans MS', 20).render(s, True, (0,0,0)), (x,y))
 
 sz = (800, 600)
 
@@ -26,67 +21,47 @@ def rotArr(vv, ang): # функция для поворота массива н�
 def dist(p1, p2):
     return np.linalg.norm(np.subtract(p1, p2))
 
-def drawRotRect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
-    pts = [
-        [- w/2, - h/2],
-        [+ w/2, - h/2],
-        [+ w/2, + h/2],
-        [- w/2, + h/2],
-    ]
-    pts = rotArr(pts, ang)
-    pts = np.add(pts, pc)
-    pygame.draw.polygon(screen, color, pts, 2)
+def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина высота прямоуг и угол поворота прямогуольника
+    pts = [[- w/2, - h/2],[+ w/2, - h/2],[+ w/2, + h/2],[- w/2, + h/2]]
+    pygame.draw.polygon(screen, color, np.add(rotArr(pts, ang), pc), 2)
 
 class Robot:
     def __init__(self, x, y, alpha):
-        self.x=x
-        self.y=y
+        self.x, self.y = x, y
         self.alpha=alpha
-        self.L=70
-        self.W=40
-        self.speed=0
-        self.steer=0
+        self.L, self.W = 70, 40
+        self.speed, self.steer = 0, 0
         self.traj=[] #точки траектории
         
-    def getPos(self):
-        return [self.x, self.y]
+    def get_pos(self): return [self.x, self.y]
     def clear(self):
-        self.traj = []
-        self.vals1 = []
-        self.vals2 = []
+        self.traj, self.vals1, self.vals2  = [], [], []
 
     def draw(self, screen):
-        p=np.array(self.getPos())
-        drawRotRect(screen, (0,0,0), p,
-                    self.L, self.W, self.alpha)
-        dx=self.L/3
-        dy=self.W/3
-        dd=[[-dx,-dy], [-dx,dy], [dx,-dy], [dx,dy]]
-        dd=rotArr(dd, self.alpha)
-        kRot=[0,0,1,1]
-        for d, k in zip(dd, kRot):
-            drawRotRect(screen, (0, 0, 0), p+d,
+        p=np.array(self.get_pos())
+        draw_rot_rect(screen, (0,0,0), p, self.L, self.W, self.alpha)
+        dx, dy=self.L/3, self.W/3
+        dd=rotArr([[-dx,-dy], [-dx,dy], [dx,-dy], [dx,dy]], self.alpha)
+        for d, k in zip(dd, [0,0,1,1]):
+            draw_rot_rect(screen, (0, 0, 0), p+d,
                         self.L/5, self.W/5, self.alpha+k*self.steer)
         for i in range(len(self.traj)-1):
             pygame.draw.line(screen, (0,0,255), self.traj[i], self.traj[i+1], 1)
     def sim(self, dt):
-        self.addedTrajPt = False
-        delta=[self.speed*dt, 0]
-        delta=rot(delta, self.alpha)
+        self.added_traj_pt = False
+        delta=rot([self.speed*dt, 0], self.alpha)
         self.x+=delta[0]
         self.y+=delta[1]
         if self.steer!=0:
             R = self.L/self.steer
             da = self.speed*dt/R
             self.alpha+=da
-
-        p=self.getPos()
-        if len(self.traj)==0 or dist(p, self.traj[-1])>10:
-            self.traj.append(self.getPos())
-            self.addedTrajPt=True
+        if len(self.traj)==0 or dist(self.get_pos(), self.traj[-1])>10:
+            self.traj.append(self.get_pos())
+            self.added_traj_pt=True
 
     def goto(self, pos, dt):
-        v=np.subtract(pos, self.getPos())
+        v=np.subtract(pos, self.get_pos())
         aGoal=math.atan2(v[1], v[0])
         da=limAng(aGoal-self.alpha)
         self.steer += 0.5 * da * dt
@@ -96,9 +71,7 @@ class Robot:
         self.speed = 50
 
 if __name__=="__main__":
-    screen = pygame.display.set_mode(sz)
-    timer = pygame.time.Clock()
-    fps = 20
+    screen, timer, fps = pygame.display.set_mode(sz), pygame.time.Clock(), 20
 
     robot=Robot(100, 100, 1)
 
@@ -107,23 +80,16 @@ if __name__=="__main__":
 
     while True:
         for ev in pygame.event.get():
-            if ev.type==pygame.QUIT:
-                sys.exit(0)
+            if ev.type==pygame.QUIT: sys.exit(0)
         dt=1/fps
         screen.fill((255, 255, 255))
-
         robot.goto(goal, dt)
-
         robot.sim(dt)
-
         robot.draw(screen)
-        
         pygame.draw.circle(screen, (255,0,0), goal, 5, 2)
-
-        drawText(screen, f"Time = {time:.3f}", 5, 5)
+        draw_text(screen, f"Time = {time:.3f}", 5, 5)
        
-        pygame.display.flip()
-        timer.tick(fps)
+        pygame.display.flip(), timer.tick(fps)
         time+=dt
 
-#template file by S. Diane, RTU MIREA, 2024
+#template file by S. Diane, RTU MIREA, 2026
