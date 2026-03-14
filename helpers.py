@@ -558,7 +558,7 @@ def wrap_text(text, width=80):
 #определение числа строк в текстбоксе tkinter
 def tk_get_lines_count(tktext): return int(tktext.index('end').split('.')[0]) - 1
 
-def len_str_intersection(a, b): # поиск максимального пересечения между 2 строками
+def max_str_intersection(a, b): # поиск максимального пересечения между 2 строками
     (a, b), seqs=((a, b) if len(a)>=len(b) else (b,a)), [] #ensure a is longer than b
     for pos1 in range(len(b)): seqs.extend([b[pos1:pos2] for pos2 in range(pos1+1, len(b)+1)])
     seqs = [seq for seq in seqs if seq.strip() != ''] # remove empty sequences
