@@ -51,7 +51,7 @@ class Graph:
             for nb in [_ for _ in get_nbrs(j, i, self.nodes) if all(not pt_inside_ngon(_.get_pos(), o) for o in objs)]:
                 self.nodes[i][j].edges.append(Edge(self.nodes[i][j], nb))
                 nb.edges.append(Edge(nb, self.nodes[i][j]))
-    def draw(self, screen): for n in self.all_nodes(): n.draw(screen)
+    def draw(self, screen): foo=[n.draw(screen) for n in self.all_nodes()]
     def all_nodes(self): return [self.nodes[a][b] for a in range(len(self.nodes)) for b in range(len(self.nodes[a]))]
     def find_route(self, n1, n2):
         for n in self.all_nodes(): n.visited, n.D, n.route = False, 100500, []
