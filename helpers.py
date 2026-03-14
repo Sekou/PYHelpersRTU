@@ -236,14 +236,10 @@ def get_segm_intersection_circle(A, B, pos, R, full_line=False, tangent_tol=1e-9
         else: return pts
 
 # проверяем, находится ли точка внутри многоугольника
-def pt_inside_ngon(point, vertices): #ngon_contains_pt
-    (x, y), c = point, 0
-    for i in range(len(vertices)):
-        (x1, y1), (x2, y2) = vertices[i-1], vertices[i]
-        if min(y1,y2) <= y < max(y1, y2):
-            ratio = (y - y1) / (y2 - y1)
-            c ^= (x - x1 < ratio*(x2 - x1))
-    return c
+def pt_inside_ngon(pt, points, foo=0): #ngon_contains_pt
+    for (A, B), (C, D) in zip([*points[-1:], *points[:-1]], points):
+        if min(B, D) <= pt[1] < max(B, D): foo ^= (pt[0] - A < (pt[1] - B) / (D - B) * (C - A))
+    return foo
 
 # определяем точки, лежащие внутри многоугольника
 def get_pts_inside_ngon(ngon_pts, xmin, xmax, ymin, ymax, step=20):
