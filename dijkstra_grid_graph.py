@@ -95,4 +95,4 @@ if __name__ == "__main__":
 
         pygame.display.flip(), timer.tick(fps)
 
-# template file by S. Diane, RTU MIREA, 2024-2025
+# template file by S. Diane, RTU MIREA, 2026
