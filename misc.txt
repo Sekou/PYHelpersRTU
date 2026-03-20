@@ -7,3 +7,8 @@ IkeaBot https://dspace.mit.edu/bitstream/handle/1721.1/90593/rus_ikeabot.pdf?seq
 IKEA-Building Robot / Nanyang Technological University in Singapore https://www.scientificamerican.com/article/ikea-building-robot-conquers-touchy-feely-challenge2/
 2025 Efficient Path Planning and Formation Control in Multi-Robot Systems: A Neural Fields and Auto-Switching Mechanism Approach
 2011 Object Path Planner for the Box Pushing Problem https://cdn.intechopen.com/pdfs/12645/InTech-Object_path_planner_for_the_box_pushing_problem.pdf
+
+
+RRT and RRT* Using Vehicle Dynamics https://arxiv.org/pdf/2206.10533
+RRT-Connect: An Efficient Approach to Single-Query Path Planning https://www.cs.cmu.edu/afs/cs/academic/class/15494-s12/readings/kuffner_icra2000.pdf
+A novel RRT*-Connect algorithm for path planning on robotic arm collision avoidance https://www.researchgate.net/publication/388281316_A_novel_RRT-Connect_algorithm_for_path_planning_on_robotic_arm_collision_avoidance
