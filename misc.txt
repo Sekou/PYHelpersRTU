@@ -13,7 +13,7 @@ RRT and RRT* Using Vehicle Dynamics https://arxiv.org/pdf/2206.10533
 RRT-Connect: An Efficient Approach to Single-Query Path Planning https://www.cs.cmu.edu/afs/cs/academic/class/15494-s12/readings/kuffner_icra2000.pdf
 A novel RRT*-Connect algorithm for path planning on robotic arm collision avoidance https://www.researchgate.net/publication/388281316_A_novel_RRT-Connect_algorithm_for_path_planning_on_robotic_arm_collision_avoidance
 ST-RRT*: Asymptotically-Optimal Bidirectional Motion Planning through Space-Timehttps://arxiv.org/pdf/2203.02176
-
+A novel RRT*-Connect algorithm for path planning on robotic arm collision avoidance https://www.researchgate.net/publication/388281316_A_novel_RRT-Connect_algorithm_for_path_planning_on_robotic_arm_collision_avoidance
 
 
 CLOPE
