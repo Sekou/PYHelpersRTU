@@ -1,0 +1,49 @@
+#2026, S. Diane, example of UR5-manipulator control (forward kinematics)
+import math, time, os, numpy as np
+from coppeliasim_zmqremoteapi_client import RemoteAPIClient
+
+print('Program started')
+client = RemoteAPIClient()
+sim = client.getObject('sim')
+# Run a simulation in synchronous mode:
+client.setStepping(True)
+sim.startSimulation(), print('sim.start')
+
+def move_to_config(handles,max_vel,max_accel,max_jerk,target_conf):
+    params = { "joints" : handles, "targetPos" : target_conf, "maxVel" : max_vel,
+        "maxAccel" : max_accel, "maxJerk" : max_jerk }
+    sim.moveToConfig(params)
+
+# идентификаторы звеньев робота
+joint_handles=[sim.getObject('/UR5/joint', {"index":i}) for i in range(6)]
+print(joint_handles)
+
+kPI=math.pi/180
+
+vel, accel, jerk=180, 40, 80
+max_vel=[vel*kPI,vel*kPI,vel*kPI,vel*kPI,vel*kPI,vel*kPI]
+max_accel=[accel*kPI,accel*kPI,accel*kPI,accel*kPI,accel*kPI,accel*kPI]
+max_jerk=[jerk*kPI,jerk*kPI,jerk*kPI,jerk*kPI,jerk*kPI,jerk*kPI]
+
+phase=0
+while (t := sim.getSimulationTime()) < 30:
+    print(f"t={t:.2f}")
+    if t>1 and phase==0:
+        # 1
+        target_pos1 = [90 * kPI, 90 * kPI, -90 * kPI, 90 * kPI, 90 * kPI, 90 * kPI]
+        move_to_config(joint_handles, max_vel, max_accel, max_jerk, target_pos1)
+        phase+=1
+    if t>5 and phase==1:
+        # 2
+        target_pos2 = [-90 * kPI, 45 * kPI, 90 * kPI, 135 * kPI, 90 * kPI, 90 * kPI]
+        move_to_config(joint_handles, max_vel, max_accel, max_jerk, target_pos2)
+        phase+=1
+    if t>10 and phase==2:
+        # 3
+        target_pos3 = [0, 0, 0, 0, 0, 0]
+        move_to_config(joint_handles, max_vel, max_accel, max_jerk, target_pos3)
+        phase+=1
+    sim.step()
+
+#stop
+sim.stopSimulation(), print('Program ended')
