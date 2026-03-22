@@ -7,9 +7,9 @@ def flatten(lst): # разглаживание вложенного списка
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)): # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
-def draw_multiline_text(screen, text, pos, sz=25, color=(0,0,0), transf=False, sep="\n"):
+def draw_multiline_text(screen, text, x, y, sz=25, color=(0,0,0), sep="\n"):
     for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
-        draw_text(screen, t, [pos[0], pos[1]+sz*i], sz, color, transf)
+        draw_text(screen, t, [x, y+sz*i], sz, color)
     
 def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
