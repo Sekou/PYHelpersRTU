@@ -43,6 +43,9 @@ while (t := sim.getSimulationTime()) < 30:
         target_pos3 = [0, 0, 0, 0, 0, 0, 0]
         move_to_config(joint_handles, max_vel, max_accel, max_jerk, target_pos3)
         phase+=1
+
+    angs=[sim.getJointPosition(h) for h in joint_handles]
+    print( [f"{float(a):.3f}" for a in angs] )
     sim.step()
 
 #stop
