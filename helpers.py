@@ -339,27 +339,27 @@ def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z
     myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]] # z
     return np.array(mrol) @ mpit @ myaw
 
+# функция для трансформации 3D точки
+def transform_pt_3d(x, y, z, roll, pitch, yaw, S=math.sin, C=math.cos):
+    cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
+    return (x*cp*cy-y*sy-z*sp, y*cy*cr+x*sy-z*sr, z*cp*cr+x*sp+y*sr)
+
 # функция для проекции 3D точки в 2D
-CAM_SCALE=150 #pixels per meter
-CAM_DIST=5 #distance from camera to scene origin
-def project_point(x, y, z, roll, pitch, yaw):
-    cp,sp,cy,sy,cr,sr=math.cos(pitch), math.sin(pitch), \
-                      math.cos(yaw), math.sin(yaw), math.cos(roll), math.sin(roll)
-    z, x = z*cp - x*sp, x*cp + z*sp
-    xs, ys, zs = x*cy - y*sy, -z*cr - y*sr, y*cr - z*sr
-    factor = CAM_DIST / (CAM_DIST + zs)
-    x_proj = xs * factor * CAM_SCALE + WIDTH // 2
-    y_proj = ys * factor * CAM_SCALE + int(HEIGHT *2/3)
+def project_pt_3d_to_2d(x, y, z, roll, pitch, yaw, tilt=0.1):
+    #WIDTH, HEIGHT, CAM_SCALE=800, 600, 150
+    xs, ys, zs = transform_pt_3d(x, y, z, roll, pitch, yaw)
+    xs, ys, zs = transform_pt_3d(xs, ys, zs, math.pi / 2 + tilt, 0, 0)
+    x_proj = xs * CAM_SCALE + WIDTH // 2
+    y_proj = ys * CAM_SCALE + int(HEIGHT * 2 / 3)
     return int(x_proj), int(y_proj)
-    
+
 # функция отрисовки осей
 def draw_axes(screen, size, roll, pitch, yaw):
     base_dirs = [(size, 0, 0), (0, size, 0), (0, 0, size)]
-    colors=[(255,100,100), (100,255,100), (100,100,255)]
-    for (rx, ry, rz), c in zip(base_dirs, colors):
-        # Проецируем точки на экран
-        start_2d = project_point(0,0,0, roll, pitch, yaw)
-        end_2d = project_point(rx, ry, rz, roll, pitch, yaw)
+    colors = [(255, 100, 100), (100, 255, 100), (100, 100, 255)]
+    start_2d = project_pt_3d_to_2d(0, 0, 0, roll, pitch, yaw)
+    for (rx, ry, rz), c in zip(base_dirs, colors): # Проецируем точки на экран
+        end_2d = project_pt_3d_to_2d(rx, ry, rz, roll, pitch, yaw)
         pygame.draw.line(screen, c, start_2d, end_2d, 2)
 
 def load_images_from_folder(dir): # загрузка изображений из папки
