@@ -7,7 +7,7 @@ def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) #расстояни
 def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
 def rot_arr(vv, ang): return [rot(v, ang) for v in vv] # функция для поворота массива на угол
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
-    ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
+    return ang%(2*arc)+2*arc*(int(ang%(2*arc)<-arc)-int(ang%(2*arc)>arc))
 def draw_rot_rect(screen, color, pc, w, h, ang): #точка центра, ширина, высота и угол поворота прямогуольника
     pts = [[- w/2, - h/2],[+ w/2, - h/2],[+ w/2, + h/2],[- w/2, + h/2]]
     pygame.draw.polygon(screen, color, np.add(rot_arr(pts, ang), pc), 2)
