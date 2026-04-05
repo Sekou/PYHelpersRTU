@@ -346,14 +346,11 @@ def transform_pt_3d(x, y, z, roll, pitch, yaw, S=math.sin, C=math.cos):
     cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
     return (x*cp*cy-y*sy-z*sp, y*cy*cr+x*sy-z*sr, z*cp*cr+x*sp+y*sr)
 
-# функция для проекции 3D точки в 2D
+# функция для проекции 3D точки в 2D #WIDTH, HEIGHT, CAM_SCALE=800, 600, 150
 def project_pt_3d_to_2d(x, y, z, roll, pitch, yaw, tilt=0.1):
-    #WIDTH, HEIGHT, CAM_SCALE=800, 600, 150
     xs, ys, zs = transform_pt_3d(x, y, z, roll, pitch, yaw)
     xs, ys, zs = transform_pt_3d(xs, ys, zs, math.pi / 2 + tilt, 0, 0)
-    x_proj = xs * CAM_SCALE + WIDTH // 2
-    y_proj = ys * CAM_SCALE + int(HEIGHT * 2 / 3)
-    return int(x_proj), int(y_proj)
+    return int(xs * CAM_SCALE + WIDTH // 2), int(ys * CAM_SCALE + int(HEIGHT // 2 + 100))
 
 # функция отрисовки осей
 def draw_axes(screen, size, roll, pitch, yaw):
