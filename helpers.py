@@ -49,13 +49,15 @@ def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернут�
     
 # def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
 #     ang=ang%(2*arc); return ang + (2*arc if ang<-arc else -2*arc if ang>arc else 0)
-    
-def lim_ang(ang): # ограничение угла в пределах +/-pi
-    while ang > math.pi: ang -= 2 * math.pi
-    while ang <= -math.pi: ang += 2 * math.pi
-    return ang
-
-# def lim_ang(ang, arc=3.141592653589793): return (ang - 2 * arc) if ang > arc else (ang + 2 * arc) if ang <= -arc else ang
+# def lim_ang(ang): # ограничение угла в пределах +/-pi
+#     while ang > math.pi: ang -= 2 * math.pi
+#     while ang <= -math.pi: ang += 2 * math.pi
+#     return ang
+# def lim_ang(ang, arc=3.141592653589793): 
+# 	return (ang - 2 *(1+(ang-arc)//(2*arc))* arc) if ang > arc else (ang + 2*(1+(ang-arc)//(-2*arc))* arc) if ang <= -arc else ang
+	
+def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
+    return ang%(2*arc)+2*arc*(int(ang%(2*arc)<-arc)-int(ang%(2*arc)>arc))
 
 def get_corner(p1, p, p2): return lim_ang(math.atan2(p1[1]-p[1], p1[0]-p[0])-math.atan2(p2[1]-p[1], p2[0]-p[0])) #угол
 	
