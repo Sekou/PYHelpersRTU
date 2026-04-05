@@ -332,20 +332,27 @@ def open_trackbar_dialog(params, names): # диалог с трекбарами 
     root.mainloop(); root.destroy()
     return result
 
-# матрица поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
-def get_mat(roll, pitch, yaw): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
-    cr, cp, cy = math.cos(roll), math.cos(pitch), math.cos(yaw)
-    sr, sp, sy = math.sin(roll), math.sin(pitch), math.sin(yaw)
+# матрица 4x4 поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
+def get_R_mat4(roll, pitch, yaw, S=math.sin, C=math.cos): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
+    cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
     mrol = [[1, 0, 0, 0], [0, cr, -sr, 0], [0, sr, cr, 0], [0, 0, 0, 1]] # x
     mpit = [[cp, 0, sp, 0], [0, 1, 0, 0], [-sp, 0, cp, 0], [0, 0, 0, 1]] # y
     myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]] # z
     return np.array(mrol) @ mpit @ myaw
-
-# функция для трансформации 3D точки
-def transform_pt_3d(x, y, z, roll, pitch, yaw, S=math.sin, C=math.cos):
+	
+def get_R_mat(roll, pitch, yaw, S=math.sin, C=math.cos): #матрица 3x3 поворота: mrol @ mpit @ myaw
     cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
-    return (x*cp*cy-y*sy-z*sp, y*cy*cr+x*sy-z*sr, z*cp*cr+x*sp+y*sr)
-
+    return np.array([[cp*cy,-cp*sy,sp], [cr*sy+cy*sp*sr,cy*cr-sr*sp*sy,-cp*sr],
+                     [sr*sy-cr*cy*sp,cr*sp*sy+cy*sr,cp*cr]])
+	
+def get_T_mat(x,y,z): #матрица смещения
+    return np.array([[1, 0, 0, x], [0, 1, 0, y], [0, 0, 1, z], [0, 0, 0, 1]])
+	
+def transform_pt_3d(x, y, z, roll, pitch, yaw, S=math.sin, C=math.cos): # трансформация 3D точки
+    cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
+    return (x*cp*cy-y*cp*sy+z*sp, x*(cr*sy+cy*sp*sr)+y*(cy*cr-sr*sp*sy)-z*cp*sr,
+            x*(sr*sy-cr*cy*sp) + y*(cr*sp*sy+cy*sr) + z*cp*cr) #mrol @ mpit @ myaw
+	
 # функция для проекции 3D точки в 2D #WIDTH, HEIGHT, CAM_SCALE=800, 600, 150
 def project_pt_3d_to_2d(x, y, z, roll, pitch, yaw, tilt=0.1):
     xs, ys, zs = transform_pt_3d(x, y, z, roll, pitch, yaw)
