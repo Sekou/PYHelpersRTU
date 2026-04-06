@@ -333,19 +333,19 @@ def open_trackbar_dialog(params, names): # диалог с трекбарами 
     return result
 
 # матрица 4x4 поворота трехмерного вектора или объекта (3д-модели, камеры, дрона, датчика...)
-def get_R_mat4(roll, pitch, yaw, S=math.sin, C=math.cos): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
+def get_R_mat_4x4(roll, pitch, yaw, S=math.sin, C=math.cos): #например, (x2,y2,z2)=(get_mat()@[x, y, z, 1])[:3]
     cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
     mrol = [[1, 0, 0, 0], [0, cr, -sr, 0], [0, sr, cr, 0], [0, 0, 0, 1]] # x
     mpit = [[cp, 0, sp, 0], [0, 1, 0, 0], [-sp, 0, cp, 0], [0, 0, 0, 1]] # y
     myaw = [[cy, -sy, 0, 0], [sy, cy, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]] # z
     return np.array(mrol) @ mpit @ myaw
 	
-def get_R_mat(roll, pitch, yaw, S=math.sin, C=math.cos): #матрица 3x3 поворота: mrol @ mpit @ myaw
+def get_R_mat_3x3(roll, pitch, yaw, S=math.sin, C=math.cos): #матрица 3x3 поворота: mrol @ mpit @ myaw
     cp, sp, cy, sy, cr, sr = C(pitch), S(pitch), C(yaw), S(yaw), C(roll), S(roll)
     return np.array([[cp*cy,-cp*sy,sp], [cr*sy+cy*sp*sr,cy*cr-sr*sp*sy,-cp*sr],
                      [sr*sy-cr*cy*sp,cr*sp*sy+cy*sr,cp*cr]])
 	
-def get_T_mat(x,y,z): #матрица смещения
+def get_T_mat_4x4(x,y,z): #матрица смещения
     return np.array([[1, 0, 0, x], [0, 1, 0, y], [0, 0, 1, z], [0, 0, 0, 1]])
 	
 def transform_pt_3d(x, y, z, roll, pitch, yaw, S=math.sin, C=math.cos): # трансформация 3D точки
