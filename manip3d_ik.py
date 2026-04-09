@@ -195,7 +195,6 @@ if __name__ == "__main__":
             for i, l in enumerate(manip.links):
                 l.q = 2/(i+1)*math.sin(tsim*(i+1) + i)
 
-
         manip.calc(True)
 
         screen.fill((255, 255, 255))
