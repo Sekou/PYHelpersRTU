@@ -29,3 +29,5 @@ Evolutionary Multi-Objective Optimization https://www.researchgate.net/publicati
 
 An Evolutionary Approach for the Design of Autonomous Underwater Vehicles
 https://www.researchgate.net/publication/262333743_An_Evolutionary_Approach_for_the_Design_of_Autonomous_Underwater_Vehicles
+
+Geometric Optimisation of Unmanned Aerial Vehicle Trajectories in Uncertain Environments https://www.sciencedirect.com/science/article/pii/S2214209625000658
