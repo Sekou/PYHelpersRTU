@@ -21,3 +21,11 @@ https://algowiki-project.org/ru/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA
 https://studfile.net/preview/2015072/page:3/
 
 Hiearch Clust
+
+"finding criteria for stopping immplicit evolutiornay optimisation"
+
+Convergence Detection and Stopping Criteria for
+Evolutionary Multi-Objective Optimization https://www.researchgate.net/publication/279513061_Convergence_Detection_and_Stopping_Criteria_for_Evolutionary_Multi-Objective_Optimization
+
+An Evolutionary Approach for the Design of Autonomous Underwater Vehicles
+https://www.researchgate.net/publication/262333743_An_Evolutionary_Approach_for_the_Design_of_Autonomous_Underwater_Vehicles
