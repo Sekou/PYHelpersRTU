@@ -519,7 +519,7 @@ class Task: #задача, выполняемая роботом в течени
     def run(self, robot, objs, t, dt): print(f"{t:.2f}: {self.name}")
     def draw(self, screen): pass
 
-class TaskGoTo(Task):
+class TaskGoTo(Task): #задача движения к точке
     def __init__(self, goal): 
 		_, self.name, self.goal = super().__init__(), self.__class__.__name__, self.goal=goal
     def run(self, robot, objs, t, dt):
