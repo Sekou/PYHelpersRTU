@@ -519,6 +519,14 @@ class Task: #задача, выполняемая роботом в течени
     def run(self, robot, objs, t, dt): print(f"{t:.2f}: {self.name}")
     def draw(self, screen): pass
 
+class TaskGoTo(Task):
+    def __init__(self, goal): 
+		_, self.name, self.goal = super().__init__(), self.__class__.__name__, self.goal=goal
+    def run(self, robot, objs, t, dt):
+        print(f"{t:.2f}: {self.name}"), robot.goto(self.goal, dt)
+        if dist(robot.get_pos(), self.goal)<45: self.finished, _=True, robot.stop()
+    def draw(self, screen): pygame.draw.circle(screen, (255, 0, 0), self.goal, 5, 2)
+
 def draw_dynamic_plot(screen, arr, y0, k=50, w=800, c=(0, 0, 255)): #рисует бегущий график (например внизу экрана по всей его ширине)
     arr = arr if 2 < len(arr) < w else [0, 0] if len(arr) < 2 else arr[-min(w, len(arr)):]
     for i in range(len(arr)-1): pygame.draw.line(screen, c, [i, y0-arr[i]*k], [i+1, y0-arr[i+1]*k], 1)
