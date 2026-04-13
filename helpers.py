@@ -514,7 +514,7 @@ class Obj: #небольшой объект на экране
     def set_pos(self, p): self.x, self.y=p
     def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2, 2)
 
-class Task: #задача, выполняемая роботом в течение некоторого врмени
+class Task: #задача, выполняемая роботом в течение некоторого времени
     def __init__(self): self.name, self.finished, self.error=self.__class__.__name__, False, False
     def run(self, robot, objs, t, dt): print(f"{t:.2f}: {self.name}")
     def draw(self, screen): pass
