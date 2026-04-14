@@ -512,7 +512,7 @@ class Obj: #небольшой объект на экране
     def get_pos(self): return [self.x, self.y]
     def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
     def set_pos(self, p): self.x, self.y=p
-    def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2, 2)
+    def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2)
 
 class Task: #задача, выполняемая роботом в течение некоторого времени
     def __init__(self): self.name, self.finished, self.error=self.__class__.__name__, False, False
