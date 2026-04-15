@@ -299,6 +299,12 @@ def save_screenshot(screen):
         time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
 
+def write_video(path, ind_frame, screen, fps): #запись экрана в pygame
+    global fourcc, out #write_video("video.avi", ind, screen, fps)
+    img = np.transpose(pygame.surfarray.array3d(screen), (1, 0, 2))
+    if ind_frame==0: out = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'H264'), fps, img.shape[1::-1])
+    out.write(np.array(img, dtype=np.uint8))
+
 # функция для запроса текста
 def ask_for_text(text="", cap="Введите текст", tit="Текст объекта:"):
     (root := tk.Tk()).withdraw()  # Скрыть главное окно
