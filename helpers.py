@@ -299,10 +299,11 @@ def save_screenshot(screen):
         time.time()).strftime("%Y-%m-%d(%H-%M-%S)")
     pygame.image.save(screen, frmt_date+".png")
 
-def write_video(path, ind_frame, screen, fps): #запись экрана в pygame
-    global fourcc, out #write_video("video.avi", ind, screen, fps)
+def write_video(path, ind_frame, screen, fps, ksz=1): #запись экрана
+    global fourcc, out #write_video("video.mp4", ind, screen, fps, 0.5) #ind = 0, 1...
     img = np.transpose(pygame.surfarray.array3d(screen), (1, 0, 2))
-    if ind_frame==0: out = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'H264'), fps, img.shape[1::-1])
+    if ksz!=1: img = cv2.resize(img, None, fx=ksz, fy=ksz, interpolation=cv2.INTER_LINEAR)
+    if ind_frame==0: out = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'mp4v'), fps, img.shape[1::-1])
     out.write(np.array(img, dtype=np.uint8))
 
 # функция для запроса текста
