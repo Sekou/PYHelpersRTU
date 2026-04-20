@@ -384,11 +384,16 @@ def save_arr_as_img(arr, filename): # сохраняет массив как и�
 def show_traj_3d(traj): # график трехмерной линии 
     import matplotlib.pyplot as plt
     ax = plt.figure().add_subplot(projection='3d')
-    ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
-    # ax.set_xlim(-1, 1); ax.set_ylim(-1, 1); ax.set_zlim(-1, 1)
+    ax.set_xlabel('x'), ax.set_ylabel('y'), ax.set_zlabel('z')
+    # ax.set_xlim(-1, 1), ax.set_ylim(-1, 1), ax.set_zlim(-1, 1)
     ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
-    ax.legend(); plt.show()
+    ax.legend(), plt.show()
 
+def show_plot(tt, vv): # двухмерный график 
+    import matplotlib.pyplot as plt
+	plt.plot(tt, vv, color="green")
+    plt.xlabel("Время, c"), plt.ylabel("Число задач"), plt.show()
+	
 def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из углов: Z-Y-X (Yaw-Pitch-Roll)
     R_x = np.array([[1, 0, 0], [0, np.cos(phi), -np.sin(phi)], [0, np.sin(phi), np.cos(phi)]])
     R_y = np.array([[np.cos(theta), 0, np.sin(theta)], [0, 1, 0], [-np.sin(theta), 0, np.cos(theta)]])
