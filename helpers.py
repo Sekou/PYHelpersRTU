@@ -389,10 +389,10 @@ def show_traj_3d(traj): # график трехмерной линии
     ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
     ax.legend(), plt.show()
 
-def show_plot(tt, vv): # двухмерный график 
+def show_plot(xx, yy, name1="X", name2="Y", color="blue"): # двухмерный график 
     import matplotlib.pyplot as plt
-	plt.plot(tt, vv, color="green")
-    plt.xlabel("Время, c"), plt.ylabel("Число задач"), plt.show()
+	plt.plot(xx, yy, color="green")
+    plt.xlabel(name1), plt.ylabel(name2), plt.show()
 	
 def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из углов: Z-Y-X (Yaw-Pitch-Roll)
     R_x = np.array([[1, 0, 0], [0, np.cos(phi), -np.sin(phi)], [0, np.sin(phi), np.cos(phi)]])
