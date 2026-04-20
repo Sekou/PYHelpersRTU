@@ -391,7 +391,7 @@ def show_traj_3d(traj): # график трехмерной линии
 
 def show_plot(xx, yy, name1="X", name2="Y", color="blue"): # двухмерный график 
     import matplotlib.pyplot as plt
-	plt.plot(xx, yy, color="green")
+	plt.plot(xx, yy, color=color)
     plt.xlabel(name1), plt.ylabel(name2), plt.show()
 	
 def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из углов: Z-Y-X (Yaw-Pitch-Roll)
