@@ -68,7 +68,8 @@ class TwoLinkManipulator:
         sign = 1 if lim_ang(ang_to(self.pos0, goal)-ang0)>0 else -1
         aa=mainp_ik_2_link(goal, *[l.L for l in self.links][:2], self.links[0].pos, self.links[0].ext_ang, sign)
         self.goto_angs(aa)
-
+    def grasp(self, obj): self.attached_obj=obj
+        
 class Robot:
     def __init__(self, x, y, alpha):
         self.x, self.y = x, y
@@ -163,7 +164,7 @@ class TaskTake(Task):
         print(f"{t:.2f}: {self.name}")
         dd=[dist(o.get_pos(), robot.manip.get_end_pos()) for o in objs]
         if dd[np.argmin(dd)]<10:
-            robot.manip.attached_obj=objs[np.argmin(dd)]
+            robot.manip.grasp(objs[np.argmin(dd)])
             self.finished=True
         else: self.error = True
 
@@ -187,7 +188,7 @@ class TaskManager:
             else: self.lst=self.lst[1:]
         else: self.finished=True
     def draw(self, screen):
-        if tm.get_current_task(): tm.get_current_task().draw(screen)
+        if self.get_current_task(): self.get_current_task().draw(screen)
 
 if __name__ == "__main__":
     screen, timer, fps = pygame.display.set_mode(sz), pygame.time.Clock(), 20
