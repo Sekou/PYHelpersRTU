@@ -4,8 +4,6 @@ import sys, pygame, numpy as np, math
 pygame.font.init()
 def draw_text(screen, s, x, y, sz=15, c=(255, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, c), (x, y))
-def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) #расстояние между точками
-def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
 
 sz = (800, 600)
 
