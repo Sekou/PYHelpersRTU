@@ -48,8 +48,7 @@ class Bar:  # балка
         return np.array(rot(pt, self.ang)) + self.get_pos()
     def set_pos(self, p): self.x, self.y = p
     def draw(self, screen):
-        pp = self.get_all_pts()
-        pygame.draw.lines(screen, (0, 0, 0), True, pp, 2)
+        pygame.draw.lines(screen, (0, 0, 0), True, self.get_all_pts(), 2)
         draw_arrow(screen, (255, 0, 0), self.get_pos(), math.atan2(*self.F[::-1]), 20, 2) #сила
         c, m = ((0, 255, 0), self.M) if self.M >= 0 else ((255, 0, 0), -self.M)
         pygame.draw.circle(screen, c, self.get_pos(), m / 100, 2) #момент
