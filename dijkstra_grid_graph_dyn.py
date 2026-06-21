@@ -1,3 +1,6 @@
+# Finding route dynamically on a lattice graph with excluded nodes for obstacles
+# S. Diane, 2026
+
 import sys, pygame, numpy as np, math
 
 pygame.font.init()
