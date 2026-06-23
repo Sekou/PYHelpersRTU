@@ -31,11 +31,6 @@ class Node:
     def draw(self, screen):
         pygame.draw.circle(screen, (255, 0, 0), self.get_pos(), 7, 1)
         for e in self.edges: pygame.draw.line(screen, (255, 0, 0), e.n1.get_pos(), e.n2.get_pos(), 1)
-    def draw_debug(self, screen):
-        if self.vA is not None:
-            pygame.draw.line(screen, (255, 0, 0), self.get_pos(), self.vA.get_pos(), 2)
-        if self.vB is not None:
-            pygame.draw.line(screen, (0, 0, 255), self.get_pos(), self.vB.get_pos(), 2)
 
 class Edge:
     def __init__(self, n1, n2): self.n1, self.n2, self.w = n1, n2, dist(n1.get_pos(), n2.get_pos())
