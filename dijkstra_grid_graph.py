@@ -1,9 +1,7 @@
 # Finding route on a lattice graph with excluded edges for obstacles
 # S. Diane, 2026
 import sys, pygame, numpy as np, math
-
 pygame.font.init()
-
 def draw_text(screen, s, x, y, sz=20, color=(0, 0, 0)):  # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, (0, 0, 0)), (x, y))
 def check_intersection(A, B, C, D):  # проверка пересечения двух отрезков
@@ -48,39 +46,27 @@ class Graph:
         pts = [[[x, y] for x in range(0, sz[0], step)] for y in range(0, sz[1], step)]
         self.nodes = [[Node(*p) for p in line] for line in pts]
         def get_nbrs(ix, iy, nodes):
-            inds = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]
-            inds = [[x + ix, y + iy] for x, y in inds]
-            inds = [[x, y] for x, y in inds if
-                    0 <= y < len(nodes) and 0 <= x < len(nodes[y])]
+            inds = [[x + ix, y + iy] for x, y in [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]]
+            inds = [[x, y] for x, y in inds if 0 <= y < len(nodes) and 0 <= x < len(nodes[y])]
             p1 = self.nodes[iy][ix].get_pos()
-            print("p1=", p1)
-            print("p2p2=", [self.nodes[i][j].get_pos() for j, i in inds])
             collisions = [objs[0].intersects([p1, self.nodes[i][j].get_pos()]) for j, i in inds]
-            print(collisions)
             inds = [i for i, c in zip(inds, collisions) if not c]
-            print(inds)
             return [nodes[y][x] for x, y in inds]
-        print(len(pts))
         for i in range(len(self.nodes)):
             for j in range(len(self.nodes[0])):
                 nbrs = get_nbrs(j, i, self.nodes)
                 for nb in nbrs:
                     self.nodes[i][j].edges.append(Edge(self.nodes[i][j], nb))
                     nb.edges.append(Edge(nb, self.nodes[i][j]))
-    def get_all_nodes(self):
-        return [n for row in self.nodes for n in row]
+    def get_all_nodes(self): return [n for row in self.nodes for n in row]
     def draw(self, screen):
-        for i in range(len(self.nodes)):
-            for n in self.nodes[i]:
-                n.draw(screen)
+        for n in self.get_all_nodes(): n.draw(screen)
     def find_nearest_node(self, pos):
         all_nodes = self.get_all_nodes()
         dd = [dist(n.get_pos(), pos) for n in all_nodes]
         return all_nodes[np.argmin(dd)]
     def find_route(self, n1, n2):
-        all_nodes = self.get_all_nodes()
-        for n in all_nodes:
-            n.visited, n.D, n.route = False, 100500, []
+        for n in self.get_all_nodes(): n.visited, n.D, n.route = False, 100500, []
         n1.D, n1.route, wave = 0, [n1], [n1]
         while len(wave):
             v = wave.pop(np.argmin([n.D for n in wave]))
@@ -100,14 +86,14 @@ if __name__ == "__main__":
     route = None
     debug_node = None
 
-    n1A = graph.find_nearest_node((200, 200))
-    n2A = graph.find_nearest_node([600, 400])
+    n1 = graph.find_nearest_node((200, 200))
+    n2 = graph.find_nearest_node([600, 400])
 
     while True:
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT: sys.exit(0)
             if ev.type == pygame.KEYDOWN:
-                if ev.key == pygame.K_1: route = graph.find_route(n1A, n2A)
+                if ev.key == pygame.K_1: route = graph.find_route(n1, n2)
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 debug_node = graph.find_nearest_node(ev.pos)
                 print(debug_node.get_pos())
@@ -115,8 +101,8 @@ if __name__ == "__main__":
         screen.fill((255, 255, 255))
         graph.draw(screen), obstacle.draw(screen)
         if debug_node is not None: pygame.draw.circle(screen, (200, 200, 0), debug_node.get_pos(), 20, 3)
-        pygame.draw.circle(screen, (220, 100, 100), n1A.get_pos(), 15, 3)
-        pygame.draw.circle(screen, (220, 100, 100), n2A.get_pos(), 7, 3)
+        pygame.draw.circle(screen, (220, 100, 100), n1.get_pos(), 15, 3)
+        pygame.draw.circle(screen, (220, 100, 100), n2.get_pos(), 7, 3)
 
         if route is not None:
             for i in range(1, len(route)):
