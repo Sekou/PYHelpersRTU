@@ -10,7 +10,19 @@ def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)): # отрисовка тек
 def draw_multiline_text(screen, text, x, y, sz=25, color=(0,0,0), sep="\n"):
     for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
         draw_text(screen, t, [x, y+sz*i], sz, color)
-    
+		
+def draw_filled_sector(surface, color, center, radius, start_angle, end_angle, step=5): #рисует сектор
+    points, start_rad, end_rad = [center], math.radians(start_angle), math.radians(end_angle)
+    num_segments = max(2,int(abs(end_angle - start_angle)) + 1)
+    for i in range(0,num_segments+step,step):
+        angle = start_rad + (end_rad - start_rad) * min(1, i / (num_segments - 1))
+        points.append((center[0] + radius * math.cos(angle), center[1] - radius * math.sin(angle)))
+    pygame.draw.polygon(surface, color, points)
+
+def get_color(v, thr): #выдает цвет по +/- числу
+    nv=(-thr if v<-thr else thr if v>thr else v)/thr
+    return (255*(1-max(0,-nv)), 255*(1-abs(nv)), 255*(1-max(0,nv)))
+	
 def arr_to_str(arr, sep="\t"): # конвертирует одномерный массив в строку
     return sep.join([f"{v:.3f}" for v in arr])
 	
