@@ -43,6 +43,22 @@ def ask_file():
     tk.Tk().withdraw()
     return filedialog.askopenfilename(initialdir=".")
 
+#получает список файлов в папке
+def get_filenames(dir, ext=None): #ext = ".txt"
+    ff = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
+    if ext is not None: ff = [f for f in ff if f.endswith(ext)]
+    return ff
+
+class ExperimentFile: #e.g.: (0)-1-8-Q(0.0049093).txt - имя в формате: иерархический номер эксперимента и результат
+    def __init__(self, dir, name, num_inds):
+        self.name, self.num_inds = name, num_inds
+        self.val = float(re.findall(r'\d[\d.]*', name)[-1])
+        self.numbers = [float(v) for v in re.findall(r'\d+', name)[:num_inds]]
+        with open(os.path.join(dir, name), "r") as f: self.arr=eval(f.read())
+    def get_order_ind(self, base=100): #для сортировки
+        gg=np.geomspace(1, base**(self.num_inds-1), num=self.num_inds)
+        return np.dot(self.numbers, gg[::-1])
+
 #выводит матрицу в 1 строку
 def show_mat(mat, prec=5):
     return str([[round(x, prec) for x in r] for r in mat])
