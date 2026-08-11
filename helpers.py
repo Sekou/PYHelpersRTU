@@ -1,8 +1,12 @@
 #Various helper functions (author: Sekou Diane, 2024-2026)
 
-def flatten(lst): # разглаживание вложенного списка в линейный вид
+def flatten_list(lst): # разглаживание вложенного списка в линейный вид
     return [e for l in filter(lambda v:type(v)==list,lst) for e in flatten(l)]+[*filter(lambda v:type(v)!=list,lst)]
 
+# сворачивает список по группам длиной width
+def reshape_list(lst, width):
+    return [lst[i: i + width] for i in range(0, len(lst), width)]
+	
 # pygame.font.init()
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)): # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
