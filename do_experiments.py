@@ -1,11 +1,8 @@
 # 2026, S. Diane
-# Example of reading series of experimental plots and values
+# Example of writing and reading series of experimental plots and values
 
 import matplotlib.pyplot as plt
 import os, re, numpy as np
-
-# DIR = "exp"
-# DIMS = [10, 3, 4]
 
 DIR = "exp2"
 DIMS = [4, 2, 3]
@@ -82,7 +79,6 @@ print("===")
 print("MEAN VALUES:")
 print(np.mean(vals, axis=0))
 
-# yyy=get_plots(files, 1, 2) #для лучшего значения (индексы определены вручную)
 yyy=get_plots(files, 1,1)
 
 show_range_plot(yyy)
