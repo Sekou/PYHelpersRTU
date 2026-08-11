@@ -408,7 +408,15 @@ def show_plot(xx, yy, name1="X", name2="Y", color="blue"): # двухмерны�
     import matplotlib.pyplot as plt
 	plt.plot(xx, yy, color=color)
     plt.xlabel(name1), plt.ylabel(name2), plt.show()
-	
+
+def show_range_plot(yyy, xx=None): #график стохастической величины с диапазоном
+    if xx is None: xx=list(range(len(yyy[0]))) #yyy - список графиков по нескольким экспериментам
+    p1,p2,p3 = yyy.min(axis=0), yyy.max(axis=0), yyy.mean(axis=0)
+    fill = plt.fill_between(xx, p1, p2, color="#FFEEDD")
+    (line,) = plt.plot(xx, p3, color="blue")
+    plt.legend([line, fill], ["Среднее", "Диапазон"], loc='upper left')
+    plt.show()
+
 def euler_angles_to_rotation_matrix(phi, theta, psi): # матрица из углов: Z-Y-X (Yaw-Pitch-Roll)
     R_x = np.array([[1, 0, 0], [0, np.cos(phi), -np.sin(phi)], [0, np.sin(phi), np.cos(phi)]])
     R_y = np.array([[np.cos(theta), 0, np.sin(theta)], [0, 1, 0], [-np.sin(theta), 0, np.cos(theta)]])
