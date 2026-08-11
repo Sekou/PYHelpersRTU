@@ -3,8 +3,7 @@
 def flatten_list(lst): # разглаживание вложенного списка в линейный вид
     return [e for l in filter(lambda v:type(v)==list,lst) for e in flatten(l)]+[*filter(lambda v:type(v)!=list,lst)]
 
-# сворачивает список по группам длиной width
-def reshape_list(lst, width):
+def reshape_list(lst, width): # сворачивает список по группам длиной width
     return [lst[i: i + width] for i in range(0, len(lst), width)]
 	
 # pygame.font.init()
