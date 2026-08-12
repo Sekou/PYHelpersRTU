@@ -46,9 +46,11 @@ def compose_files_and_vals(files, dims): #сворачивает линейны�
         else: return [f.val for f in files]
     return files, proc_dim(files)
 
-def get_plots(files, ik1, ik2): #извлекает набор графиков для определенной под-серии экспериментов
-    vv = np.array([f[ik1][ik2].arr for f in files])
-    return vv
+def get_plots(files, inds=[]): #извлекает набор графиков для определенной под-серии экспериментов
+    def at(ff, inds):
+        for i in inds: ff=ff[i]
+        return ff
+    return np.array([at(f,inds).arr for f in files])
 
 def show_range_plot(yyy, xx=None): #график стохастической величины с диапазоном
     if xx is None: xx=list(range(len(yyy[0]))) #yyy - список графиков по нескольким экспериментам
@@ -79,7 +81,7 @@ print("===")
 print("MEAN VALUES:")
 print(np.mean(vals, axis=0))
 
-yyy=get_plots(files, 1,1)
+yyy=get_plots(files, [1,1])
 
 show_range_plot(yyy)
 
