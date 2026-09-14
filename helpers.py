@@ -122,6 +122,10 @@ def ang_to(p1, p2): return math.atan2(p2[1] - p1[1], p2[0] - p1[0]) # угол �
     
 def dist(p1, p2): return np.linalg.norm(np.subtract(p2, p1)) # расстояние между точками
 
+def get_vec(p1, p2): return [(p2[0]-p1[0]),(p2[1]-p1[1])] #вектор от p1 к p2
+	
+def get_unit_vec(p1, p2): return [(p2[0]-p1[0])/(d:=dist(p1, p2)),(p2[1]-p1[1])/d] #нормированный вектор от p1 к p2
+
 def path_len(pts): # длина ломанной линии
     return sum(np.linalg.norm(np.subtract(p1,p2)) for p1,p2 in zip(pts[1:], pts[:-1]))
 
