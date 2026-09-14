@@ -618,3 +618,11 @@ def max_str_intersection(a, b): # поиск максимального пере
     for seq in seqs: # find segments in str b
         if len(seq) > max_len_match and seq in a: max_len_match, max_match_sequence = len(seq), seq
     return max_match_sequence
+
+#замена паттернов в строке
+def replace_patterns(text, pattern, fn_match): #e.g. s=replace_patterns(s, "\*\w", lambda m: "***" )
+    return re.sub(pattern, fn_match, text)
+	
+#обработка паттернов в строке
+def iter_patterns(text, pattern, fn_match): #e.g. iter_patterns(s, "\*\w", lambda m: print(m.group()))
+    for match in re.finditer(pattern, text): fn_match(match)
