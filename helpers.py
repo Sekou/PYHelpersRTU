@@ -400,7 +400,7 @@ def load_images_from_folder(dir): # загрузка изображений из
 def save_arr_as_img(arr, filename): # сохраняет массив как изображение
     cv2.imwrite(filename, np.array(np.array(penalty_map)*(255/np.max(arr)), dtype=int))
 
-def append_2d(arr_big, arr_small, x, y): #записывает маленькое 2D-изображение в большое
+def insert_img_2d(arr_big, arr_small, x, y): #записывает маленькое 2D-изображение в большое
     for iy in range(min(arr_small.shape[0], arr_big.shape[0] - y)):
         for ix in range(min(arr_small.shape[1], arr_big.shape[1] - x)): 
             arr_big[y + iy, x + ix]=arr_small[iy, ix]
