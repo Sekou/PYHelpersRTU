@@ -405,7 +405,7 @@ def insert_img_2d(arr_big, arr_small, x, y): #записывает малень�
         for ix in range(min(arr_small.shape[1], arr_big.shape[1] - x)): 
             arr_big[y + iy, x + ix]=arr_small[iy, ix]
 
-def rgb_to_grayscale(rgb_array): #конвертирует цветное изобрадение в серое
+def rgb_to_grayscale(rgb_array): #конвертирует цветное изображение в серое
     return np.mean(rgb_array, axis=2)
 
 def grayscale_to_rgb(gray_array): #конвертирует серое изобрадение в цветное
