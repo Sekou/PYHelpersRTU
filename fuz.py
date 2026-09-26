@@ -24,7 +24,7 @@ class Term:
     def draw(self, plt, xmin, xmax):
         N = 100
         dx = (xmax - xmin) / N
-        xx = [i * dx for i in range(N)]
+        xx = [xmin + i * dx for i in range(N)]
         yy = [self.F(x) for x in xx]
         plt.plot(xx, yy)
 
