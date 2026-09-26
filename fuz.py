@@ -35,7 +35,7 @@ class FuzzyVar:
         self.xmin = xmin
         self.xmax = xmax
 
-    def addTerm(self, name, x0, w):
+    def add_term(self, name, x0, w):
         self.terms.append(Term(name, x0, w))
 
     def draw(self, plt):
@@ -45,42 +45,42 @@ class FuzzyVar:
     def calc(self, x):
         return [t.calc(x) for t in self.terms]
 
-    def defuzzMamdani(self, x, rules, fvOut, split=100):
+    def defuzz_mamdani(self, x, rules, fv_out, split=100):
         # активация входных термов
         aa = [t.calc(x) for t in self.terms]
         # применение правил и определение выходных термов
-        terms2 = [fvOut.terms[rules[i][1]] for i in range(len(rules))]
+        terms2 = [fv_out.terms[rules[i][1]] for i in range(len(rules))]
         # дефаззификация выходного нечеткого множества
         J, M = 0, 0
-        step=(fvOut.xmax - fvOut.xmin)/split
-        for x_ in np.arange(fvOut.xmin, fvOut.xmax, step):
+        step=(fv_out.xmax - fv_out.xmin)/split
+        for x_ in np.arange(fv_out.xmin, fv_out.xmax, step):
             v = max([min(a, t.calc(x_)) for a, t in zip(aa, terms2)])
             J += v * x_
             M += v
         return J / M
 
 if __name__ == "__main__":
-    fvInp = FuzzyVar(0, 100)
-    fvInp.addTerm("DSmall", 0, 100)
-    fvInp.addTerm("DMid", 50, 100)
-    fvInp.addTerm("DBig", 100, 100)
-    fvInp.draw(plt)
+    fv_inp = FuzzyVar(0, 100)
+    fv_inp.add_term("DSmall", 0, 100)
+    fv_inp.add_term("DMid", 50, 100)
+    fv_inp.add_term("DBig", 100, 100)
+    fv_inp.draw(plt)
     plt.show()
-    fvOut = FuzzyVar(0, 80)
-    fvOut.addTerm("VSmall", 0, 80)
-    fvOut.addTerm("VMid", 40, 80)
-    fvOut.addTerm("VBig", 80, 80)
-    fvOut.draw(plt)
+    fv_out = FuzzyVar(0, 80)
+    fv_out.add_term("VSmall", 0, 80)
+    fv_out.add_term("VMid", 40, 80)
+    fv_out.add_term("VBig", 80, 80)
+    fv_out.draw(plt)
     plt.show()
 
     # цикл активации термов при линейном изменении входной координаты
     for x in range(100):
-        aa = fvInp.calc(x)
+        aa = fv_inp.calc(x)
     print(aa)
 
     # тестовая база правил, отображающая нечеткие значения сами в себя
     rules = [[0, 0], [1, 1], [2, 2]]  # при наблюдении нечеткого значения i выдать нечеткое значение j
     xx = np.arange(0, 100, 1)
-    yy = [fvInp.defuzzMamdani(x, rules, fvOut) for x in xx]
+    yy = [fv_inp.defuzz_mamdani(x, rules, fv_out) for x in xx]
     plt.plot(xx, yy)
     plt.show()
