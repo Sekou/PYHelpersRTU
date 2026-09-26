@@ -10,6 +10,7 @@ class Term:
         self.w=w
         self.left=False
         self.right=False
+        self.activation=0
     def F(self, x):
         if self.left and x<=self.x0: return 1
         if self.right and x>=self.x0: return 1
