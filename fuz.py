@@ -46,6 +46,10 @@ class FuzzyVar:
     def calc(self, x):
         return [t.calc(x) for t in self.terms]
 
+    def defuzz_term_name(self, term_name):
+        tt=[t for t in self.terms if t.name==term_name]
+        return tt[0].x0 if len(tt) else None
+        
     def defuzz_mamdani(self, x, rules, fv_out, split=100):
         # активация входных термов
         aa = [t.calc(x) for t in self.terms]
