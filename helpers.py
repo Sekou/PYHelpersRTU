@@ -412,12 +412,21 @@ def grayscale_to_rgb(gray_array): #конвертирует серое изоб�
     return np.stack([gray_array, gray_array, gray_array], axis=-1)
 
 def show_traj_3d(traj): # график трехмерной линии 
-    import matplotlib.pyplot as plt
+    #import matplotlib.pyplot as plt
     ax = plt.figure().add_subplot(projection='3d')
     ax.set_xlabel('x'), ax.set_ylabel('y'), ax.set_zlabel('z')
     # ax.set_xlim(-1, 1), ax.set_ylim(-1, 1), ax.set_zlim(-1, 1)
     ax.plot(*np.swapaxes(traj, 0, 1), label='trajectory')  
     ax.legend(), plt.show()
+	
+def show_surf_plot_3d(xx, yy, zz):
+	#import matplotlib.pyplot as plt
+	(Y, X), Z = np.meshgrid(yy, xx), np.array(zz)
+	fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+	s=ax.plot_surface(X, Y, Z, vmin=Z.min(), cmap="viridis")
+	ax.set_xlabel("X"), ax.set_ylabel("Y"), ax.set_zlabel("Z")
+	fig.colorbar(s, ax=ax, shrink=0.5, aspect=5, label="Z value"), plt.show()
+	#e.g. draw_3d_surf_plot([1, 2, 3], [5, 10, 15], [[5, 10, 15],[10, 20, 30],[15, 30, 45]])
 
 def show_plot(xx, yy, name1="X", name2="Y", color="blue"): # двухмерный график 
     import matplotlib.pyplot as plt
