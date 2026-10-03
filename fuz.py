@@ -39,6 +39,9 @@ class FuzzyVar:
     def add_term(self, name, x0, w):
         self.terms.append(Term(name, x0, w))
 
+    def get_terms_names(self):
+        return [t.name for t in self.terms]
+
     def draw(self, plt):
         for t in self.terms:
             t.draw(plt, self.xmin, self.xmax)
