@@ -1,8 +1,8 @@
 import sys, pygame, numpy as np, math
 
 pygame.font.init()
-def draw_text(screen, s, x, y):
-    screen.blit(pygame.font.SysFont('Comic Sans MS', 20).render(s, True, (0,0,0)), (x,y))
+def draw_text(screen, s, x, y, sz=20):
+    screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, (0,0,0)), (x,y))
 
 sz = (800, 600)
 
