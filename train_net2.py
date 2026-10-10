@@ -48,4 +48,4 @@ def train_net():
     model.save_weights("net.weights.h5")
 
 if __name__=="__main__":
-    trainNet()
+    train_net()
