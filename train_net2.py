@@ -2,7 +2,7 @@
 import numpy as np
 import tensorflow as tf
 
-def createModel():
+def create_model():
     model = tf.keras.Sequential([
 
         tf.keras.layers.Dense(units=64, activation='relu',
@@ -12,8 +12,8 @@ def createModel():
     ])
     return model
 
-def trainNet():
-    model = createModel()
+def train_net():
+    model = create_model()
     model.summary()
 
     model.compile(optimizer='adam', loss='mae')
