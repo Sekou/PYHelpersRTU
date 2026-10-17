@@ -570,6 +570,15 @@ class Obj: #небольшой объект на экране
     def __init__(self, x, y): self.x, self.y, self.sz = x, y, 20
     def get_pos(self): return [self.x, self.y]
     def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
+    def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2)
+
+class Obj: #небольшой объект на экране с отрезками
+    def __init__(self, x, y): self.x, self.y, self.sz = x, y, OBJ_SZ
+    def get_pos(self): return [self.x, self.y]
+    def get_bb(self): return [self.x-self.sz/2, self.y-self.sz/2, self.sz, self.sz]
+    def get_segments(self): 
+        pp=[[self.x+dx*self.sz/2, self.y+dy*self.sz/2] for dx,dy in [[-1,-1], [-1,1], [1,1], [1,-1]]]
+        return [ [a,b] for a,b in zip(pp, pp[1:]+[pp[0]] ) ]
     def set_pos(self, p): self.x, self.y=p
     def draw(self, screen): pygame.draw.rect(screen, (0, 0, 0), self.get_bb(), 2)
 
