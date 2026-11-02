@@ -10,6 +10,12 @@ def reshape_list(lst, width): # сворачивает список по гру�
 def draw_text(screen, s, x, y, sz=15, с=(0, 0, 0)): # отрисовка текста
     screen.blit(pygame.font.SysFont('Comic Sans MS', sz).render(s, True, с), (x, y))
 
+def show_arr(lst): #отображает строкой 1D-массив
+    return "["+"; ".join(str(x) for x in lst)+"]"
+
+def show_arr2d(lst): #отображает строкой 2D-массив
+    return "["+"; ".join(str(show_arr(x)) for x in lst)+"]"
+
 def draw_multiline_text(screen, text, x, y, sz=25, color=(0,0,0), sep="\n"):
     for i,t in enumerate(text.split(sep)): # отрисовка многострочного текста
         draw_text(screen, t, [x, y+sz*i], sz, color)
@@ -565,6 +571,15 @@ def mainp_ik_2_link(target, l1, l2, p0, a0, sign=1): #решение ОЗК дл
     ep=np.add([l1, 0],[l2*math.cos(a2), l2*math.sin(a2)])
     amanip, agoal=math.atan2(ep[1], ep[0])+a0, math.atan2(v[1], v[0])
     return [lim_ang(agoal-amanip), a2]
+
+def get_neighborhood(M, i0, j0):  # окрестность Мура
+	res, w, h = [], M.shape[1], M.shape[0]
+	for i in range(-1 + i0, 2 + i0):
+		for j in range(-1 + j0, 2 + j0):
+			if i == i0 and j == j0: continue
+			if i < 0 or i >= h or j < 0 or j >= w: continue
+			res.append(M[i, j])
+	return res
 
 class Obj: #небольшой объект на экране
     def __init__(self, x, y): self.x, self.y, self.sz = x, y, 20
