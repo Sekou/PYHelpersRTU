@@ -624,6 +624,13 @@ def find_route_dijkstra(nodes, n1, n2): #поиск маршрута на гра
 			if not e.n2 in wave: wave.append(e.n2) #берем соседа в фронт поиска
 	return list(reversed(n2.route))
 
+def generate_distinct_points(N, x1, x2, y1, y2): #генерирует несколько целочисленных точек на 2D-плоскости
+    x_coords = random.sample(range(x1, x2 + 1), N)
+    y_coords = random.sample(range(y1, y2 + 1), N)
+    points = list(zip(x_coords, y_coords)) # Создаём точки как пары
+    if len(points) == len(set(points)): return points
+    else: return generate_distinct_points(x1, x2, y1, y2)
+
 # разбивка длинной строки на более маленькие для компактной отрисовки
 def insert_str_breaks(s, max_w_len=15, sep="\\"): 
     n, n2=len(s), int(len(s)**0.5)+1
