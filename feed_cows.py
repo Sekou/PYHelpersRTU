@@ -5,7 +5,7 @@ import sys, pygame, numpy as np, math
 def rot(v, ang): return np.dot([[-v[1], v[0]], v],[math.sin(ang), math.cos(ang)]) # поворот вектора на угол
 def lim_ang(ang, arc=3.141592653589793): # ограничение угла в пределах +/-pi
     return ang%(2*arc)+2*arc*(int(ang%(2*arc)<-arc)-int(ang%(2*arc)>arc))
-def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2))
+def dist(p1, p2): return np.linalg.norm(np.subtract(p1, p2)) # расстояние между точками
 def rot_arr(vv, ang): return [rot(v, ang) for v in vv] # функция для поворота массива на угол
 def draw_rot_rect(screen, color, pc, w, h, ang): #рисует повернутый прямоугольник (по точке центра, ширине, высоте и углу)
     pygame.draw.polygon(screen, color, np.add(rot_arr([[-w/2, -h/2], [+w/2, -h/2], [+w/2, +h/2], [-w/2, +h/2]], ang), pc), 2)
@@ -102,8 +102,7 @@ goal = None # Точка цели
 
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        if event.type == pygame.QUIT: running = False
 
     if goal is not None: robot.goto(goal, dt) # Движение к цели
 
