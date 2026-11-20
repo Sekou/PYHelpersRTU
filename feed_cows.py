@@ -1,4 +1,4 @@
-#2026, S. Diane, drawing a cow in pygame
+#2026, S. Diane, drawing robot and cows in pygame
 
 import sys, pygame, numpy as np, math
 
@@ -92,28 +92,27 @@ def draw_cow(screen, x0,y0, sz=200):
 # Основной цикл программы
 running = True
 
-robot=Robot(100, 100, 1)
-sim_time, dt = 0, 1 / fps
-cows = [[200, 350], [400, 350], [600, 350]]
-food = robot.get_cargo_pts()
-goals = [[x, y-50] for x,y in cows] + [[700,200]]
-
-ind_goal=-1
-goal = None
+robot=Robot(100, 100, 1) # Робот
+sim_time, dt = 0, 1 / fps # Время симуляции
+cows = [[200, 350], [400, 350], [600, 350]] # Положения коров
+food = robot.get_cargo_pts() # Положения порций еды
+goals = [[x, y-50] for x,y in cows] + [[700,200]] # Цели движения
+ind_goal=-1 # Индекс цели
+goal = None # Точка цели
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    if goal is not None: robot.goto(goal, dt)
+    if goal is not None: robot.goto(goal, dt) # Движение к цели
 
     if goal is None or dist(robot.get_pos(), goal)<50:
-        ind_goal+=1
+        ind_goal+=1 # Переключение на следующую цель
         if ind_goal<len(goals):goal=goals[ind_goal]
         else: robot.vsteer=robot.speed=0
 
-    if ind_goal < len(goals):
+    if ind_goal < len(goals): # Сброс корма вблизи цели
         for i,(a,b) in enumerate(zip(food, robot.get_cargo_pts())):
             if i>=ind_goal: a[:]=b[:]
 
