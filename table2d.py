@@ -16,9 +16,9 @@ class Cell:  # ячейка
     def get_bb(self): return [self.x, self.y, self.w, self.h] # рамка ячейки
     def get_center(self): return [self.x + 0.5 * self.w, self.y + 0.5 * self.h] # центр ячейки
     def draw(self, screen):
-        color = (255, 0, 0) if self.selected else (50, 0, 0)  # контур ячейки
+        color = (255, 0, 0) if self.selected else (50, 0, 0) # контур ячейки
         pygame.draw.rect(screen, color, self.get_bb(), (3 if self.selected else 1))
-        p = self.get_center()  # точка для вывода текста ячейки
+        p = self.get_center() # точка для вывода текста ячейки
         if len(self.text): draw_text(screen, self.text, p[0] - 4*len(self.text), p[1] - 20, sz=12)
         draw_text(screen, f"{self.val:.2f}", p[0] - 20, p[1] - 10, sz=12, c=(255, 0, 0))
 
