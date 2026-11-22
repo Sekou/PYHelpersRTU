@@ -8,7 +8,7 @@ def draw_text(screen, s, x, y, sz=15, c=(0, 0, 0)):  # отрисовка тек
 
 sz = (800, 600)
 
-class Cell:  # ячейка
+class Cell: # ячейка
     def __init__(self, id, ix, iy, x, y, w, h):
         self.id, self.ix, self.iy, self.x, self.y, self.w, self.h = id, ix, iy, x, y, w, h
         self.text, self.val, self.selected = "", 0, False
