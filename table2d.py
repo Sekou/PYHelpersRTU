@@ -1,4 +1,5 @@
-#2026, table class for pygame, S. Diane
+#2026, table class for pygame, by S. Diane
+
 import sys, pygame, numpy as np, math
 
 pygame.font.init()
